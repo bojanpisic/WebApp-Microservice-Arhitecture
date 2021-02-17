@@ -1,0 +1,43 @@
+@import '../../../scss/layout/header';
+@import '../../../scss/layout/footer';
+@import '../../../scss/elements/steps';
+@import '../../../scss/elements/inputs';
+@import '../../../scss/elements/buttons';
+
+* {
+    box-sizing: border-box;
+}
+
+.content {
+
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 24px;
+    box-shadow: $smallest-shadow;
+    border-radius: 10px;
+    padding: 40px 20px;
+
+    img {
+        height: 160px;
+    }
+
+    button {
+        @extend %wide-button;
+        width: auto;
+        padding: 12px 20px;
+        margin-top: 36px;
+        box-shadow: $smallest-shadow;
+    }
+}
+
+button {
+    @extend %wide-button;
+    border: 2px solid rgb(34, 34, 34);
+    color:rgb(34, 34, 34);
+    background-color: white;
+    margin: 50px 24px;
+    width: calc(100% - 48px);
+
+}

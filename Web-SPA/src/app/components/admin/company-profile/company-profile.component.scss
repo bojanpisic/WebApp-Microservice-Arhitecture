@@ -1,0 +1,124 @@
+@import '../../../scss/layout/header';
+@import '../../../scss/layout/footer';
+@import '../../../scss/elements/avatar';
+@import '../../../scss/elements/inputs';
+@import '../../../scss/elements/buttons';
+
+* {
+    box-sizing: border-box;
+}
+
+header {
+    @extend %container-top;
+    display: grid;
+    grid-template-columns: 44px auto 44px;
+    text-align: center;
+
+    .back {
+        @extend %header-back;
+
+        svg {
+            @extend %header-svg;
+        }
+    }
+
+    span {
+        @extend %header-span;
+    }
+}
+
+main {
+    padding: 94px 24px 30px 24px;
+    .image {
+        text-align: center;
+        .logo {
+            @extend %image-container;
+            height: 100px;
+            width: 100px;
+            display: block;
+            margin: 0 auto;
+    
+            #logo {
+                @extend %image;
+                margin-top: -10%;
+                margin-left: -10%;
+            }
+        }
+            
+        button {
+            text-align: center;
+            font-size: 14px;
+            line-height: 18px;
+            font-family: 'Roboto';
+            color: white;
+            background: $blue;
+            padding: 4px 8px;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            img {
+                vertical-align: bottom;
+                height: 16px;
+                width: 16px;
+                margin: 0 4px 1px 0;
+            }
+        }
+
+        :focus {
+            outline: none;
+        }
+    }
+
+    form {
+        margin: 30px 0;
+        p {
+            font-size: 16px;
+            line-height: 20px;
+            color: rgb(34, 34, 34);
+            margin: 0;
+            font-weight: bold;
+        }
+
+        input {
+            display: block;
+            @extend %input2;
+            margin: 5px 0 15px 0;
+        }
+
+        :focus {
+            @extend %focus;
+        }
+
+        .error-input {
+            @extend %error-input;
+            margin-bottom: 5px;
+        }
+
+        .error {
+            @extend %error-text;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        textarea {
+            display: block;
+            @extend %input2;
+            padding: 20px 10px;
+            height: 40vh;
+            margin: 5px 0 40px 0;
+        }
+
+        :focus {
+            @extend %focus;
+        }
+
+        button {
+            @extend %wide-button;
+        }
+
+        button:focus {
+            outline: none;
+            border: none;
+        }
+    }
+}

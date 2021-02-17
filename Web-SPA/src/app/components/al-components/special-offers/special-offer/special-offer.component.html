@@ -1,0 +1,88 @@
+<ul class="all"> <!--speciial offer je klasicna karta sa snizenom cenom.
+    moze da bude oneway,roundtrip ili multicity.
+    u flights se nalaze svi letovi koji se nalaze u special offeru(to je samo jedan flight ako je recimo od bg do ny)
+    moze da bude i vise flightova ako je special offer round trip ili multicity-->
+        <!--ZNACI SPECIAL OFFER IMA LISTU LETOVA TA LISTA SE IZLISTAVA OD SLEDECE LINIJE DO 70. LINIJE-->
+        <li *ngFor="let flight of offer.flights; let i = index"  [ngStyle]="{'border-bottom': offer.tripType === 'oneWay' ? 'none' : '.5px solid gainsboro'}">
+            <div class="container"> <!--ceo ovaj div je samo jedan let, recimo bg - lon-->
+                <hr id="left"><hr id="right">
+                <img *ngIf="offer.tripType !== 'roundTrip' || (offer.tripType === 'roundTrip' && i === 0)" id="plane" src="../../../../assets/icons8-airplane-emoji-96.png" alt="">
+                <img *ngIf="offer.tripType === 'roundTrip' && i === 1" id="reverse-plane" src="../../../../assets/icons8-airplane-emoji-96.png" alt="">
+                <span id="spandate">DATE</span>
+                <p id="date">{{flight.takeOffDate | date: 'dd-MM-yyyy'}}</p><!--ako prelazi u novi dan ond mora ovako: May 24/25,2020 da bi stalo-->
+                <span id="spanairlines">AIRLINES</span>
+                <p id="airlines"><img src="../../../../assets/turkish_airlines_logo.png">{{getAirlineName(flight.airlineId)}}</p>
+                <p id="from-full">{{flight.from.city}}</p>
+                <p id="from">{{flight.from.shortName}}</p>
+                <p id="to-full">{{flight.to.city}}</p>
+                <p id="to">{{flight.to.shortName}}</p>
+                <span id="spandeparture" [ngStyle]="{'grid-area': offer.tripType === 'roundTrip' && i === 1 ? 'spanarrival' : 'spandeparture',
+                                                     'text-align': offer.tripType === 'roundTrip' && i === 1 ? 'right' : 'left'}">DEPARTURE</span>
+                <p id="departure" [ngStyle]="{'grid-area': offer.tripType === 'roundTrip' && i === 1 ? 'arrival' : 'departure',
+                                              'text-align': offer.tripType === 'roundTrip' && i === 1 ? 'right' : 'left'}">{{flight.takeOffTime}}</p>
+                <span id="time"><img src="../../../../assets/icons8-clock.svg">{{flight.tripTime}}</span><!--pazi ako traje samo 50min ili cist sat tipa 3h-->
+                <span id="spanarrival" [ngStyle]="{'grid-area': offer.tripType === 'roundTrip' && i === 1 ? 'spandeparture' : 'spanarrival',
+                                                   'text-align': offer.tripType === 'roundTrip' && i === 1 ? 'left' : 'right'}">ARRIVAL</span> 
+                <p id="arrival" [ngStyle]="{'grid-area': offer.tripType === 'roundTrip' && i === 1 ? 'departure' : 'arrival',
+                                            'text-align': offer.tripType === 'roundTrip' && i === 1 ? 'left' : 'right'}">{{flight.landingTime}}</p>
+                <span id="spanflight">FLIGHT</span>
+                <p id="flight">{{flight.flightNumber}}</p>
+                <span id="spanseat">SEAT</span>
+                <p id="seat">{{flight.seats[0].seatNumber}}</p>
+                <div id="stops">
+                    <span *ngIf="flight.changeOverLocations.length > 0">{{flight.changeOverLocations.length}} stops</span>
+                    <ul *ngIf="flight.changeOverLocations.length > 0">
+                        <li *ngFor="let stop of flight.changeOverLocations; let i = index">
+                            <p *ngIf="i === flight.changeOverLocations.length -1">{{stop.newDestination.city}}</p>
+                            <p *ngIf="i !== flight.changeOverLocations.length -1">{{stop.newDestination.city}}, </p>
+                        </li>
+                    </ul>
+                    <span *ngIf="flight.changeOverLocations.length === 0">direct</span>
+                </div>
+            </div>
+            <div (click)="showStopsInfo(i)" id="stops-info-arrow" *ngIf="flight.changeOverLocations.length > 0"> <!--ovde imamo info
+            ukoliko taj let od malopre(bg-lon) ima neka presedanja-->
+                <img [ngStyle]="{'transform': showInfo[i] ? 'rotate(90deg)' : 'rotate(-90deg)'}" src="../../../../assets/back.png" alt="">
+            </div>
+            <div class="stops-info" *ngIf="showInfo[i]"> <!--ovdee su presedanja od tog jednog leta-->
+                <ul>
+                    <li>
+                        <span id="stop-from">{{flight.from.city}}(<span>{{flight.from.shortName}}</span>)</span>
+                        <span id="stop-time"><img src="../../../../assets/icons8-clock.svg">{{calculateFlightLength(flight.takeOffTime, flight.changeOverLocations[0].arrivalTime)}}</span>
+                        <span id="stop-to">{{flight.changeOverLocations[0].newDestination.city}}(<span>{{flight.changeOverLocations[0].newDestination.shortName}}</span>)</span>
+                        <span id="stop-departure">DEPARTURE: <span>{{flight.takeOffTime}}</span></span>
+
+                        <span id="stop-arrival">ARRIVAL: <span>{{flight.changeOverLocations[0].arrivalTime}}</span></span>
+                        <div id="stop-pause">
+                            <span>Change planes in {{flight.changeOverLocations[0].newDestination.city}}</span>
+                            <span id="stop-time"> - {{flight.changeOverLocations[0].stopTime}}</span>
+                        </div>
+                    </li>
+                    <li *ngFor="let item of flight.changeOverLocations; let ind = index; last as isLast">
+                        <span id="stop-from">{{item.newDestination.city}}(<span>{{item.newDestination.shortName}}</span>)</span>
+                        <span id="stop-time" *ngIf="!isLast"><img src="../../../../assets/icons8-clock.svg">{{calculateFlightLength(item.departureTime, flight.changeOverLocations[ind + 1].arrivalTime)}}</span>
+                        <span id="stop-time" *ngIf="isLast"><img src="../../../../assets/icons8-clock.svg">{{calculateFlightLength(item.departureTime, flight.landingTime)}}</span>
+                        <span id="stop-to" *ngIf="!isLast">{{flight.changeOverLocations[ind + 1].newDestination.city}}(<span>{{flight.changeOverLocations[ind + 1].newDestination.shortName}}</span>)</span>
+                        <span id="stop-to" *ngIf="isLast">{{flight.to.city}}(<span>{{flight.to.shortName}}</span>)</span>
+                        <span id="stop-departure">DEPARTURE: <span>{{item.departureTime}}</span></span>
+
+                        <span id="stop-arrival" *ngIf="!isLast">ARRIVAL: <span>{{flight.changeOverLocations[ind + 1].arrivalTime}}</span></span>
+                        <span id="stop-arrival" *ngIf="isLast">ARRIVAL: <span>{{flight.landingTime}}</span></span>
+                        <div id="stop-pause" *ngIf="!isLast">
+                            <span>Change planes in {{flight.changeOverLocations[ind + 1].newDestination.city}}</span>
+                            <span id="stop-time"> - {{flight.changeOverLocations[ind + 1].stopTime}}</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <!--nakon izlistavanja svih letova koji se nalaze u special offer prikazujemo njenu cenu i mozemo da je bookujemo-->
+        <li>
+            <div class="price-more">
+                <span id="total">TOTAL PRICE:</span>
+                <span id="oldprice">{{calculatePrice()}}€</span><span id="newprice">{{offer.newPrice}}€</span>
+            </div>
+        </li>
+    </ul>
+    <button id="book">BOOK</button>
+    <!--ovde je kraj jedne special offer(odnosno karte) koja moze biti oneway,round trip, multicity-->

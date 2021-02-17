@@ -1,0 +1,15 @@
+<div class="popup">
+    <div class="message-info-header">
+        <button (click)="close()">
+            <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: rgb(34, 34, 34); height: 16px; width: 16px; stroke: currentcolor; stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>
+        </button>
+        <span>{{props.message.senderFirstName}} {{props.message.senderLastName}}</span>
+    </div>
+    <div class="content">
+        <h1>Would you like to become my friend? :-)</h1>
+   </div>
+    <div class="buttons">
+        <button id="decline" (click)="decline()">Decline</button>
+        <button id="accept" (click)="accept()">Accept</button>
+    </div>
+</div>

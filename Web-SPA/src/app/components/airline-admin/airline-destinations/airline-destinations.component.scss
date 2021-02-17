@@ -1,0 +1,66 @@
+@import '../../../../app/app.component.scss';
+@import '../../../scss/layout/header';
+@import '../../../scss/elements/inputs';
+
+* {
+    box-sizing: border-box;
+}
+
+header {
+    @extend %container-top;
+    display: grid;
+    grid-template-columns: 44px auto 44px;
+
+    .back {
+        display: inline-block;
+        height: 44px;
+        width: 44px;
+        padding: 14px;
+        svg {
+            fill: rgb(34, 34, 34);
+        }
+    }
+
+    .search {
+        @extend %search-container;
+
+        button {
+            @extend %search-button;
+
+            svg {
+                @extend %search-svg;
+            }
+
+            input {
+                @extend %search-input;
+            }
+
+            ::placeholder {
+                color: rgb(113, 113, 113);
+            }
+        }
+    }
+
+}
+
+ul {
+    margin: 0;
+    padding: 94px 24px 30px 24px;
+    list-style: none;
+    background-color: white;
+    min-height: 100vh;
+
+    li {
+        display: inline;
+    }
+
+    h3 {
+        color: $pink;
+        font-size: 24px;
+        font-family: 'Roboto';
+    }
+}
+
+.blur {
+    filter: blur(8px);
+}

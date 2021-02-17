@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+@import '../../../scss/layout/header';
+@import '../../../scss/layout/footer';
+@import '../../../scss/elements/steps';
+@import '../../../scss/elements/inputs';
+* {
+    font-family: 'Montserrat', 'sans-serif';
+}
+
+header {
+    @extend %container-top;
+    display: grid;
+    grid-template-columns: 44px auto 44px;
+    text-align: center;
+
+    .back {
+        @extend %header-back;
+
+        svg {
+            @extend %header-svg;
+        }
+    }
+
+    span {
+        @extend %header-span;
+    }
+}
+
+
+main {
+    padding: 94px 24px 64px 24px;
+    min-height: 100vh;
+
+    p {
+        font-size: 16px;
+        line-height: 20px;
+        color: rgb(34, 34, 34);
+        font-weight: bold;
+        margin: 20px 0 5px 5px;
+    }
+
+    input {
+        @extend %input2;
+        background-color: white;
+    }
+
+    input:focus {
+        @extend %focus;
+        background-color: white;
+    }
+
+    #takeoff-time:focus, #takeoff-date:focus, #arrival-time:focus, #arrival-date:focus {
+        @extend %focus;
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        margin-top: 40px;
+
+        li {
+            padding: 0;
+            p {
+                font-weight: normal;
+            }
+
+            .pickedType {
+                font-weight: bold;
+            }
+        }
+    }
+
+    .carType {
+        display: block;
+        margin: 0;
+        padding: 9px 8px;
+        border: 1px solid rgb(234, 234, 234);
+        border-radius: 5px;
+
+        p {
+            line-height: 20px;
+            font-size: 16px;
+            margin: 5px 0 5px 5px;
+
+            svg {
+                float: right;
+                transform: rotate(-90deg);
+                vertical-align: top;
+                margin-top: 2px;
+                transition: transform 0.5s;
+            }
+        }
+    }
+
+    .droppedDown {
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+
+    .dropdown {
+        margin: 0;
+        padding: 8px 0px;
+        border: 1px solid rgb(234, 234, 234);
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border-top: none;
+
+        ul {
+            margin: 0;
+        }
+
+        p {
+            padding: 3px 8px;
+        }
+    }
+}
+
+#kanvas{
+    display: block;
+    height: 500px;
+    width: 100%;
+    div {
+        canvas {
+            height: 100%;
+            width: 100%;
+        }
+    }
+}
+
+input:not([type="radio"]) {
+    height: 3em;
+    padding-left: 1em;
+    border: 1px solid lightgrey;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: rgb(100, 100, 100);
+    opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: rgb(100, 100, 100);
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: rgb(100, 100, 100);
+}

@@ -1,0 +1,31 @@
+div {
+    position: fixed;
+    top: 0; left: 0;
+    width: calc(100% - 2*22px);
+    max-width: calc(100% - 2*22px);
+    min-height: 44px;
+    font-size: 16px;
+    line-height: 20px;
+    box-sizing: border-box;
+    z-index: 100000;
+    margin: 10px 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: red;
+    border-radius: 5px;
+    transform: translateY(-100%) 0.2s;
+
+    p {
+        font-weight: bold;
+        color: white;
+        text-align: center;
+        width: 100%;
+        margin: 0;
+        word-wrap: break-word;
+    }
+}
+
+.active {
+    transform: translateY(0%);
+}

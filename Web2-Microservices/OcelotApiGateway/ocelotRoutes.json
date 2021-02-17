@@ -1,0 +1,209 @@
+{
+  "ReRoutes": [
+
+    //airline routes
+    {
+      "DownstreamPathTemplate": "/api/{controller}/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "airlinemicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/airline/{controller}/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/{controller}/{everything}?id={id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "airlinemicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/airline/{controller}/{everything}/{id}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/airline/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "airlinemicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/airline/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/airline/{everything}?id={everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "airlinemicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/airline/{everything}/{id}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+
+
+    //user routes
+    {
+      "DownstreamPathTemplate": "/api/{controller}/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usermicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/user/{controller}/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/{controller}/{everything}?id={id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usermicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/user/{controller}/{everything}/{id}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/user/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usermicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/user/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/user/{everything}?id={everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usermicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/user/{everything}/{id}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+
+    //racs routes
+    {
+      "DownstreamPathTemplate": "/api/{controller}/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "racsmicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/racs/{controller}/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/{controller}/{everything}?id={id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "racsmicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/racs/{controller}/{everything}/{id}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/racs/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "racsmicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/racs/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/racs/{everything}?id={everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "racsmicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/racs/{everything}/{id}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    }
+
+
+
+
+    //{
+    //  "DownstreamPathTemplate": "/api/user/{everything}?id={param}",
+    //  "DownstreamScheme": "http",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "usermicroservice",
+    //      "Port": 80
+    //    }
+    //  ],
+    //  "UpstreamPathTemplate": "/user/{everything}/{param}",
+    //  "UpstreamHttpMethod": [ "GET" ]
+    //},
+    //{
+    //  "DownstreamPathTemplate": "/api/user/{everything}",
+    //  "DownstreamScheme": "http",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "usermicroservice",
+    //      "Port": 80
+    //    }
+    //  ],
+    //  "UpstreamPathTemplate": "/user/{everything}",
+    //  "UpstreamHttpMethod": [ "GET" ]
+    //}
+
+
+    //{
+    //  "DownstreamPathTemplate": "/api/user/test",
+    //  "DownstreamScheme": "http",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "usermicroservice",
+    //      "Port": 80
+    //    }
+    //  ],
+    //  "UpstreamPathTemplate": "/user/test",
+    //  "UpstreamHttpMethod": [ "GET" ]
+    //},
+
+
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:8084"
+  },
+  "AuthenticationOptions": {
+    "AuthenticationProviderKey": "jwt",
+    "AllowedScopes": []
+  }
+}

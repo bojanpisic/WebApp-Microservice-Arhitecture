@@ -1,0 +1,306 @@
+@import '../../../../scss/elements/inputs';
+@import '../../../../scss/layout/modal';
+
+* {
+    box-sizing: border-box;
+}
+
+.container {
+    @extend %modal-container;
+    display: block;
+    overflow: scroll;
+    .header {
+        @extend %modal-header;
+        padding: 10px 24px;
+        grid-template-columns: 44px auto minmax(44px, max-content);
+
+        button {
+            @extend %modal-header-x;
+        }
+        
+        span {
+            @extend %modal-header-headline;
+        }
+
+        p {
+            width: auto;
+            margin: auto 0;
+            line-height: 20px;
+            font-size: 16px;
+            color: $pink;
+            font-weight: bold;
+        }
+    }
+
+    .seat {
+        margin: 64px auto 0 auto;
+        width: 250px;
+        height: 100px;
+        background-color: $blue;
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+        padding: 20px;
+        display: grid;
+        grid-template-rows: auto 40px;
+        grid-template-columns: 70px 70px 70px;
+        box-shadow: $smallest-shadow;
+        position: relative;
+
+        span {
+            font-size: 14px;
+            line-height: 20px;
+            color: whitesmoke;
+        }
+
+        p {
+            display: inline-block;
+            font-size: 40px;
+            line-height: 40px;
+            margin: 0;
+            font-family: 'Roboto';
+            font-weight: bold;
+            color: white;
+            padding: 0;
+            margin: 0;
+        }
+    }
+
+    .content {
+        min-height: calc(100% - 164px - 80px - 64px);
+        margin: 40px 30px 40px 30px;
+        text-align: center;
+
+        form {
+            text-align: left;
+            margin: 0 auto;
+            width: 80%;
+            p {
+                margin: 0;
+                line-height: 13px;
+                font-size: 13px;
+                font-weight: bold;
+                color: rgb(80, 80, 80);
+            }
+
+            input {
+                @extend %input;
+                width: 100%;
+                margin-top: 5px;
+                font-size: 16px;
+                line-height: 20px;
+                padding: 10px auto;
+                color: rgb(34, 34, 34);
+            }
+
+            :focus {
+                @extend %focus;
+            }
+
+            .error-input {
+                @extend %error-input;
+                margin-bottom: 5px;
+            }
+
+            .error {
+                @extend %error-text;
+                margin-bottom: 10px;
+                font-size: 14px;
+            }
+
+            button {
+                margin-top: 5px;
+                width: 100%;
+                border: 3px solid red;
+                border-radius: 10px;
+                font-size: 16px;
+                line-height: 20px;
+                padding: 12px 20px;
+                background-color: white;
+                font-weight: bold;
+                color: red;
+                box-shadow: $smallest-shadow;
+            }
+
+            .firstButton {
+                color: #8795fa;
+                border-color: #8795fa;
+            }
+
+            .businessButton {
+                color: #fa8795;
+                border-color: #fa8795;
+            }
+
+            .economyButton {
+                color: #3eb0f7;
+                border-color: #3eb0f7;
+            }
+
+            .basicEconomyButton {
+                color: #fab387;
+                border-color: #fab387;
+            }
+        }
+
+        .search-friends {
+            @extend %search-container;
+            button {
+                @extend %search-button;
+                svg {
+                    @extend %search-svg;
+                }
+                input {
+                    @extend %search-input;
+                }
+            }
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            margin-top: 20px;
+            list-style: none;
+    
+            .no-friends {
+                font-size: 18px;
+                font-family: 'Roboto';
+                color: $orange;
+                line-height: 26px;
+            }
+    
+            li {
+                text-align: left;
+                position: relative;
+                border-radius: 30px;
+                margin-bottom: 30px;
+                padding: 15px 20px;
+                box-shadow: $smallest-shadow;
+                display: grid;
+                grid-template-columns: 80px 130px;
+                grid-template-rows: 30px 40px;
+                grid-template-areas: "image name"
+                                     "image email";
+    
+                #add {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    margin-top: -10px;
+                    margin-right: -10px;
+                    background-color: $light-blue;
+                    border-radius: 50%;
+                    font-size: 24px;
+                    color: white;
+                    padding: 10px;
+    
+                }
+    
+                #image {
+                    grid-area: image;
+                    display: inline-block;
+                    width: 70px;
+                    height: 70px;
+                    background-image: url('../../../../../assets/friend1.jpeg');
+                    background-size: cover;
+                    background-position: 50% 10%;
+                    position: relative;
+                    overflow: hidden;
+                    border-radius: 50%;
+                    border: 2px solid white;
+                }
+    
+                #name {
+                    grid-area: name;
+                    align-self: end;
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: rgb(34, 34, 34);
+                    line-height: 20px;
+                    max-height: 20px;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                }
+    
+                #email {
+                    grid-area: email;
+                    font-size: 14px;
+                    font-family: 'Roboto';
+                    line-height: 20px;
+                    max-height: 20px;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    color: rgb(119, 119, 119);
+    
+                    #mail {
+                        vertical-align: bottom;
+                        height: 16px;
+                        width: 16px;
+                        font-size: 16px;
+                        margin-bottom: 2px;
+                        color: $light-blue;
+                    }
+                }
+            }
+        }
+
+        .invitedFriend {
+            height: 40px;
+            padding: calc(50% - 20px) 0;
+            p {
+                margin: 0;
+                span {
+                    font-weight: bold;
+                    font-family: 'Roboto';
+                    transform: scaleX(1.1);
+                    color: $pink;
+                }
+            }
+        }
+    }
+
+    .footer {
+        @extend %modal-footer;
+        padding: 10px 24px;
+        grid-template-columns: auto auto;
+
+        button {
+            // background: linear-gradient(135deg,#EC038B,#FB6468,#FBB936);
+            text-align: center;
+            border-radius: 10px;
+            font-size: 16px;
+            line-height: 20px;
+            font-weight: bold;
+        }
+
+        :focus {
+            border: none;
+            outline: none;
+        }
+
+        #discard {
+            justify-self: start;
+            background-color: white;
+            border: 2px solid rgb(34, 34, 34);
+            color: rgb(34, 34, 34);
+            padding: 10px 15px;
+        }
+
+        #invite, #fill {
+            border: none;
+            justify-self: end;
+            padding: 12px 20px;
+            color: white;
+            box-shadow: $smallest-shadow;
+        }
+
+        #invite {
+            background-color: $pink;
+        }
+
+        #fill {
+            background-color: rgb(34, 34, 34);
+        }
+    }
+}

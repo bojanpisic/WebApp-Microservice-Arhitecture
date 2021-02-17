@@ -1,0 +1,436 @@
+@import '../../../../scss/layout/header';
+@import '../../../../scss/layout/footer';
+@import '../../../../scss/elements/steps';
+@import '../../../../scss/elements/inputs';
+
+* {
+    box-sizing: border-box;
+}
+
+#note {
+    margin: 100px 22px;
+    a {
+        color: hotpink;
+        font-weight: bold;
+    }
+}
+
+header {
+    @extend %container-top;
+    display: grid;
+    grid-template-columns: 44px auto 44px;
+    text-align: center;
+
+    .back {
+        @extend %header-back;
+
+        svg {
+            @extend %header-svg;
+        }
+    }
+
+    span {
+        @extend %header-span;
+    }
+}
+
+main {
+    padding: 94px 24px 0 24px;
+    min-height: 100vh;
+
+    .radio-group {
+        padding: 0;
+        margin: 40px 0 0em 0;
+        font-size: 14px;
+        display: grid;
+        grid-template-columns: auto auto;
+    
+        .radio {
+            display: inline-block;
+            vertical-align: middle;
+            text-transform: uppercase;
+            color: rgb(34, 34, 34);
+            font-weight: 600;
+            position: relative;
+            padding-left: 14px;
+    
+            input[type="radio"] {
+                display: none;
+            }
+    
+            input[type="radio"]:checked ~ span:after {
+                transform: translate(-50%, -50%) scale(1);
+            }
+    
+            span {
+                height: 10px;
+                width: 10px;
+                border-radius: 50%;
+                border: 1.5px solid rgb(34, 34, 34);
+                display: block;
+                position: absolute;
+                left: 0;
+                top: 4px;
+            }
+    
+            span:after {
+                content: "";
+                height: 4px;
+                width: 4px;
+                background-color: rgb(34, 34, 34);
+                display: block;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%) scale(0);
+                border-radius: 50%;
+                transition: 150ms ease-in-out 0s;
+            }
+    
+        }
+    
+        .radio:nth-child(2) {
+            margin: 0 0 0 auto;
+        }
+    }
+
+    .main {
+        margin-top: 10px;
+        h3 {
+            font-size: 22px;
+            line-height: 22px;
+            color: rgb(34, 34, 34);
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 20px;
+            color: rgb(34, 34, 34);
+            font-weight: bold;
+            margin: 20px 0 5px 5px;
+        }
+
+        form {
+
+            .carType {
+                display: block;
+                margin: 0;
+                padding: 9px 8px;
+                border: 1px solid rgb(234, 234, 234);
+                border-radius: 5px;
+        
+                p {
+                    line-height: 20px;
+                    font-size: 16px;
+                    margin: 5px 0 5px 5px;
+        
+                    svg {
+                        float: right;
+                        transform: rotate(-90deg);
+                        vertical-align: top;
+                        margin-top: 2px;
+                        transition: transform 0.5s;
+                    }
+                }
+            }
+
+            .droppedDown {
+                border-bottom-left-radius: 0px;
+                border-bottom-right-radius: 0px;
+            }
+        
+            .dropdown {
+                margin: 0;
+                padding: 8px 0px;
+                border: 1px solid rgb(234, 234, 234);
+                border-bottom-left-radius: 5px;
+                border-bottom-right-radius: 5px;
+                border-top: none;
+
+                ul {
+                    margin: 0;
+                }
+        
+                p {
+                    padding: 3px 8px;
+                }
+            }
+
+            input {
+                @extend %input2;
+                background-color: white;
+            }
+    
+            input:focus {
+                @extend %focus;
+                background-color: white;
+            }
+    
+            #takeoff-time:focus, #takeoff-date:focus, #arrival-time:focus, #arrival-date:focus {
+                @extend %focus;
+            }
+    
+            .error-input {
+                @extend %error-input;
+                margin-bottom: 5px;
+                border: 2px solid $error;
+            }
+
+            button {
+                float: right;
+                margin-top: 30px;
+                border: none;
+                border-radius: 10px;
+                color: white;
+                font-size: 16px;
+                line-height: 20px;
+                font-weight: bold;
+                background-color: rgb(34, 34, 34);
+                width: auto;
+                padding: 12px 30px;
+            }
+
+            button:focus {
+                outline: none;
+                border: none;
+            }
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            margin-top: 40px;
+
+            li {
+                padding: 0;
+                h3 {
+                    display: inline-block;
+                    margin-top: 0px;
+                    margin-bottom: 20px;
+                    margin-left: 5px;
+                    color: $pink;
+                    font-size: 18px;
+                }
+
+                span {
+                    display: inline-block;
+                    font-size: 16px;
+                    color: rgb(34, 34, 34);
+                    font-weight: bold;
+                }
+            }
+        }
+
+        .buttons {
+            display: flex;
+            width: 100%;
+            margin: 20px 0 0 auto;
+            justify-content: flex-end;
+        }
+
+        #remove {
+            padding: 12px 30px;
+            background-color: transparent;
+            border: none;
+            font-size: 16px;
+            line-height: 20px;
+            color: rgb(34, 34, 34);
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        #add {
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            line-height: 20px;
+            font-weight: bold;
+            background-color: $pink;
+            width: auto;
+            padding: 12px 30px;
+        }
+
+        button:focus {
+            outline: none;
+            border: none;
+        }
+
+        .numberOfSeats, .pricePerSeat {
+            border-bottom: 1px solid rgb(234, 234, 234);
+            padding: 16px 0;
+            display: grid;
+            width: 100%;
+            grid-template-columns: auto 32px 60px 32px;
+            grid-template-rows: 20px 18px;
+            grid-template-areas: "pText minus input plus"
+                                 "spanText minus input plus";
+                                 
+
+            p {
+                grid-area: pText;
+                margin: 0;
+            }
+
+            span {
+                grid-area: spanText;
+                font-size: 14px;
+                line-height: 18px;
+                color: rgb(113, 113, 113);
+            }
+
+            .input-box {
+                position: relative;
+                grid-area: minus;
+                margin-top: 3px;
+                input {
+                    width: 124px;
+                    height: 32px;
+                    font-size: 16px;
+                    padding: 8px 15px 8px 25px;
+                    border: 1px solid rgb(234, 234, 234);
+                    border-radius: 5px;
+                    color: rgb(34, 34, 34);
+                    font-weight: bold;
+                }
+                .dollar {
+                    position: absolute;
+                    top: 8px;
+                    left: 10px;
+                    line-height: 16px;
+                    font-size: 16px;
+                    color: rgb(34, 34, 34);
+                    font-weight: bold;
+                }
+            }
+
+            input {
+                text-align: center;
+                width: 60px;
+                height: 32px;
+                font-size: 16px;
+                padding: 8px 5px;
+                border: none;
+                color: rgb(34, 34, 34);
+                font-weight: bold;
+            }
+
+            :focus {
+                outline: none;
+            }
+
+            .minusBtn, .plusBtn {
+                margin-top: 3px;
+                border-radius: 50%;
+                width: 32px;
+                height: 32px;
+                background-color: white;
+                padding: 4px;
+            }
+    
+            .minusBtn {
+                grid-area: minus;
+                border: 1px solid rgb(113, 113, 113);
+            }
+    
+            .plusBtn {
+                grid-area: plus;
+                border: 1px solid rgb(113, 113, 113);
+            }
+    
+            .disabled {
+                border: 1px solid rgb(234, 234, 234);
+    
+                svg {
+                    fill: rgb(234, 234, 234);
+                }
+            }
+        }
+
+        #finish {
+            width: 100%;
+            height: 44px;
+            font-size: 16px;
+            line-height: 20px;
+            padding: 12px 0;
+            font-weight: bold;
+            background-color: $pink;
+            color: white;
+            border-radius: 10px;
+            border: none;
+            margin: 50px 0 10px 0;
+        }
+
+        .next {
+            float: right;
+            margin-top: 50px;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            line-height: 20px;
+            font-weight: bold;
+            background-color: rgb(34, 34, 34);
+            width: 100%;
+            padding: 12px 30px;
+        }
+
+        .next:focus {
+            outline: none;
+            border: none;
+        }
+    }
+    
+}
+
+.error {
+    @extend %error-text;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+ 
+footer {
+    @extend %container;
+    text-align: center;
+    display: grid;
+    grid-template-columns: auto auto;
+    padding: 10px 24px;
+
+    button, a {
+        grid-column: 1 / span 2;
+        text-decoration: none;
+        width: 100%;
+        border: none;
+        border-radius: 10px;
+        background-color: $pink;
+        color: white;
+        font-size: 16px;
+        line-height: 20px;
+        font-weight: bold;
+        padding: 12px 0;
+    }
+
+    :focus {
+        border: none;
+        outline: none;
+    }
+
+    #next {
+        background-color: rgb(34, 34, 34);
+        width: auto;
+        padding: 12px 30px;
+        justify-self: end;
+    }
+
+    #back {
+        grid-column: span 1 / 1;
+        width: auto;
+        background-color: transparent;
+        color: rgb(34, 34, 34);
+        text-decoration: underline;
+        justify-self: start;
+    }
+}

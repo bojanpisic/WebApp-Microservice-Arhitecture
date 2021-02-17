@@ -1,0 +1,299 @@
+@import './../../../app.component.scss';
+
+* {
+  box-sizing: border-box;
+}
+
+header {
+  nav {
+    display: grid;
+    width: 100%;
+    height: 60px;
+    background: white;
+    opacity: 1;
+    padding:20px 30px;
+    border-bottom: 1px solid gainsboro;
+    grid-template-columns: 90px auto 90px;
+    position: fixed;
+    z-index: 9999;
+  
+    img {
+        height: 16px;
+        width: 16px;
+        margin: auto 0;
+    }
+  
+    span, a {
+        font-size: 16px;
+        text-align: center;
+        font-weight: 600;
+        color: rgb(60,60,60);
+    }
+  
+    .bonus {
+        text-align: right;
+        img {
+          height: 18px;
+          width: 18px;
+          vertical-align: middle;
+          margin-bottom: 3px;
+          margin-right: 5px;
+        }
+    }
+  }
+}
+
+main {
+  padding-top: 70px;
+
+  .personal-info {
+    margin-top: 30px;
+    margin-left: 29px;
+    svg {
+      vertical-align: middle;
+      margin-right: 6px;
+      margin-bottom: 2px;
+    }
+  
+    h4 {
+      display: inline;
+      color: rgb(60,60,60);
+      font-size: 20px;
+    }
+  }
+
+  .container {
+    max-width: 100%;
+    margin: 30px 30px 40px 30px;
+    display: grid;
+    grid-template-columns: auto 120px;
+    grid-template-rows: 20px 30px 20px 30px 20px 35px 50px;
+    grid-template-areas: "spanfirstname image"
+                         "firstname image"
+                         "spanlastname image"
+                         "lastname image"
+                         "spanphone image"
+                         "phone image"
+                         "edit none";
+
+    p {
+      margin: 0;
+      margin-top: 3px;
+      color: rgb(80, 80, 80);
+      max-width: 195px;
+    }
+
+    #changePhoto {
+      text-align: center;
+      font-size: 14px;
+      line-height: 18px;
+      font-family: 'Roboto';
+      color: white;
+      background: $blue;
+      padding: 4px 8px;
+      border: none;
+      border-radius: 5px;
+      margin: 0;
+      width: 100%;
+      img {
+          vertical-align: bottom;
+          height: 16px;
+          width: 16px;
+          margin: 0 4px 1px 0;
+      }
+  }
+
+    span {
+      margin-top: 8px;
+      font-size: .85em;
+      font-weight: bold;
+      color: rgb(60, 60, 60);
+    }
+
+    #spanfirstname {
+      grid-area: spanfirstname;
+    }
+
+    #firstname {
+      grid-area: firstname;
+      font-size: 20px;
+    }
+
+    #spanlastname {
+      grid-area: spanlastname;
+    }
+
+    #lastname {
+      grid-area: lastname;
+      font-size: 20px;
+    }
+
+    #spanphone {
+      grid-area: spanphone;
+    }
+
+    #phone {
+      grid-area: phone;
+      font-size: 20px;
+    }
+
+    #edit {
+      grid-area: edit;
+      margin-top: 20px;
+      margin-right: auto;
+      padding: .4em .7em .4em .5em;
+      background-color: $light-blue;
+      text-decoration: none;
+      color: white;
+      font-size: 14px;
+      border-radius: 20px;
+      box-shadow: $lightest-shadow;
+
+      img {
+        height: 16px;
+        width: 16px;
+        vertical-align: middle;
+        margin-bottom: 5px;
+        margin-right: 2px;
+      }
+    }
+
+    #image {
+      grid-area: image;
+      width: 120px;
+      height: 120px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 50%;
+      box-shadow: $gray-shadow;
+      img{
+        display: inline-block;
+        margin-top: -20%;
+        margin-left: -35%;
+        height: 120%;
+        width: auto;
+      }
+    }
+  }
+
+  .friends {
+    display: grid;
+    grid-template-columns: auto auto;
+    margin-top: 30px;
+    margin-left: 29px;
+  
+    h4 {
+      display: inline;
+      color: rgb(60,60,60);
+      font-size: 20px;
+      margin: 0;
+    }
+
+    a {
+      text-align: right;
+      margin-right: 30px;
+      color: rgb(60,60,60);
+      font-weight: bold;
+    }
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin-left: 25px;
+    margin-top: 25px;
+    margin-bottom: 30px;
+
+    .friends-avatar {
+      display: inline-block;
+      width: 60px;
+      height: 60px;
+      background-image: url('../../../../assets/friend1.jpeg');
+      background-size: cover;
+      background-position: 50% 10%;
+      position: relative;
+      overflow: hidden;
+      border-radius: 50%;
+      border: 5px solid white;
+
+      img {
+        margin-left: 5px;
+        margin-top: 5px;
+        width: 50px;
+        height: 50px;
+      }
+
+      .plus {
+        text-align: center;
+        width: 50px;
+        height: 50px;
+        padding: 15px 0 15px 0;
+        line-height: 20px;
+        font-size: 40px;
+        color: white;
+        font-weight: bold;
+      }
+    }
+
+    li + li {
+      margin-left: -15px;
+    }
+  }
+
+  .points {
+    margin-left: 30px;
+    margin-top: 30px;
+    max-width: calc(100% - 60px);
+    font-size: 1.1em;
+    color: rgb(60,60,60);
+
+    a {
+      display: inline-block;
+      width: calc(50% - 5px);
+      text-align: center;
+      background-color: $purple;
+      text-decoration: none;
+      font-weight: bold;
+      color: white;
+      border-radius: 3px;
+      padding: 8px 0;
+      box-shadow: $smallest-shadow;
+
+      img {
+        display: inline-block;
+        margin-left: 10px;
+        margin-right: 0;
+      }
+    }
+
+    a + a {
+      margin-left: 10px;
+      background-color: $pink;
+    }
+
+    img {
+      height: 18px;
+      width: 18px;
+      vertical-align: middle;
+      margin-bottom: 3px;
+      margin-right: 5px;
+    }
+    
+    span {
+      font-weight: bold;
+    }
+  }
+
+  button {
+    width: calc(100% - 60px);
+    margin: 30px 30px 0px 30px;
+    padding: .6em;
+    outline: none;
+    border-radius: 10px;
+    border: 2px solid rgb(60,60,60);
+    color: rgb(60,60,60);
+    font-weight: bold;
+    font-size: 1.1em;
+    background-color: white;
+  }
+}

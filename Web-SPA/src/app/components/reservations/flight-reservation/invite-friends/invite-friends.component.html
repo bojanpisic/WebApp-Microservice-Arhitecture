@@ -1,0 +1,76 @@
+<div class="container">
+    <div class="header">
+        <button (click)="close()">
+            <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: rgb(34, 34, 34); height: 16px; width: 16px; stroke: currentcolor; stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>
+        </button>
+        <span>Passenger info</span>
+        <!-- <div class="price"></div> -->
+        <p>${{seat.price}}</p>
+    </div>
+    <div class="seat" [ngStyle]="{'background-color': seat.class === 'F' ? '#8795fa'
+                                                    : seat.class === 'B' ? '#fa8795'
+                                                    : seat.class === 'E' ? '#3eb0f7'
+                                                    : '#fab387'}">
+        <span>class</span><span>column</span><span>row</span>
+        <p>{{seat.class}}</p><p>{{seat.column}}</p><p>{{seat.row}}</p>
+    </div>
+    <div class="content">
+        <form *ngIf="option === 'fill' && pickSeatForMe" [formGroup]="form" (ngSubmit)="confirm()">
+            <p>YOUR PASSPORT:</p>
+            <input [ngClass]="{'error-input': (form.controls.passport.touched || passportInvalid) && form.controls.passport.invalid}" formControlName="passport" type="text">
+            <div class="error" *ngIf="(form.controls.passport.touched || passportInvalid) && form.controls.passport.invalid">
+                Passport is required!
+            </div>
+            <button id="confirm" type="submit" [ngClass]="{'firstButton': seat.class === 'F', 'businessButton' : seat.class === 'B', 'economyButton' : seat.class === 'E', 'basicEconomyButton' : seat.class === 'BE'}">
+                Confirm
+            </button>
+        </form>
+        <form *ngIf="option === 'fill' && !pickSeatForMe" [formGroup]="form" (ngSubmit)="confirm()">
+            <p>FIRST NAME:</p>
+            <input [ngClass]="{'error-input': (form.controls.firstName.touched || firstNameInvalid) && form.controls.firstName.invalid}" formControlName="firstName" type="text">
+            <div class="error" *ngIf="(form.controls.firstName.touched || firstNameInvalid) && form.controls.firstName.invalid">
+                First name is required!
+            </div>
+            <p>LAST NAME:</p>
+            <input [ngClass]="{'error-input': (form.controls.lastName.touched || lastNameInvalid) && form.controls.lastName.invalid}" formControlName="lastName" type="text">
+            <div class="error" *ngIf="(form.controls.lastName.touched || lastNameInvalid) && form.controls.lastName.invalid">
+                Last name is required!
+            </div>
+            <p>PASSPORT:</p>
+            <input [ngClass]="{'error-input': (form.controls.passport.touched || passportInvalid) && form.controls.passport.invalid}" formControlName="passport" type="text">
+            <div class="error" *ngIf="(form.controls.passport.touched || passportInvalid) && form.controls.passport.invalid">
+                Passport is required!
+            </div>
+            <button id="confirm" type="submit" [ngClass]="{'firstButton': seat.class === 'F', 'businessButton' : seat.class === 'B', 'economyButton' : seat.class === 'E', 'basicEconomyButton' : seat.class === 'BE'}">
+                Confirm
+            </button>
+        </form>
+        <div *ngIf="option === 'invite'" class="invite-friends">
+            <div *ngIf="person === undefined" class="search-friends" (click)='focusInput()'>
+                <button>
+                    <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: none; height: 16px; width: 16px; stroke: currentcolor; stroke-width: 4; overflow: visible;"><g fill="none"><path d="m13 24c6.0751322 0 11-4.9248678 11-11 0-6.07513225-4.9248678-11-11-11-6.07513225 0-11 4.92486775-11 11 0 6.0751322 4.92486775 11 11 11zm8-3 9 9"></path></g></svg>
+                    <input id="searchInput" type="text" [(ngModel)]="searchText" placeholder="Find your friend!">
+                </button>
+            </div>
+            <ul *ngIf="person === undefined" class="my-friend">
+                <div *ngIf="friends.length === 0" class="no-friends">
+                    You are not friends with anyone yet, find your friends now!
+                </div>
+                <li *ngFor="let friend of (friends | findFriend:searchText)">
+                    <span id="add" class="material-icons" (click)='inviteFriend(friend)'>person_add</span>
+                    <div id="image" class="image"></div>
+                    <span id="name">{{friend.firstName}} {{friend.lastName}}</span>
+                    <span id="email"><i id='mail' class="material-icons">mail_outline</i> {{friend.email}}</span>
+                </li>
+                <br>
+            </ul>
+            <div *ngIf="person !== undefined" class="invitedFriend">
+                <p>This seat is reserved for your friend <span>{{person.firstName}} {{person.lastName}}.</span></p>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <button [ngStyle]="{'visibility': (person === undefined) ? 'hidden' : 'visible' }" id="discard" (click)='onDiscard()'>Discard</button>
+        <button *ngIf="!pickSeatForMe" [ngStyle]="{'visibility': (person === undefined) ? 'visible' : 'hidden' }" id="{{(option === 'fill') ? 'invite' : 'fill'}}" (click)='onClick()'>{{btnContent}}</button>
+    </div>
+</div>

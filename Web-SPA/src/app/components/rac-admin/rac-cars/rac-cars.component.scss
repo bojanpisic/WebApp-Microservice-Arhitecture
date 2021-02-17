@@ -1,0 +1,119 @@
+@import '../../../scss/layout/header';
+@import '../../../scss/layout/footer';
+@import '../../../scss/elements/buttons';
+@import '../../../scss/elements/inputs';
+
+* {
+    box-sizing: border-box;
+}
+
+header {
+    @extend %container-top;
+    display: grid;
+    grid-template-columns: 44px auto 44px;
+    text-align: center;
+
+    .back {
+        @extend %header-back;
+
+        svg {
+            @extend %header-svg;
+        }
+    }
+
+    span {
+        @extend %header-span;
+    }
+}
+
+main {
+    padding: 79px 24px 63px 24px;
+
+    .search {
+        @extend %search-container;
+        margin-bottom: 20px;
+
+        button {
+            @extend %search-button;
+
+            svg {
+                @extend %search-svg;
+            }
+
+            input {
+                @extend %search-input;
+            }
+
+            ::placeholder {
+                color: rgb(113, 113, 113);
+            }
+        }
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    
+        li {
+            padding: 0px;
+            padding-bottom: 1px;
+            margin-bottom: 30px;
+            border-radius: 3px;
+            box-shadow: $smallest-shadow;
+
+            button {
+                background: transparent;
+                border: none;
+                text-decoration: underline;
+                font-size: 16px;
+                line-height: 16px;
+                font-weight: bold;
+                color: $pink;
+                padding: 0;
+                display: block;
+                margin: 15px 0 0 auto;
+
+                img {
+                    display: inline-block;
+                    height: 14px;
+                    width: 14px;
+                    transform: rotate(180deg);
+                    vertical-align: top;
+                    margin-left: 5px;
+                }
+            }
+        }
+    }
+    
+}
+
+footer {
+    @extend %container;
+    text-align: center;
+    display: grid;
+    grid-template-columns: auto;
+    padding: 10px 24px;
+
+    a {
+        text-decoration: none;
+        width: 100%;
+        border: none;
+        border-radius: 10px;
+        background-color: rgb(34, 34, 34);
+        color: white;
+        font-size: 16px;
+        line-height: 20px;
+        font-weight: bold;
+        padding: 12px 0;
+    }
+
+    :focus {
+        border: none;
+        outline: none;
+    }
+}
+
+.blur {
+    filter: blur(8px);
+}

@@ -1,0 +1,36 @@
+<div class="popup">
+    <div class="header">
+        <button (click)="back()">
+            <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: rgb(34, 34, 34); height: 16px; width: 16px; stroke: currentcolor; stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>
+        </button>
+        <span>Configure</span>
+    </div>
+    <div class="seat" [ngStyle]="{'background-color': seat.class === 'F' ? '#8795fa'
+                                                    : seat.class === 'B' ? '#fa8795'
+                                                    : seat.class === 'E' ? '#3eb0f7'
+                                                    : '#fab387'}">
+        <span>class</span><span>column</span><span>row</span>
+        <p>{{seat.class}}</p><p>{{seat.column}}</p><p>{{seat.row}}</p>
+    </div>
+    <div class="content">
+        <form [formGroup]="form" (ngSubmit)="onChangePrice()">
+            <p>Seat price:</p>
+            <div class="input-box" [ngStyle]="{'margin-bottom': form.controls.price.invalid ? '5px' : '20px'}">
+                <input [ngClass]="{'error-input': form.controls.price.invalid}" formControlName="price" type="number" min="1" [value]="seat.price">
+                <span class="dollar">$</span>
+            </div>
+            <div class="error" *ngIf="form.controls.price.errors?.required">
+                Seat price is required!
+            </div>
+            <div class="error" *ngIf="form.controls.price.errors?.max">
+                Seat price has to be to less than original (${{seat.price}})!
+            </div>
+            <button class="submit" type="submit" [ngClass]="{'firstButton': seat.class === 'F', 'businessButton' : seat.class === 'B', 'economyButton' : seat.class === 'E', 'basicEconomyButton' : seat.class === 'BE'}">
+                Confirm
+            </button>
+        </form>
+    </div>
+    <div *ngIf="!special" class="footer">
+        <button (click)='deleteSeat()'>Delete seat</button>
+    </div>
+</div>

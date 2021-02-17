@@ -1,0 +1,110 @@
+@import './../../../../app.component.scss';
+
+* {
+  box-sizing: border-box;
+}
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    width: calc(100% - 60px);
+    height: calc(100vh - 200px);
+    margin: 100px 30px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: $smallest-shadow;
+
+    .message-info-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 64px;
+        width: 100%;
+        padding: 10px;
+        background-color: white;
+        border-bottom: 1px solid rgb(238, 238, 238);
+        border-top-right-radius: 20px;
+        border-top-left-radius: 20px;
+        display: grid;
+        grid-template-columns: 44px auto 44px;
+
+        button {
+            height: 44px;
+            width: 44px;
+            margin: auto;
+            border: none;
+            background: transparent;
+            svg {
+                margin: auto;
+            }
+        }
+
+        span {
+            font-size: 16px;
+            line-height: 20px;
+            color: rgb(34, 34, 34);
+            font-weight: bold;
+            margin: auto;
+        }
+    }
+
+    .content {
+        margin: 64px 0;
+        padding: 30px;
+        overflow: auto;
+        height: calc(100% - 64px * 2);
+        width: 100%;
+        border-radius: 30px;
+
+        span {
+            font-size: 14px;
+            color: rgb(34, 34, 34);
+            padding-bottom: 8px;
+        }
+
+        h1 {
+            line-height: 30px;
+            font-size: 26px;
+            margin: 0;
+        }
+    }
+
+    .buttons {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 64px;
+        width: 100%;
+        background-color: white;
+        border-top: 1px solid rgb(238, 238, 238);
+        border-bottom-right-radius: 20px;
+        border-bottom-left-radius: 20px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        button {
+            padding: .5em;
+            border-radius: 10px;
+            background-color: transparent;
+            border: 1px solid rgb(34, 34, 34);
+            color: rgb(34, 34, 34);
+            width: calc(50% - 20px);
+        }
+        
+        #decline {
+            margin-right: 10px;
+        }
+
+        #accept {
+            font-weight: bold;
+            color: white;
+            background-color: $pink;
+            border: 1px solid $pink;
+            box-shadow: $smallest-shadow;
+        }
+    }
+}

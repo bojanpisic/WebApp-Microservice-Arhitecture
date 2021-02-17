@@ -1,0 +1,28 @@
+<header>
+    <div (click)="goBack()" class="back">
+        <svg viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style="height: 1em; width: 1em; display: block;"><path d="m10.8 16c-.4 0-.7-.1-.9-.4l-6.8-6.7c-.5-.5-.5-1.3 0-1.8l6.8-6.7c.5-.5 1.2-.5 1.7 0s .5 1.2 0 1.7l-5.8 5.9 5.8 5.9c.5.5.5 1.2 0 1.7-.2.3-.5.4-.8.4"></path></svg>
+    </div>
+    <span>Special offers</span>
+</header>
+<main *ngIf="itsOk">
+    <h3 *ngIf="specialOffers.length === 0" style="color: rgb(34, 34, 34); margin-top: 40px;">
+        You have no added any special offers yet.<br>Add them now!
+    </h3>
+    <ul>
+        <li *ngFor="let specialOffer of specialOffers">
+            <div class="specialOffer">
+                <div class="price">
+                    <span>Old price: ${{specialOffer.oldPrice}}</span>
+                    <p id="price">${{specialOffer.newPrice}}</p>
+                </div>
+                <p>Special offer</p>
+            </div>
+            <div *ngFor="let flight of specialOffer.flights; let i = index"  [ngStyle]="{'border-bottom': '.5px solid gainsboro'}">
+                <app-flight [flight]="flight" [seat]="true" [seatName]="flight.seatNum"></app-flight>
+            </div>
+        </li>
+    </ul>
+</main>
+<footer>
+    <a href="#" routerLink='/admin/{{adminId}}/special-offers/add-special-offer'>ADD SPECIAL OFFER</a>
+</footer>

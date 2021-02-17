@@ -1,0 +1,25 @@
+<div class="fly" [ngClass]="{'drive': option === 'drive'}">
+    <app-nav *ngIf='userId === undefined'></app-nav>
+    <h6>Travel with us.</h6><h1>Skys&roads.</h1>
+</div>
+<div class="container">
+    <button type="button" (click) = "onFly()" [ngClass]="{'choosen-option-class': option === 'fly'}">FLY</button>
+    <button type="button" (click) = "onDrive()" [ngClass]="{'choosen-option-class': option === 'drive'}">DRIVE</button>
+</div>
+<div class="form">
+    <app-flight-main-form [userId]="userId" *ngIf="option === 'fly'" ></app-flight-main-form>
+    <app-drive-main-form [userId]="userId" *ngIf="option === 'drive'"></app-drive-main-form>
+</div>
+<app-top-rated [option]='option'></app-top-rated>
+<div class="all-special-offers" (click)="onSpecialOffers()">
+    <div class="purple">
+        <div class="orange">
+            <div class="blue">
+                <img src="../../../assets/offer.svg">
+            </div>
+        </div>
+    </div>
+</div>
+<app-redirect-to (redirect)="onRedirect($event)" [option]='option'></app-redirect-to>
+<app-bottom-menu *ngIf='userId !== undefined' [userId] = "userId"></app-bottom-menu>
+<app-footer></app-footer>

@@ -1,0 +1,167 @@
+@import './../../../app.component.scss';
+
+* {
+  box-sizing: border-box;
+}
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3000;
+    width: calc(100% - 60px);
+    height: calc(100vh - 200px);
+    margin: 100px 30px;
+    background-color: white;
+    border-radius: 30px;
+    box-shadow: $smallest-shadow;
+    text-align: center;
+    align-content: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .remove-friend-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 64px;
+        width: 100%;
+        padding: 10px;
+        border-bottom: 1px solid rgb(238, 238, 238);
+        display: grid;
+        grid-template-columns: 44px auto 44px;
+
+        button {
+            height: 44px;
+            width: 44px;
+            margin: auto;
+            border: none;
+            background: transparent;
+            svg {
+                margin: auto;
+            }
+        }
+
+        :focus {
+            outline: none;
+        }
+
+        span {
+            font-size: 16px;
+            line-height: 20px;
+            color: rgb(34, 34, 34);
+            font-weight: bold;
+            margin: auto;
+        }
+    }
+
+    .car-content {
+        margin: 0 30px;
+        // display: grid;
+        // grid-template-columns: auto auto;
+        // grid-template-rows: auto auto auto;
+        // grid-template-areas: 'image image'
+        //                      'text text'
+        //                      'cancel delete';
+        img {
+            // grid-area: image;
+            justify-self: center;
+            max-height: calc(100vh * .25);
+            max-width: 100%;
+            margin-bottom: 30px;
+        }
+
+        p {
+            margin: 0;
+            line-height: 20px;
+            font-size: 16px;
+            margin-top: 3px;
+            // grid-area: text;
+            // display: inline;
+        }
+
+        button {
+            display: inline-block;
+            justify-self: center;
+            margin-top: 30px;
+            width: calc(100% - 20px);
+            padding: .5em;
+            border-radius: 24px;
+            background-color: transparent;
+            border: 1px solid rgb(238, 238, 238);
+            color: rgb(80, 80, 80);
+        }
+
+        :focus {
+            outline: none;
+        }
+
+        #cancel {
+            grid-area: cancel;
+            margin-right: 10px;
+        }
+
+        #remove {
+            grid-area: delete;
+            font-weight: bold;
+            color: rgb(34, 34, 34);
+            border: 2px solid rgb(34, 34, 34);
+            box-shadow: $smallest-shadow;
+        }
+    }
+
+    .content {
+        margin: 0 30px;
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-template-rows: auto auto auto;
+        grid-template-areas: 'image image'
+                             'text text'
+                             'cancel delete';
+        img {
+            grid-area: image;
+            justify-self: center;
+            max-height: calc(100vh * .25);
+            max-width: 100%;
+            margin-bottom: 30px;
+        }
+
+        h4 {
+            grid-area: text;
+            display: inline;
+            h4 {
+                color: $orange;
+            }
+        }
+
+        button {
+            display: inline-block;
+            justify-self: center;
+            margin-top: 30px;
+            width: calc(100% - 20px);
+            padding: .5em;
+            border-radius: 24px;
+            background-color: transparent;
+            border: 1px solid rgb(238, 238, 238);
+            color: rgb(80, 80, 80);
+        }
+
+        :focus {
+            outline: none;
+        }
+
+        #cancel {
+            grid-area: cancel;
+            margin-right: 10px;
+        }
+
+        #remove {
+            grid-area: delete;
+            font-weight: bold;
+            color: rgb(34, 34, 34);
+            border: 2px solid rgb(34, 34, 34);
+            box-shadow: $smallest-shadow;
+        }
+    }
+}

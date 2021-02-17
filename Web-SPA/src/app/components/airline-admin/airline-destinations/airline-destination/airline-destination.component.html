@@ -1,0 +1,7 @@
+<div [ngStyle]="{'height': editable ? '165px' : '16vh'}" class="container">
+    <div class="content">
+        <img [ngStyle]="{'height': editable ? '120px' : 'calc(16vh - 45px)'}" [src]="destination.imageUrl">
+        <p id="country"><img src="../../../../../assets/location.png">{{destination.state}}</p>
+        <p id="city">{{destination.city}}</p>
+    </div>
+</div>

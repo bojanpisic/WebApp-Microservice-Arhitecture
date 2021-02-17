@@ -1,0 +1,10 @@
+<div class="google-map">
+  <agm-map [ngStyle]="{'height': home ? '30vh' : '250px'}"
+  [latitude]="latitude" 
+  [longitude]="longitude" 
+  [zoom]="zoom" >
+    <agm-marker 
+    [latitude]="latitude" 
+    [longitude]="longitude"></agm-marker>
+  </agm-map>
+</div>

@@ -1,0 +1,18 @@
+@import '../../app.component.scss';
+
+* {
+    box-sizing: border-box;
+}
+
+%wide-button {
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    background-color: $pink;
+    color: white;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: bold;
+    padding: 12px 0;
+}

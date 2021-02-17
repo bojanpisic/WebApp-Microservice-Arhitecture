@@ -1,0 +1,14 @@
+<div [ngClass]="{'unread': !message.accepted}" class="container">
+    <span *ngIf="message.accepted" id="note">accepted</span>
+    <span *ngIf="!message.accepted" id="note">request</span>
+    <!-- <div class="expires">
+        <img src="../../../../../assets/stopwatch.svg"><span>2h 35min</span>
+    </div> -->
+    <div class="image"></div>
+    <span id="name">{{message.senderFirstName}} {{message.senderLastName}}</span>
+    <div class="text">
+        <span id="text">I would like to be your friend!</span>
+    </div>
+    <!-- <button id="delete" (click)='deleteMessage()'>Delete</button> -->
+    <button *ngIf="!message.accepted" id="read" (click)='readMessage()'>OPEN</button>
+</div>

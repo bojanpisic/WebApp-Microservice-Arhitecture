@@ -1,0 +1,55 @@
+@import '../../../scss/layout/header';
+@import '../../../scss/layout/footer';
+@import '../../../scss/elements/buttons';
+@import '../../../scss/elements/inputs';
+
+* {
+    box-sizing: border-box;
+}
+
+header {
+    @extend %container-top;
+    display: grid;
+    grid-template-columns: 44px auto 44px;
+    text-align: center;
+
+    .back {
+        @extend %header-back;
+
+        svg {
+            @extend %header-svg;
+        }
+    }
+
+    span {
+        @extend %header-span; 
+    }
+}
+
+ul {
+    margin: 0;
+    padding: 79px 24px 0 24px;
+    list-style-type: none;
+
+    li {
+        padding: 0px;
+        padding-bottom: 1px;
+        margin-bottom: 30px;
+        border-radius: 3px;
+        box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.15);
+    }
+}
+.addMore {
+    height: 64px;
+    text-align: center;
+    padding: 22px 0;
+    margin-bottom: 30px;
+    border-top: 1px solid rgb(234, 234, 234);
+    border-bottom: 1px solid rgb(234, 234, 234);
+    span {
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 20px;
+        color: rgb(34, 34, 34);
+    }
+}

@@ -1,0 +1,29 @@
+<!-- <input type="text" [ngClass]="{'one-column': oneColumn, 'two-columns': !oneColumn}" (keydown.enter)="$event.preventDefault()" placeholder="Anywhere" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search> -->
+<input id="dropOffLocation" *ngIf="!pickUpLocation && !searchDestination && !addFlight && !pickAirlineLocation && !addAirlineAddress" type="text" [ngStyle]="{'border-top-right-radius': left ? '0px' : '3px',
+                               'border-bottom-right-radius': left ? '0px' : '3px',
+                               'border-top-left-radius': left ? '3px' : '0px',
+                               'border-bottom-left-radius': left ? '3px' : '0px',
+                               'border-left': right ? '0px' : '1px solid lightgrey'}" 
+    [ngClass]="{'error': error}"
+    (focus)="onFocus()"
+    (input)="onChangeDropOffLocation()"
+(keydown.enter)="$event.preventDefault()" placeholder="Anywhere" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
+<input id="pickUpLocation" *ngIf="pickUpLocation" type="text" [ngStyle]="{'border-radius': '3px', 'grid-column:' : '1/ span 4'}" 
+    [ngClass]="{'error': error}"
+    (focus)="onFocus()"
+    (input)="onChangePickUpLocation()"
+(keydown.enter)="$event.preventDefault()" placeholder="Anywhere" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
+<input *ngIf="searchDestination" id="searchDestination" type="text" [ngStyle]="{'border': '0', 'padding-left': '30px', 'z-index' : 9999}" 
+(keydown.enter)="$event.preventDefault()" placeholder="Find destination!" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
+<input *ngIf="addFlight" [disabled]="disabled" type="text" id="addFlight" class="addFlight"
+    [ngClass]="{'error': error}"
+    (focus)="onFocus()"
+    (input)="onChange()"
+(keydown.enter)="$event.preventDefault()" placeholder="Find destination!" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
+<input *ngIf="addAirlineAddress" [disabled]="disabled" type="text" id="addAirlineAddress" class="smallInput"
+    [ngClass]="{'error': error}"
+    (focus)="onFocus()"
+    (input)="onChangeAddAirline()"
+(keydown.enter)="$event.preventDefault()" placeholder="{{airlineAddress !== undefined ? airlineAddress : 'Find address!'}}" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
+<input *ngIf="pickAirlineLocation"  type="text" id="pickAirlineLocation" class="pickAirlineLocation" [ngClass]="{'error': error}" (focus)="onFocus()" (input)="onChangeLocation()"
+(keydown.enter)="$event.preventDefault()" placeholder="{{myLocation.city}}, {{myLocation.state}}" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>

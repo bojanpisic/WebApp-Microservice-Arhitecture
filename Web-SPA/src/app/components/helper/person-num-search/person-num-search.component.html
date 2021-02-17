@@ -1,0 +1,23 @@
+<div class="container" [ngStyle]="{'margin-bottom': rotateArrow ? '3em' : '0px'}">
+    <div>
+        <button id="travellers-btn" (click)="travellersBtnClick()" type="button"
+            [ngStyle]="{'border-bottom-left-radius': rotateArrow ? '0px' : '3px',
+                        'border-bottom-right-radius': rotateArrow ? '0px' : '3px'}">
+            {{buttonContent}} 
+            <img src="../../assets/back.png" id="arrow" 
+            [ngStyle]="{'transform': rotateArrow ? 'rotateZ(-90deg)' : 'rotateZ(90deg)'}"/>
+        </button>
+    </div>
+    
+    <div id="travellers-box" [ngStyle]="{'display': rotateArrow ? 'grid' : 'none'}">  
+        <div class="travellers-box-items">
+            <p>travellers</p>
+            <div class="plus-minus-div">
+                <input type="button" value="-" class="minus" (click)="minus('adults')">
+                <!-- <input type="text" size="25" value={{numOfAdults}} class="count"> -->
+                <p class="count">{{numOfAdults}}</p>
+                <input type="button" value="+" class="plus" (click)="plus('adults')">
+            </div>
+        </div>         
+    </div>
+</div>

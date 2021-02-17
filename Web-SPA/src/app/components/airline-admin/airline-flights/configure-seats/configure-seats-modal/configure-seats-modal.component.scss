@@ -1,0 +1,174 @@
+@import '../../../../../scss/layout/modal';
+@import '../../../../../scss/elements/inputs';
+@import '../../../../../scss/elements/buttons';
+
+* {
+    box-sizing: border-box;
+}
+
+.popup {
+    @extend %modal-container;
+    display: block;
+    overflow: scroll;
+    .header {
+        @extend %modal-header;
+        padding: 10px 24px;
+
+        button {
+            @extend %modal-header-x;
+        }
+
+        :focus {
+            outline: none;
+        }
+
+        span {
+            @extend %modal-header-headline;
+        }
+    }
+
+    .seat {
+        margin: 64px auto 0 auto;
+        width: 250px;
+        height: 100px;
+        background-color: $blue;
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+        padding: 20px;
+        display: grid;
+        grid-template-rows: auto 40px;
+        grid-template-columns: 70px 70px 70px;
+        box-shadow: $smallest-shadow;
+        position: relative;
+
+        span {
+            font-size: 14px;
+            line-height: 20px;
+            color: whitesmoke;
+        }
+
+        p {
+            display: inline-block;
+            font-size: 40px;
+            line-height: 40px;
+            margin: 0;
+            font-family: 'Roboto';
+            font-weight: bold;
+            color: white;
+            padding: 0;
+            margin: 0;
+        }
+    }
+
+    .content {
+        min-height: calc(100% - 164px - 80px - 64px);
+        margin: 0 30px 80px 30px;
+        text-align: left;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        p {
+            color: rgb(34, 34, 34);
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 20px;
+            margin: 0;
+            margin-left: 10%;
+        }
+
+        .input-box {
+            position: relative;
+            width: 80%;
+            grid-area: minus;
+            margin: 5px 10% 20px 10%;
+            input {
+                text-align: center;
+                width: 100%;
+                height: 36px;
+                font-size: 16px;
+                padding: 8px 15px 8px 25px;
+                border: 1px solid rgb(234, 234, 234);
+                border-radius: 5px;
+                color: rgb(34, 34, 34);
+                font-weight: bold;
+                line-height: 20px;
+            }
+
+            .error-input {
+                @extend %error-input;
+                margin-bottom: 5px;
+            }
+
+            :focus {
+                @extend %focus;
+            }
+
+            .dollar {
+                position: absolute;
+                top: 8px;
+                left: 10px;
+                line-height: 20px;
+                font-size: 16px;
+                color: rgb(34, 34, 34);
+                font-weight: bold;
+            }
+        }
+
+        .error {
+            @extend %error-text;
+            margin-bottom: 10px;
+            font-size: 14px;
+            margin-left: 10%;
+        }
+
+        .submit {
+            @extend %wide-button;
+            margin-left: 10%;
+            padding: 8px 0;
+            width: 80%;
+            background-color: red;
+            border: none;
+            color: white;
+            box-shadow: $smallest-shadow;
+        }
+
+        :focus {
+            outline:none;
+        }
+
+        .firstButton {
+            background-color: #8795fa;
+        }
+
+        .businessButton {
+            background-color: #fa8795;
+        }
+
+        .economyButton {
+            background-color: #3eb0f7;
+        }
+
+        .basicEconomyButton {
+            background-color: #fab387;
+        }
+    }
+
+    .footer {
+        @extend %modal-footer;
+        grid-template-columns: auto;
+        padding: 10px 24px;
+
+        button {
+            width: 100%;
+            border: none;
+            color: $red;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 20px;
+            border-radius: 10px;
+            border: 2px solid $red;
+            background-color: white;
+        }
+    }
+}

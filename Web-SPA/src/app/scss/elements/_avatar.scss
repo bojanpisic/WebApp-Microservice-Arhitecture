@@ -1,0 +1,18 @@
+@import '../../app.component.scss';
+
+%image-container {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    box-shadow: $gray-shadow;
+}
+
+%image{
+    display: inline-block;
+    margin-top: -20%;
+    margin-left: -35%;
+    height: 120%;
+    width: auto;
+}

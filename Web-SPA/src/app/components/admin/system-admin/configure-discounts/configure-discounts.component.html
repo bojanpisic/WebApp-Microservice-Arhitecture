@@ -1,0 +1,31 @@
+<header>
+    <div (click)="onExit()" class="back">
+        <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: rgb(34, 34, 34); height: 16px; width: 16px; stroke: rgb(34, 34, 34); stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>
+    </div>
+    <span>Configure discounts</span>
+</header>
+<main *ngIf="isOk">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <p>Current bonus per kilometre is: {{data.bonus}}!</p>
+        <div class="content">
+            <p class="required">Bonus points / kilometre:</p>
+            <input [ngClass]="{'error-input': form.controls.bonus.invalid && (form.controls.bonus.touched || form.controls.bonus.dirty || errorBonus)}"
+            formControlName="bonus" type="number" min="0">
+            <div class="error" *ngIf="form.controls.bonus.errors?.required && (form.controls.bonus.touched || form.controls.bonus.dirty || errorBonus)">
+                Required field!
+            </div>
+        </div>
+        <br><br>
+        <p>Current discount for flight + car reservation is: {{data.discount}}%!</p>
+        <div class="content" style="border-bottom: none">
+            <p class="required">Discount %:</p>
+            <input [ngClass]="{'error-input': form.controls.discount.invalid && (form.controls.discount.touched || form.controls.discount.dirty || errorDiscount)}"
+            formControlName="discount" type="number" min="0" max="100">
+            <div class="error" *ngIf="form.controls.discount.errors?.required && (form.controls.discount.touched || form.controls.discount.dirty || errorDiscount)">
+                Discount is required!
+            </div>
+        </div>
+        <button type="submit">CONFIRM</button>
+    </form>
+</main>
+<!-- <app-notification show={{showErrorMsg}} message={{errorMsg}}></app-notification> -->

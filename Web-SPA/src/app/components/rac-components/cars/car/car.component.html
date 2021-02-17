@@ -1,0 +1,94 @@
+<div class="all">
+    <div class="container">
+        <div *ngIf="car.imageUrl" class="image" [ngStyle]="{'background': 'url(' + car.imageUrl + ') no-repeat center / cover',
+                                                            'border-top-left-radius': spec ? '3px' : '0px',
+                                                            'border-top-right-radius': spec ? '3px' : '0px'}">
+        </div>
+        <div *ngIf="!car.imageUrl" class="image">
+        </div>
+        <div class="racs-name">
+            <span id="company">COMPANY: </span>
+            <span>
+                {{car.name}}
+            </span>
+        </div>
+        <div class="name">
+            <span>{{car.brand}} {{car.model}} {{car.year}}</span>
+        </div>
+        <div class="grade">
+            <span id="grade">
+                <svg viewBox="0 0 1000 1000" role="presentation" aria-hidden="true" focusable="false" style="fill: currentcolor;"><path d="M972 380c9 28 2 50-20 67L725 619l87 280c11 39-18 75-54 75-12 0-23-4-33-12L499 790 273 962a58 58 0 0 1-78-12 50 50 0 0 1-8-51l86-278L46 447c-21-17-28-39-19-67 8-24 29-40 52-40h280l87-279c7-23 28-39 52-39 25 0 47 17 54 41l87 277h280c24 0 45 16 53 40z"></path></svg>
+                {{car.rate}}
+            </span>
+        </div>
+        <div class="extra">
+            <span id="type">
+                {{car.type}}
+            </span>
+            <span>
+                {{car.seatsNumber}} passengers
+            </span>
+        </div>
+        <div *ngIf="customerView || adminView" class="price">
+            <span id="price">${{car.pricePerDay}}</span>
+            <span> / day</span>
+        </div>
+        <div *ngIf="fromDate && toDate" class="price">
+            <span id="dates">{{fromDate}} / {{toDate}}</span>
+            <br *ngIf="!spec">
+            <span *ngIf="!spec" id="dates">{{fromPlace}} / {{toPlace}}</span>
+            <br>
+            <span id="price">total: ${{car.totalPrice}}</span>
+            <!-- <span> / day</span> -->
+        </div>
+        <div *ngIf="customerView" class="book">
+            <a (click)="onBook()">BOOK NOW</a>
+        </div>
+        <div *ngIf="adminView" class="edit" (click)="onEdit()">
+            <span>Edit<img src="../../../../assets/bold_arrow_blue.svg"></span>
+        </div>
+        <div *ngIf="quitReservation && canQuit" class="quit" (click)="onQuit()">
+            <span>QUIT</span>
+        </div>
+        <div *ngIf="quitReservation && !canQuit" class="quit">
+            <span>You can't quit this!</span>
+        </div>
+        <div *ngIf="carRate" class="book" (click)="onRate()">
+            <a>RATE EXPERIENCE <svg [ngStyle]="{'transform': rateExperience ? 'rotate(90deg)' : 'rotate(-90deg)'}" viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style="height: 12px; width: 14px; fill: #1C4CB2"><path d="m10.8 16c-.4 0-.7-.1-.9-.4l-6.8-6.7c-.5-.5-.5-1.3 0-1.8l6.8-6.7c.5-.5 1.2-.5 1.7 0s .5 1.2 0 1.7l-5.8 5.9 5.8 5.9c.5.5.5 1.2 0 1.7-.2.3-.5.4-.8.4"></path></svg></a>
+        </div>
+        <div *ngIf="rateExperience" class="rateExperience">
+            <p (click)="onRateService()">Rate service <svg [ngStyle]="{'transform': showRateService ? 'rotate(90deg)' : 'rotate(-90deg)'}" viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style="height: 12px; width: 14px; fill: #1C4CB2"><path d="m10.8 16c-.4 0-.7-.1-.9-.4l-6.8-6.7c-.5-.5-.5-1.3 0-1.8l6.8-6.7c.5-.5 1.2-.5 1.7 0s .5 1.2 0 1.7l-5.8 5.9 5.8 5.9c.5.5.5 1.2 0 1.7-.2.3-.5.4-.8.4"></path></svg></p>
+            <div *ngIf="showRateService && !racsRated" class="rateService">
+                <p>Rate service</p>
+                <span>Rate it from 1 to 5</span>
+                <button [ngClass]="{'disabled': minusRateServiceDisabled}" class="minusBtn" [disabled]="minusRateServiceDisabled" (click)="onMinusRateService()">
+                    <svg [ngStyle]="{'fill': minusRateServiceDisabled ? 'rgb(234, 234, 234)' : 'rgb(113, 113, 113)'}" viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" style="height: 22px; width: 22px; display: block;"><rect height="2" rx="1" width="12" x="6" y="11"></rect></svg>
+                </button>
+                <p id="rateService">{{rateService}}</p>
+                <button class="plusBtn" [ngClass]="{'disabled': plusRateServiceDisabled}" [disabled]="plusRateServiceDisabled" (click)="onPlusRateService()">
+                    <svg viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" style="height: 22px; width: 22px; display: block; fill: rgb(113, 113, 113);"><rect height="2" rx="1" width="12" x="6" y="11"></rect><rect height="12" rx="1" width="2" x="11" y="6"></rect></svg>
+                </button>
+            </div>
+            <div *ngIf="showRateService && racsRated" class="rateService">
+                <p>You've already rated this car service!</p>
+            </div>
+            <button *ngIf="showRateService && !racsRated" id="confirmRates" (click)="onConfirmServiceRate()">Confirm rate</button>
+            <p (click)="onRateCar()">Rate car <svg [ngStyle]="{'transform': showRateCar ? 'rotate(90deg)' : 'rotate(-90deg)'}" viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style="height: 12px; width: 14px; fill: #1C4CB2"><path d="m10.8 16c-.4 0-.7-.1-.9-.4l-6.8-6.7c-.5-.5-.5-1.3 0-1.8l6.8-6.7c.5-.5 1.2-.5 1.7 0s .5 1.2 0 1.7l-5.8 5.9 5.8 5.9c.5.5.5 1.2 0 1.7-.2.3-.5.4-.8.4"></path></svg></p>
+            <div *ngIf="showRateCar && !carRated" class="rateCar">
+                <p>Rate car</p>
+                <span>Rate it from 1 to 5</span>
+                <button [ngClass]="{'disabled': minusRateCarDisabled}" class="minusBtn" [disabled]="minusRateCarDisabled" (click)="onMinusRateCar()">
+                    <svg [ngStyle]="{'fill': minusRateCarDisabled ? 'rgb(234, 234, 234)' : 'rgb(113, 113, 113)'}" viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" style="height: 22px; width: 22px; display: block;"><rect height="2" rx="1" width="12" x="6" y="11"></rect></svg>
+                </button>
+                <p id="rateCar">{{rateCar}}</p>
+                <button [ngClass]="{'disabled': plusRateCarDisabled}" [disabled]="plusRateCarDisabled" class="plusBtn" (click)="onPlusRateCar()">
+                    <svg viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" style="height: 22px; width: 22px; display: block; fill: rgb(113, 113, 113);"><rect height="2" rx="1" width="12" x="6" y="11"></rect><rect height="12" rx="1" width="2" x="11" y="6"></rect></svg>
+                </button>
+            </div>
+            <div *ngIf="showRateCar && carRated" class="rateService">
+                <p>You've already rated this car!</p>
+            </div>
+            <button *ngIf="showRateCar && !carRated" id="confirmRates" (click)="onConfirmCarRate()">Confirm rate</button>
+        </div>
+    </div>
+</div>

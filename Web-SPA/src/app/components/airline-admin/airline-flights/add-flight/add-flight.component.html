@@ -1,0 +1,192 @@
+<header>
+    <div *ngIf="step === 1" (click)="exit()" class="back">
+        <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: rgb(34, 34, 34); height: 16px; width: 16px; stroke: rgb(34, 34, 34); stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>
+    </div>
+    <div *ngIf="step !== 1" (click)="previousStep()" class="back">
+        <svg viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style="height: 1em; width: 1em; display: block; fill: rgb(34, 34, 34);"><path d="m10.8 16c-.4 0-.7-.1-.9-.4l-6.8-6.7c-.5-.5-.5-1.3 0-1.8l6.8-6.7c.5-.5 1.2-.5 1.7 0s .5 1.2 0 1.7l-5.8 5.9 5.8 5.9c.5.5.5 1.2 0 1.7-.2.3-.5.4-.8.4"></path></svg>
+    </div>
+    <span>Add flight</span>
+    <span>{{step}}/4</span>
+</header>
+<main *ngIf="this.destinations.length >= 1">
+    <div *ngIf="step === 1 && this.destinations.length > 1" class="main">
+        <form [formGroup]="formFrom" (ngSubmit)="onSubmitFrom()">
+            <h3>Departure</h3>
+            <p>Flight number:</p>
+            <input [ngClass]="{'error-input': (formFrom.controls.flightNumber.touched || flightNumberInvalid) && formFrom.controls.flightNumber.invalid}" type="text" formControlName="flightNumber">
+            <div class="error" *ngIf="(formFrom.controls.flightNumber.touched || flightNumberInvalid) && formFrom.controls.flightNumber.invalid">
+                Flight number is required!
+            </div>
+            <p>From:</p>
+            <div *ngIf="pickedFromDestination" [ngClass]="{droppedDown: dropdown}" (click)="toggleDropDown()" class="carType">
+                <p>{{pickedFromDestination.city}}, {{pickedFromDestination.state}}<svg [ngStyle]="{'transform': !dropdown ? 'rotateZ(-90deg)' : 'rotateZ(90deg)'}" viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style="height: 16px; width: 16px; display: inline-block;"><path d="m10.8 16c-.4 0-.7-.1-.9-.4l-6.8-6.7c-.5-.5-.5-1.3 0-1.8l6.8-6.7c.5-.5 1.2-.5 1.7 0s .5 1.2 0 1.7l-5.8 5.9 5.8 5.9c.5.5.5 1.2 0 1.7-.2.3-.5.4-.8.4"></path></svg></p>
+            </div>
+            <div *ngIf="dropdown" class="dropdown">
+                <ul>
+                    <li *ngFor="let destination of destinations">
+                        <p (click)="setFromDestination(destination)">{{destination.city}}, {{destination.state}}</p>
+                    </li>
+                </ul>
+            </div>
+            <p>Departure date:</p>
+            <input [ngClass]="{'error-input': (formFrom.controls.dateTime.touched || departureDateInvalid) && formFrom.controls.dateTime.invalid}" type="datetime-local" id='takeoff-date' formControlName="dateTime">
+            <div class="error" *ngIf="(formFrom.controls.dateTime.touched || departureDateInvalid) && formFrom.controls.dateTime.invalid">
+                Departure date is required!
+            </div>
+            <button class="next" type="submit">Next</button>
+        </form>
+    </div>
+    <div *ngIf="step === 1 && this.destinations.length <= 1" class="main">
+        You don't travel to at least 2 destinations.
+        <a href="#" routerLink="/admin/{{adminId}}/destinations">Add destinations</a> so you can add flight!
+    </div>
+    <div *ngIf="step === 2" class="main">
+        <div class="radio-group">
+            <label class="radio">
+                <input (change)="onFlightType($event)" type="radio" name="flight-type" value="direct flight" [checked]="(flightType === 'direct flight')">
+                Direct flight
+                <span></span>
+            </label>
+            <label class="radio">
+                <input (click)="onFlightType($event)" type="radio" name="flight-type" value="with stops" [checked]="(flightType === 'with stops')">
+                With stops
+                <span></span>
+            </label>
+        </div>
+        <div *ngIf="flightType === 'with stops' && this.destinations.length > 2" class="with-stops">
+            <ul>
+                <li>
+                    <ng-container #viewContainerRef1>
+                        <ng-template #tpl let-number='number' let-city='city' let-state='state'>
+                            <span>{{(number === 1) ? '1st' : (number === 2) ? '2nd' : number + 'th'}} stop:</span><h3>{{city}}, {{state}}</h3><br>
+                        </ng-template>
+                    </ng-container>
+                </li>
+                <li>
+                    <ng-template #viewContainerRef></ng-template>
+                </li>
+            </ul>
+            <div class="buttons">
+                <button id="remove" (click)="onRemoveStop()">Undo</button><button (click)="onAddStop()" id="add">ADD</button>
+            </div>
+        </div>
+        <div *ngIf="flightType === 'with stops' && this.destinations.length === 2">
+            You travel to 2 destinations only. That's why this has to be direct flight!
+        </div>
+        <button class="next" (click)="nextStep()">Next</button>
+    </div>
+    <div *ngIf="step === 3" class="main">
+        <form [formGroup]="formTo" (ngSubmit)="onSubmitTo()">
+            <h3>Arrival</h3>
+            <p>To:</p>
+            <div *ngIf="pickedToDestination" [ngClass]="{droppedDown: dropdown}" (click)="toggleDropDown()" class="carType">
+                <p>{{pickedToDestination.city}}, {{pickedToDestination.state}}<svg [ngStyle]="{'transform': !dropdown ? 'rotateZ(-90deg)' : 'rotateZ(90deg)'}" viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style="height: 16px; width: 16px; display: inline-block;"><path d="m10.8 16c-.4 0-.7-.1-.9-.4l-6.8-6.7c-.5-.5-.5-1.3 0-1.8l6.8-6.7c.5-.5 1.2-.5 1.7 0s .5 1.2 0 1.7l-5.8 5.9 5.8 5.9c.5.5.5 1.2 0 1.7-.2.3-.5.4-.8.4"></path></svg></p>
+            </div>
+            <div *ngIf="dropdown" class="dropdown">
+                <ul>
+                    <li *ngFor="let destination of availableDestinations">
+                        <p (click)="setToDestination(destination)">{{destination.city}}, {{destination.state}}</p>
+                    </li>
+                </ul>
+            </div>
+            <p>Arrival date:</p>
+            <input [ngClass]="{'error-input': (formTo.controls.dateTime.touched || arrivalDateInvalid) && formTo.controls.dateTime.invalid}" type="datetime-local" id='arrival-date' formControlName="dateTime">
+            <div class="error" *ngIf="(formTo.controls.dateTime.touched || arrivalDateInvalid) && formTo.controls.dateTime.invalid">
+                Arrival date is required!
+            </div>
+            <p>Total length in kilometers:</p>
+            <input [ngClass]="{'error-input': (formTo.controls.flightLength.touched || flightLengthInvalid) && formTo.controls.flightLength.invalid}" type="text" formControlName="flightLength">
+            <div class="error" *ngIf="(formTo.controls.flightLength.touched || flightLengthInvalid) && formTo.controls.flightLength.invalid">
+                Flight length is required!
+            </div>
+            <button type="submit">Next</button>
+        </form>
+    </div>
+    <div *ngIf="step === 4" class="main">
+        <h3 style="margin: 40px 0 10px 0">First class</h3>
+        <div class="numberOfSeats">
+            <p>Number of seats</p>
+            <span>This is changable</span>
+            <button [ngClass]="{'disabled': minusFirstClassDisabled}" class="minusBtn" [disabled]="minusFirstClassDisabled" (click)="onMinusFirstClass()">
+                <svg [ngStyle]="{'fill': minusFirstClassDisabled ? 'rgb(234, 234, 234)' : 'rgb(113, 113, 113)'}" viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" style="height: 22px; width: 22px; display: block;"><rect height="2" rx="1" width="12" x="6" y="11"></rect></svg>
+            </button>
+            <input type="number" min="1" [(ngModel)]="firstClassSeatsNumber">
+            <button class="plusBtn" (click)="onPlusFirstClass()">
+                <svg viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" style="height: 22px; width: 22px; display: block; fill: rgb(113, 113, 113);"><rect height="2" rx="1" width="12" x="6" y="11"></rect><rect height="12" rx="1" width="2" x="11" y="6"></rect></svg>
+            </button>
+        </div>
+        <div class="pricePerSeat">
+            <p>Price for seat</p>
+            <span>This is changable</span>
+            <div class="input-box">
+                <input type="number" min="1" [(ngModel)]="firstClassSeatPrice">
+                <span class="dollar">$</span>
+            </div>
+        </div>
+        <h3 style="margin: 50px 0 10px 0">Business</h3>
+        <div class="numberOfSeats">
+            <p>Number of seats</p>
+            <span>This is changable</span>
+            <button [ngClass]="{'disabled': minusBusinessDisabled}" [disabled]="minusBusinessDisabled" class="minusBtn" (click)="onMinusBusiness()">
+                <svg [ngStyle]="{'fill': minusBusinessDisabled ? 'rgb(234, 234, 234)' : 'rgb(113, 113, 113)'}" viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" style="height: 22px; width: 22px; display: block;"><rect height="2" rx="1" width="12" x="6" y="11"></rect></svg>
+            </button>
+            <input type="number" min="1" [(ngModel)]="businessSeatsNumber">
+            <button class="plusBtn" (click)="onPlusBusiness()">
+                <svg viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" style="height: 22px; width: 22px; display: block; fill: rgb(113, 113, 113);"><rect height="2" rx="1" width="12" x="6" y="11"></rect><rect height="12" rx="1" width="2" x="11" y="6"></rect></svg>
+            </button>
+        </div>
+        <div class="pricePerSeat">
+            <p>Price for seat</p>
+            <span>This is changable</span>
+            <div class="input-box">
+                <input type="number" min="1" [(ngModel)]="businessSeatPrice">
+                <span class="dollar">$</span>
+            </div>
+        </div>
+        <h3 style="margin: 50px 0 10px 0">Economy</h3>
+        <div class="numberOfSeats">
+            <p>Number of seats</p>
+            <span>This is changable</span>
+            <button [ngClass]="{'disabled': minusEconomyDisabled}" [disabled]="minusEconomyDisabled" class="minusBtn" (click)="onMinusEconomy()">
+                <svg [ngStyle]="{'fill': minusEconomyDisabled ? 'rgb(234, 234, 234)' : 'rgb(113, 113, 113)'}" viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" style="height: 22px; width: 22px; display: block;"><rect height="2" rx="1" width="12" x="6" y="11"></rect></svg>
+            </button>
+            <input type="number" min="1" [(ngModel)]="economySeatsNumber">
+            <button class="plusBtn" (click)="onPlusEconomy()">
+                <svg viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" style="height: 22px; width: 22px; display: block; fill: rgb(113, 113, 113);"><rect height="2" rx="1" width="12" x="6" y="11"></rect><rect height="12" rx="1" width="2" x="11" y="6"></rect></svg>
+            </button>
+        </div>
+        <div class="pricePerSeat">
+            <p>Price for seat</p>
+            <span>This is changable</span>
+            <div class="input-box">
+                <input type="number" min="1" [(ngModel)]="economySeatPrice">
+                <span class="dollar">$</span>
+            </div>
+        </div>
+        <h3 style="margin: 50px 0 10px 0">Basic economy</h3>
+        <div class="numberOfSeats">
+            <p>Number of seats</p>
+            <span>This is changable</span>
+            <button [ngClass]="{'disabled': minusBasicEconomyDisabled}" [disabled]="minusBasicEconomyDisabled" class="minusBtn" (click)="onMinusBasicEconomy()">
+                <svg [ngStyle]="{'fill': minusBasicEconomyDisabled ? 'rgb(234, 234, 234)' : 'rgb(113, 113, 113)'}" viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" style="height: 22px; width: 22px; display: block;"><rect height="2" rx="1" width="12" x="6" y="11"></rect></svg>
+            </button>
+            <input type="number" min="1" [(ngModel)]="basicEconomySeatsNumber">
+            <button class="plusBtn" (click)="onPlusBasicEconomy()">
+                <svg viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" style="height: 22px; width: 22px; display: block; fill: rgb(113, 113, 113);"><rect height="2" rx="1" width="12" x="6" y="11"></rect><rect height="12" rx="1" width="2" x="11" y="6"></rect></svg>
+            </button>
+        </div>
+        <div class="pricePerSeat">
+            <p>Price for seat</p>
+            <span>This is changable</span>
+            <div class="input-box">
+                <input type="number" min="1" [(ngModel)]="basicEconomySeatPrice">
+                <span class="dollar">$</span>
+            </div>
+        </div>
+        <button id="finish" (click)="addSeats()">Finish</button>
+    </div>
+</main>
+<h3 *ngIf="this.destinations.length === 0" id="note" style="color: rgb(34, 34, 34); margin-top: 100px;">
+    You don't travel to any destinations at the moment!<br>
+    Please add some <a href="#" [routerLink]="['/admin/' + adminId + '/destinations']">travel destinations</a> first!
+</h3>

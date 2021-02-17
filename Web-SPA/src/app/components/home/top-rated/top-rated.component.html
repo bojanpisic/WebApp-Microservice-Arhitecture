@@ -1,0 +1,25 @@
+<h1 *ngIf="option === 'fly'">Top-rated airlines</h1>
+<h1 *ngIf="option === 'drive'">Top-rated rent a car services</h1>
+<h6 *ngIf="option === 'fly'">Fly with some of the best-reviewed airlines.</h6>
+<h6 *ngIf="option === 'drive'">Rent at some of the best-reviewed rent a car services.</h6>
+<div class="app">
+    <div class="full hide-scroll">
+        <ul class="hs" *ngIf="option === 'fly'">
+            <li class="item" *ngFor = "let airline of allAirlines">
+                <app-airline [data]="airline"></app-airline>
+            </li>
+        </ul>
+        <ul class="hs" *ngIf="option === 'drive'">
+            <li class="item" *ngFor = "let rentACarService of allRentACarServices">
+                <app-rent-a-car-service [data]="rentACarService"></app-rent-a-car-service>
+            </li>
+        </ul>
+    </div>
+</div>
+<form>
+    <input *ngIf="option === 'fly'" id="submit" type="submit" (click)="onAirlines()" value="SHOW ALL">
+    <input *ngIf="option === 'drive'" id="submit" type="submit" (click)="onRAC()" value="SHOW ALL">
+</form>
+<div class="separator-div">
+    <hr class="separator">
+</div>

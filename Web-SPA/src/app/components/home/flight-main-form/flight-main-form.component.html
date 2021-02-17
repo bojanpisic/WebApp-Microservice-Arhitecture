@@ -1,0 +1,43 @@
+<div class="radio-group">
+    <label class="radio">
+        <input (change)="oneWay()" type="radio" name="flight-type" value="one-way" checked>
+        one-way
+        <span></span>
+    </label>
+    <label class="radio">
+        <input (click)="roundTrip()" type="radio" name="flight-type" value="round-trip">
+        round-trip
+        <span></span>
+    </label>
+    <label class="radio">
+        <input (click)="multiCity()" type="radio" name="flight-type" value="multi-city">
+        multi-city
+        <span></span>
+    </label>
+</div>
+<p *ngIf="errorForm" style="margin: 20px 30px 0 30px; padding: 4px 0; text-align: center; font-size: 14px; color: white; background-color: #d93900;">Please fill all fields!</p>
+<form *ngIf="flightType !== 'multiCityFlight'" class="nonMultiCityForm" action="">
+    <div>
+        <app-flight-form-part #child [flightType]="flightType"></app-flight-form-part>
+    </div>
+    <p>TRAVELLERS</p>
+    <app-person-num-search (updateTravellers)="onUpdateTravellers($event)" id="travellers-div"></app-person-num-search>
+    <input (click)="onSubmit()" *ngIf="!filterForm" class="submit" type="submit" value="SEARCH">
+</form>
+<form *ngIf="flightType === 'multiCityFlight'" class="multiCityForm" action="">
+    <ul id="ul">
+        <li>
+            <app-flight-form-part #child [flightType]="flightType"></app-flight-form-part>
+        </li>
+        <li>
+        <ng-template #viewContainerRef></ng-template>
+        </li>
+    </ul>
+    <button id="remove" (click)="removeFlight()">REMOVE</button><button (click)="addFlight()" id="new">NEW</button>
+    <p>TRAVELLERS</p>
+    <app-person-num-search id="travellers-div"></app-person-num-search>
+    <input (click)="onSubmit()" *ngIf="!filterForm" class="submit" type="submit" value="SEARCH">
+</form>
+<div *ngIf="!filterForm" class="separator-div">
+    <hr class="separator">
+</div>

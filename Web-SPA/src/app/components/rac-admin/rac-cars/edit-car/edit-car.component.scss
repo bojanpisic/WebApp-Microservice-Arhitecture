@@ -1,0 +1,287 @@
+@import '../../../../scss/layout/header';
+@import '../../../../scss/layout/footer';
+@import '../../../../scss/elements/buttons';
+@import '../../../../scss/elements/inputs';
+
+* {
+    box-sizing: border-box;
+}
+
+header {
+    @extend %container-top;
+    display: grid;
+    grid-template-columns: 44px auto 44px;
+    text-align: center;
+
+    .back {
+        @extend %header-back;
+
+        svg {
+            @extend %header-svg;
+        }
+    }
+
+    span {
+        @extend %header-span; 
+    }
+}
+
+main {
+    padding: 64px 0px 0px 0px;
+    min-height: 100vh;
+
+    form {
+        padding: 0;
+        padding-bottom: calc(64px + 15px);
+        min-height: calc(100vh - 274px);
+    }
+
+    p {
+        grid-area: pText;
+        margin: 0;
+        font-size: 16px;
+        line-height: 20px;
+        color: rgb(34, 34, 34);
+        font-weight: bold;
+    }
+
+    .image {
+        height: 200px;
+        background: url('../../../../../assets/cars/range.jpg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        box-shadow: inset 0 -14px 28px -14px black;
+        position: relative;
+
+        .editButton {
+            position: absolute;
+            bottom: 10px; right: 10px;
+            height: 44px;
+            width: 44px;
+            border-radius: 50%;
+            background-color: $pink;
+            padding: 14px;
+            img {
+                height: 16px;
+                width: 16px;
+            }
+        }
+    }
+
+    .numberOfSeats, .pricePerDay, .carType {
+        border-bottom: 1px solid rgb(234, 234, 234);
+        margin: 0 24px;
+        padding: 16px 0;
+        display: grid;
+        width: calc(100% - 48px);
+        grid-template-columns: auto 32px 60px 32px;
+        grid-template-rows: 20px 18px;
+        grid-template-areas: "pText minus input plus"
+                             "spanText minus input plus";
+
+        span {
+            grid-area: spanText;
+            font-size: 14px;
+            line-height: 18px;
+            color: rgb(113, 113, 113);
+        }
+
+        .input-box {
+            position: relative;
+            grid-area: minus;
+            margin-top: 3px;
+            input {
+                width: 124px;
+                height: 32px;
+                font-size: 16px;
+                padding: 8px 15px 8px 25px;
+                border: 1px solid rgb(234, 234, 234);
+                border-radius: 5px;
+                color: rgb(34, 34, 34);
+                font-weight: bold;
+            }
+
+            :focus {
+                @extend %focus;
+            }
+
+            .error-input {
+                @extend %error-input;
+                border: 2px solid $error;
+            }
+
+            .dollar {
+                position: absolute;
+                top: 8px;
+                left: 10px;
+                line-height: 16px;
+                font-size: 16px;
+                color: rgb(34, 34, 34);
+                font-weight: bold;
+            }
+        }
+
+        .error {
+            @extend %error-text;
+            margin-bottom: 0px;
+            font-size: 14px;
+        }
+
+        #numberOfSeats, input {
+            grid-area: input;
+            text-align: center;
+            width: 60px;
+            height: 32px;
+            font-size: 16px;
+            padding: 8px 5px;
+            border: none;
+            color: rgb(34, 34, 34);
+            font-weight: bold;
+        }
+
+        :focus {
+            border: none;
+            box-shadow: none;
+            outline: none;
+        }
+
+        .minusBtn, .plusBtn {
+            margin-top: 3px;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            background-color: white;
+            padding: 4px;
+        }
+
+        .minusBtn {
+            grid-area: minus;
+            border: 1px solid rgb(113, 113, 113);
+        }
+
+        .plusBtn {
+            grid-area: plus;
+            border: 1px solid rgb(113, 113, 113);
+        }
+
+        .disabled {
+            border: 1px solid rgb(234, 234, 234);
+
+            svg {
+                fill: rgb(234, 234, 234);
+            }
+        }
+    }
+
+    .brand, .model, .year {
+        border-bottom: 1px solid rgb(234, 234, 234);
+        padding: 16px 0;
+        margin: 0 24px;
+
+        p {
+            margin-left: 5px;
+        }
+
+        input {
+            width: 100%;
+            height: 32px;
+            font-size: 16px;
+            padding: 8px 15px 8px 10px;
+            border: 1px solid rgb(234, 234, 234);
+            border-radius: 5px;
+            color: rgb(34, 34, 34);
+            font-weight: bold;
+            margin-top: 3px;
+        }
+
+        :focus {
+            @extend %focus;
+        }
+    }
+
+    .carType {
+        display: block;
+        margin: 15px 24px 0 24px;
+        padding: 9px 8px;
+        border: 1px solid rgb(234, 234, 234);
+        border-radius: 5px;
+
+        p {
+            line-height: 20px;
+            font-size: 16px;
+
+            svg {
+                float: right;
+                transform: rotate(-90deg);
+                vertical-align: top;
+                margin-top: 2px;
+                transition: transform 0.5s;
+            }
+        }
+    }
+
+    .droppedDown {
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+
+    .dropdown {
+        margin: 0 24px;
+        padding: 8px 0px;
+        border: 1px solid rgb(234, 234, 234);
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border-top: none;
+
+        p {
+            padding: 3px 8px;
+        }
+    }
+
+    .pickedCarType {
+        background-color: lighten($pink, 20%);
+        color: white;
+    }
+
+    .buttons {
+        position: fixed;
+        top: calc(100vh - 64px);
+        padding: 10px 24px;
+        border-top: 1px solid rgb(234, 234, 234);   
+        width: 100%;
+        height: 64px;
+        background-color: white;
+        text-align: center;
+        display: grid;
+        grid-template-columns: auto auto;
+    
+        button {
+            height: 100%;
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            background-color: $pink;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    
+        :focus {
+            border: none;
+            outline: none;
+        }
+    
+        #delete {
+            justify-self: start;
+            width: auto;
+            background-color: transparent;
+            color: rgb(34, 34, 34);
+            text-decoration: underline;
+        }
+    
+        #confirm {
+            justify-self: end;
+        }
+    }
+}

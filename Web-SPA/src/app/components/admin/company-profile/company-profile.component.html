@@ -1,0 +1,44 @@
+<header>
+    <div *ngIf="companyType === 'airline-profile'" routerLink='/admin/{{adminId}}' class="back">
+        <svg viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style="height: 1em; width: 1em; display: block;"><path d="m10.8 16c-.4 0-.7-.1-.9-.4l-6.8-6.7c-.5-.5-.5-1.3 0-1.8l6.8-6.7c.5-.5 1.2-.5 1.7 0s .5 1.2 0 1.7l-5.8 5.9 5.8 5.9c.5.5.5 1.2 0 1.7-.2.3-.5.4-.8.4"></path></svg>
+    </div>
+    <div *ngIf="companyType === 'rac-profile'" routerLink='/rac-admin/{{adminId}}' class="back">
+        <svg viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style="height: 1em; width: 1em; display: block;"><path d="m10.8 16c-.4 0-.7-.1-.9-.4l-6.8-6.7c-.5-.5-.5-1.3 0-1.8l6.8-6.7c.5-.5 1.2-.5 1.7 0s .5 1.2 0 1.7l-5.8 5.9 5.8 5.9c.5.5.5 1.2 0 1.7-.2.3-.5.4-.8.4"></path></svg>
+    </div>
+    <span *ngIf="companyType === 'airline-profile'">Airline profile</span>
+    <span *ngIf="companyType === 'rac-profile'">Service profile</span>
+</header>
+<main>
+    <section class="image">
+        <div *ngIf="img && selectedFile === undefined" class="logo">
+            <img id="logo" [src]="img">
+        </div>
+        <div *ngIf="selectedFile !== undefined" class="logo">
+            <img id="logo" src="{{selectedFile.src}}">
+        </div>
+        <input style="display: none" type="file" accept="image/*" (change)="onFileChanged(fileInput)" #fileInput>
+        <button (click)="fileInput.click()"><img src="../../../../assets/camera-100.png">Change logo</button>
+    </section>
+    <form *ngIf="formOk" (ngSubmit)="onSubmit()" [formGroup]="form">
+        <p *ngIf="companyType === 'airline-profile'">Airline name:</p>
+        <p *ngIf="companyType === 'rac-profile'">Rent a car service name:</p>
+        <input [ngClass]="{'error-input': form.controls.name.invalid}" type="text" formControlName="name" [value]="companyFields.name">
+        <div class="error" *ngIf="form.controls.name.invalid && companyType === 'airline-profile'">
+            Airline name is required!
+        </div>
+        <div class="error" *ngIf="form.controls.name.invalid && companyType === 'rac-profile'">
+            Service name is required!
+        </div>
+        <p>Location:</p>
+        <app-places-search (focused)="removeErrorClass()" [error]="errorLocation" (inputValueLocation)="onLocationInputChange($event)" [pickAirlineLocation]="true" [myLocation]="companyFields.location" [ngStyle]="{'padding-left': '0px'}" (cityName)='onLocation($event)'></app-places-search>
+        <p>Promo description:</p>
+        <textarea [ngClass]="{'error-input': form.controls.about.invalid}" formControlName="about" [value]="companyFields.about"></textarea>
+        <div class="error" *ngIf="form.controls.about.invalid && companyType === 'airline-profile'">
+            Airline description is required!
+        </div>
+        <div class="error" *ngIf="form.controls.about.invalid && companyType === 'rac-profile'">
+            Service description is required!
+        </div>
+        <button type="submit">Change</button>
+    </form>
+</main>

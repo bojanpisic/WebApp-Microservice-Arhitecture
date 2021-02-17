@@ -1,0 +1,280 @@
+@import '../../../../app.component.scss';
+@import url('https://fonts.googleapis.com/css?family=Bebas+Neue&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+.all {
+    border-radius: 3px;
+    margin:0px;
+}
+
+.container {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-template-rows: 200px 36px 30px 26px auto;
+    grid-template-areas: "img img img img"
+                         "racs-name racs-name racs-name grade"
+                         "name name name name"
+                         "extra extra extra book"
+                         "price price price book";
+    .image {
+        grid-area: img;
+        background: url('../../../../../assets/cars/range.jpg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+        box-shadow: inset 0 -14px 28px -14px black;
+        position: relative;
+    }
+
+    .name {
+        grid-area: name;
+        padding-left: 8px;
+        span {
+            font-size: 24px;
+            line-height: 30px;
+            font-family: 'Bebas Neue', cursive;
+        }
+    }
+
+    .racs-name {
+        grid-area: racs-name;
+        padding-left: 8px;
+        margin-top: 12px;
+        margin-bottom: 4px;
+        span {
+            display: inline-block;
+            color: rgb(34, 34, 34);
+            font-size: 16px;
+            line-height: 20px;
+            font-family:'Bebas Neue', cursive;
+        }
+        #company {
+            color: $purple;
+            margin-right: 2px;
+        }
+    }
+
+    .grade {
+        grid-area: grade;
+        margin-top: 14px;
+        justify-self: end;
+        margin-right: 8px;
+        span {
+            font-size: 14px;
+            line-height: 18px;
+            color: rgb(34, 34, 34);
+            font-weight: bold;
+        }
+        #grade {
+            svg {
+                height: 14px;
+                width: 14px;
+                color: red;
+            }
+        }
+    }
+
+    .extra {
+        grid-area: extra;
+        font-size: 14px;
+        line-height: 20px;
+        color: rgb(72, 72, 72);
+        margin-left: 8px;
+
+        #type {
+            padding: 1px 5px;
+            border: 1px solid rgb(34, 34, 34);
+            border-radius: 4px;
+            font-size: 12px;
+            color: rgb(34, 34, 34);
+            text-align: center;
+            margin-right: 8px;
+        }
+    }
+
+    .price {
+        grid-area: price;
+        padding-left: 8px;
+        margin-bottom: 12px;
+        span {
+            font-size: 16px;
+            line-height: 20px;
+            color: rgb(72, 72, 72);
+        }
+
+        #dates {
+            font-size: 16px;
+            font-weight: normal;
+            color: rgb(34, 34, 34);
+            font-family:'Bebas Neue', cursive;
+            color: $blue;
+        }
+
+        .pricey {
+            color: $pink;
+            font-weight: bold;
+        }
+    }
+
+    .book {
+        grid-area: book;
+        justify-self: end;
+        margin: auto 8px 0 0;
+        height: 44px;
+        padding: 12px 0;
+        a {
+            font-size: 18px;
+            line-height: 20px;
+            text-decoration: none;
+            font-family:'Bebas Neue', cursive;
+            color: $blue;
+        }
+    }
+
+    .rateExperience {
+        grid-column: 1/ span 4;
+        margin: 0 8px;
+
+        p {
+            margin: 0;
+            padding: 16px 0;
+            border-top: 1px solid rgb(234, 234, 234);
+            font-weight: bold;
+            line-height: 20px;
+            font-size: 16px;
+            color: #222222;
+            position: relative;
+
+            svg {
+                position: absolute;
+                top: 17px; right: 0;
+            }
+        }
+
+        .rateService, .rateCar {
+            padding: 16px 0 8px 0;
+            display: grid;
+            width: 100%;
+            grid-template-columns: auto 32px 60px 32px;
+            grid-template-rows: 20px 18px;
+            grid-template-areas: "pText minus input plus"
+                                 "spanText minus input plus";
+                                 
+
+            p {
+                grid-area: pText;
+                margin: 0;
+                border-top: none;
+                padding: 0;
+                color: #222222;
+                font-weight: bold;
+                line-height: 20px;
+                font-size: 16px;
+            }
+
+            span {
+                grid-area: spanText;
+                font-size: 14px;
+                line-height: 18px;
+                color: rgb(113, 113, 113);
+            }
+
+            #rateService, #rateCar, input {
+                grid-area: input;
+                text-align: center;
+                width: 60px;
+                height: 32px;
+                font-size: 16px;
+                padding: 8px 5px;
+                border: none;
+                color: rgb(34, 34, 34);
+                font-weight: bold;
+            }
+
+            :focus {
+                outline: none;
+            }
+
+            .minusBtn, .plusBtn {
+                margin-top: 3px;
+                border-radius: 50%;
+                width: 32px;
+                height: 32px;
+                background-color: white;
+                padding: 4px;
+            }
+    
+            .minusBtn {
+                grid-area: minus;
+                border: 1px solid rgb(113, 113, 113);
+            }
+    
+            .plusBtn {
+                grid-area: plus;
+                border: 1px solid rgb(113, 113, 113);
+            }
+    
+            .disabled {
+                border: 1px solid rgb(234, 234, 234);
+    
+                svg {
+                    fill: rgb(234, 234, 234);
+                }
+            }
+        }
+
+        #confirmRates {
+            display: block;
+            margin: 0 0 15px auto;
+            width: 124px;
+            padding: 8px 0;
+            line-height: 20px;
+            font-size: 16px;
+            color: #222222;
+            border: 1px solid #222222;
+            background-color: white;
+            font-weight: bold;
+            border-radius: 4px;
+            box-shadow: $smallest-shadow;
+        }
+
+        #confirmRates {
+            border: 1px solid $blue;
+            outline: none;
+        }
+    }
+
+    .edit, .quit {
+        grid-area: book;
+        justify-self: end;
+        margin: auto 8px 0 0;
+        height: 44px;
+        padding: 12px 0;
+
+        span {
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 16px;
+            color: $blue;
+
+            img {
+                display: inline-block;
+                height: 14px;
+                width: 14px;
+                transform: rotate(180deg);
+                vertical-align: top;
+                margin-left: 5px;
+                margin-top: 2px;
+            }
+        }
+    }
+
+
+}

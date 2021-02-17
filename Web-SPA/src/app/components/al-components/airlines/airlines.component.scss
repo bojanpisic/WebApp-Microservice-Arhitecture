@@ -1,0 +1,206 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+
+* {
+    font-family: 'Montserrat', 'sans-serif';
+    box-sizing: border-box;
+}
+
+header {
+    margin: 0;
+    padding: 0 2em 0 1em;
+    position: fixed;
+    height: calc(.07 * 100vh);
+    width: 100%;
+    background-color: white;
+    box-shadow: 0px 3px 6px rgb(220, 220, 220);
+    z-index: 9999;
+    display: grid;
+    grid-template-columns: 50px auto;
+    grid-template-rows: auto;
+
+    nav {
+        height: calc(.07 * 100vh);
+        position: relative;
+        img {
+            position: absolute;
+            top: calc(((.07 * 100vh)-25px)/4);
+            height: 25px;
+            width: 25px;
+        }
+    } 
+
+    #sortby-div {
+        text-align: right;
+    }
+    
+    #sortby-btn{
+        background-color: transparent;
+        height: calc(.07 * 100vh);
+        border: none;
+        outline: none;
+
+        span {
+            font-weight: bold;
+            font-size: 16px;
+            color: rgb(60,60,60);
+            margin-right: 5px;
+        }
+
+        #arrow{
+            margin-top:3px;
+            height: 14px;
+            width: 14px;
+            float: right;
+            transition: transform 0.5s;
+        }
+    }
+
+    .by {
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        grid-column: 1 / span 2;
+        padding: .5em 0;
+
+        button {
+            margin: 0 auto;
+            height: 100%;
+            width: 90%;
+            text-align: center;
+            border: 2px solid rgb(60,60,60);
+            outline: none;
+            border-radius: 10px;
+            font-weight: bold;
+            img {
+                // position: absolute;
+                // top: calc((100% - 12px)/2);
+                // right: 4px;
+                margin-left: 2px;
+                height: 12px;
+                width: 12px;
+            }
+        }
+    }
+}
+
+
+main {
+    ul {
+        box-sizing: border-box;
+        list-style: none;
+        padding: 0;
+        margin-top: 0;
+        display: block;
+        margin: 0 auto;
+        width: 100%;
+        padding: 0 30px;
+
+        li {
+            margin-bottom: 2em;
+            background-color: rgb(250, 250, 250);
+            padding: 1em 1em;
+            box-shadow: 0px 3px 6px rgb(220, 220, 220);
+
+            a {
+                display: block;
+                position: relative;
+                height: 100%;
+                width: 100%;
+                text-decoration: none;
+                color: black;
+                max-height: 250px;
+                overflow: hidden;
+              
+                .grade {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    font-size: .8em;
+                    font-weight: 400;
+                
+                    svg {
+                        margin-right: 3px;
+                        color: red;
+                    }
+                }
+              
+                .name {
+                    font-size: 1.2em;
+                    font-weight: 600;
+                    // color: rgb(66, 66, 66);
+                }
+              
+                .location {
+                    position: relative;
+                
+                    img {
+                        position: absolute;
+                        top: 2px;
+                        height: 16px;
+                        width: 16px;
+                    }
+                
+                    #city{
+                        padding-left: 1.2em;
+                    }
+                }
+              
+                .about {
+                    p {
+                        line-height: 16px;
+                        font-size: 16px;
+                        max-height: 96px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 6;
+                        -webkit-box-orient: vertical;
+                    }
+                }
+              
+                .destinations {
+                    display: inline-block;
+                
+                    span {
+                        display: inline;
+                    }
+                
+                    .cities {
+                        display: inline;
+                        line-height: 24px;
+                        max-height: 96px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 3;
+                        -webkit-box-orient: vertical;
+                
+                        p {
+                        text-transform: uppercase;
+                        display: inline-block;
+                        padding: 0px 3px;
+                        margin: 2px;
+                        color: black;
+                        font-weight: 600;
+                        border: .8px solid rgb(230, 230, 230);
+                        border-radius: 3px;
+                        font-size: .7em;
+                        }
+                    }
+                }
+            }
+        }       
+    }
+}
+
+
+
+// .separator-div {
+//     text-align: center;
+
+//     .separator {
+//         width: 100%;
+//         height: 1px;
+//         background-color: rgb(230, 230, 230);
+//         border: none;
+//     }
+// } 

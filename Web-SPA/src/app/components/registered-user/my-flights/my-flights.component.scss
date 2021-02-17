@@ -1,0 +1,119 @@
+@import '../../../scss/layout/header';
+@import '../../../scss/layout/footer';
+@import '../../../scss/elements/buttons';
+@import '../../../scss/elements/inputs';
+
+* {
+    box-sizing: border-box;
+}
+
+header {
+    @extend %container-top;
+    display: grid;
+    grid-template-columns: 44px auto 44px;
+    text-align: center;
+
+    .back {
+        @extend %header-back;
+
+        svg {
+            @extend %header-svg;
+        }
+    }
+
+    span {
+        @extend %header-span;
+    }
+}
+
+main {
+    padding: 79px 24px 63px 24px;
+
+    .search {
+        @extend %search-container;
+        margin-bottom: 15px;
+
+        button {
+            @extend %search-button;
+
+            svg {
+                @extend %search-svg;
+            }
+
+            input {
+                @extend %search-input;
+            }
+
+            ::placeholder {
+                color: rgb(113, 113, 113);
+            }
+        }
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    
+        li {
+            padding: 0px;
+            margin-bottom: 30px;
+            box-shadow: $smallest-shadow;
+        }
+    }
+    .addMore {
+        height: 64px;
+        text-align: center;
+        padding: 22px 0;
+        margin-bottom: 30px;
+        border-top: 1px solid rgb(234, 234, 234);
+        border-bottom: 1px solid rgb(234, 234, 234);
+        span {
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 20px;
+            color: rgb(34, 34, 34);
+        }
+    }
+
+    .book {
+        display: grid;
+        grid-template-columns: auto auto;
+    
+        .price {
+            display: grid;
+            grid-template-rows: 18px 20px;
+            padding: 8px 0 8px 20px;
+            span {
+                line-height: 18px;
+                font-size: 14px;
+                font-weight: normal;
+                justify-self: start;
+                color: #717171;
+            }
+        
+            #price {
+                line-height: 20px;
+                font-size: 16px;
+                font-weight: bold;
+                color: $pink;
+            }
+        }
+    
+        a {
+            margin: 8px 20px 8px 0;
+            line-height: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            padding: 9px 20px;
+            height: auto;
+            background: $pink;
+            color: white;
+            text-decoration: none;
+            justify-self: end;
+            border-radius: 3px;
+        }
+    }
+    
+}

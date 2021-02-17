@@ -1,0 +1,12 @@
+<app-airlines-header [rac]="true" (sort)="applySort($event)"></app-airlines-header>
+<main [ngStyle]="{'padding-top': rotateArrow && scrolledY === 0 ? 'calc(.14 * 100vh + 1.5em)' : 'calc(.08 * 100vh + 1.5em)'}">
+    <ul>
+        <li *ngFor = "let service of allRentServices">
+            <app-rent-a-car-service [data]="service"></app-rent-a-car-service>
+        </li>
+    </ul>
+</main>
+<app-bottom-menu></app-bottom-menu>
+<!-- <div class="separator-div">
+    <hr class="separator">
+</div> -->

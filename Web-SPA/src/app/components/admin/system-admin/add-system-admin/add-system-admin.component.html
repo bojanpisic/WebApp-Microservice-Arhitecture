@@ -1,0 +1,55 @@
+<header>
+    <div (click)="onExit()" class="back">
+        <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: rgb(34, 34, 34); height: 16px; width: 16px; stroke: rgb(34, 34, 34); stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>
+    </div>
+    <span>Register system admin</span>
+</header>
+<main>
+    <form [formGroup]="formUser" (ngSubmit)="onSubmitUser()">
+        <div class="content">
+            <p class="required">Username:</p>
+            <input [ngClass]="{'error-input': formUser.controls.username.invalid && (formUser.controls.username.touched || formUser.controls.username.dirty || errorUsername)}"
+            formControlName="username" type="text">
+            <div class="error" *ngIf="formUser.controls.username.errors?.required && (formUser.controls.username.touched || formUser.controls.username.dirty || errorUsername)">
+                Username is required!
+            </div>
+        </div>
+        <div class="content">
+            <p class="required">Email:</p>
+            <input [ngClass]="{'error-input': formUser.controls.email.invalid && (formUser.controls.email.touched || formUser.controls.email.dirty || errorEmail)}"
+            formControlName="email" type="text">
+            <div class="error" *ngIf="formUser.controls.email.errors?.required && (formUser.controls.email.touched || formUser.controls.email.dirty || errorEmail)">
+                Email is required!
+            </div>
+            <div class="error" *ngIf="formUser.controls.email.errors?.pattern && (formUser.controls.email.touched || formUser.controls.email.dirty || errorEmail)">
+                Invalid email!
+            </div>
+        </div>
+        <div class="content">
+            <p class="required">Password:</p>
+            <input [ngClass]="{'error-input': formUser.controls.password.invalid && (formUser.controls.password.touched || formUser.controls.password.dirty || errorPassword)}"
+            formControlName="password" type="password">
+            <div class="error" *ngIf="formUser.controls.password.errors?.invalidPassword && (formUser.controls.password.touched || formUser.controls.password.dirty || errorPassword)">
+                Number of characters 8-20.<br>
+                At least one number.<br>
+                At least one letter.
+            </div>
+            <div class="error" *ngIf="formUser.controls.password.errors?.required && (errorPassword || formUser.controls.password.touched || formUser.controls.password.dirty)">
+                Password is required!
+            </div>
+        </div>
+        <div class="content" style="border-bottom: none;">
+            <p class="required">Confirm password:</p>
+            <input (input)="onConfirmPassword()" [ngClass]="{'error-input': (formUser.controls.confirmPassword.invalid && (formUser.controls.confirmPassword.touched || formUser.controls.confirmPassword.dirty || errorConfirmPassword)) || errorConfirmPasswordMatch}"
+            formControlName="confirmPassword" type="password">
+            <div class="error" *ngIf="formUser.controls.confirmPassword.errors?.required && (formUser.controls.confirmPassword.touched || formUser.controls.confirmPassword.dirty || errorConfirmPassword)">
+                Password confirmation is required!
+            </div>
+            <div class="error" *ngIf="errorConfirmPasswordMatch">
+                Passwords do not match!
+            </div>
+        </div>
+        <button type="submit">CONFIRM</button>
+    </form>
+</main>
+<!-- <app-notification show={{showErrorMsg}} message={{errorMsg}}></app-notification> -->

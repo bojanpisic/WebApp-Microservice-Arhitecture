@@ -1,0 +1,44 @@
+<main>
+    <p *ngIf="errorForm">Invalid dates!</p>
+    <form *ngIf="!submitOffer" (ngSubmit)="onSubmit()" [formGroup]="form">
+        <div class="content">
+            <p class="required">From:</p>
+            <input id="fromDate" [ngClass]="{'error-input': form.controls.fromDate.invalid &&
+                (form.controls.fromDate.touched || form.controls.fromDate.dirty || errorFromDate)}"
+                formControlName="fromDate" type="date" onkeydown="return false">
+            <div class="error" *ngIf="form.controls.fromDate.errors?.required &&
+                (form.controls.fromDate.touched || form.controls.fromDate.dirty || errorFromDate)">
+                Required field!
+            </div>
+        </div>
+        <div class="content">
+            <p class="required">To:</p>
+            <input id="toDate" [ngClass]="{'error-input': form.controls.toDate.invalid &&
+                (form.controls.toDate.touched || form.controls.toDate.dirty || errorToDate)}"
+                formControlName="toDate" type="date" onkeydown="return false">
+            <div class="error" *ngIf="form.controls.toDate.errors?.required &&
+                (form.controls.toDate.touched || form.controls.toDate.dirty || errorToDate)">
+                Required field!
+            </div>
+        </div>
+        <button type="submit">NEXT</button>
+    </form>
+    <form *ngIf="submitOffer" (ngSubmit)="onSubmitOffer()" [formGroup]="formOffer">
+        <p>Price for this offer would be <span style="color: hotpink">${{oldPrice}}</span>. Please configure special offer price!</p>
+        <div class="content" style="border-bottom: none;">
+            <p class="required">New price:</p>
+            <input id="newPrice" [ngClass]="{'error-input': formOffer.controls.newPrice.invalid &&
+                (formOffer.controls.newPrice.touched || formOffer.controls.newPrice.dirty || errorNewPrice)}"
+                formControlName="newPrice" type="number">
+            <div class="error" *ngIf="formOffer.controls.newPrice.errors?.required &&
+                (formOffer.controls.newPrice.touched || formOffer.controls.newPrice.dirty || errorNewPrice)">
+                Required field!
+            </div>
+            <div class="error" *ngIf="formOffer.controls.newPrice.errors?.max &&
+                (formOffer.controls.newPrice.touched || formOffer.controls.newPrice.dirty || errorNewPrice)">
+                Has to be lower than old price!
+            </div>
+        </div>
+        <button type="submit" style="background-color: hotpink;">ADD OFFER</button>
+    </form>
+</main>

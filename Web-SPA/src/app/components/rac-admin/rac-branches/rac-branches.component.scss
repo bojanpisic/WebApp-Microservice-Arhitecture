@@ -1,0 +1,125 @@
+@import '../../../../app/app.component.scss';
+@import '../../../scss/layout/header';
+@import '../../../scss/elements/inputs';
+
+* {
+    box-sizing: border-box;
+}
+
+header {
+    @extend %container-top;
+    display: grid;
+    grid-template-columns: 44px auto 44px;
+
+    .back {
+        display: inline-block;
+        height: 44px;
+        width: 44px;
+        padding: 14px;
+        svg {
+            fill: rgb(34, 34, 34);
+        }
+    }
+
+    .search {
+        @extend %search-container;
+
+        button {
+            @extend %search-button;
+
+            svg {
+                @extend %search-svg;
+            }
+
+            input {
+                @extend %search-input;
+            }
+
+            ::placeholder {
+                color: rgb(113, 113, 113);
+            }
+        }
+    }
+
+}
+
+ul {
+    margin: 0;
+    padding: 94px 24px 30px 24px;
+    list-style: none;
+    background-color: white;
+    min-height: 100vh;
+
+    li {
+        display: inline;
+        .branch {
+            width: 100%;
+            background-color: white;
+            margin: 20px 0;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: $smallest-shadow;
+            padding: 20px;
+    
+            img {
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                width: 100%;
+                height: calc(16vh - 45px);
+            }
+    
+            p {
+                margin: 0;
+                margin-left: 5px;
+                font-weight: bold;
+                color: $red;
+                line-height: 20px;
+    
+                img {
+                    height: 16px;
+                    width: 16px;
+                    vertical-align: middle;
+                    margin-bottom: 2px;
+                    margin-right: 5px;
+                }
+            }
+
+            a {
+                position: absolute;
+                top: 16px;
+                right: 44px;
+                padding: 4px 10px;
+                color: white;
+                background: lighten($light-blue, 10%);
+                border-radius: 5px;
+                box-shadow: $smallest-shadow;
+                font-size: 16px;
+                line-height: 20px;
+            }
+    
+            #remove{
+                position: absolute;
+                top: 8px;
+                right: 0;
+                height: 44px;
+                width: 44px;
+                padding: 12px;
+    
+                img {
+                    height: 20px;
+                    width: 20px;
+                }
+            }
+        }
+    }
+
+    h3 {
+        color: $pink;
+        font-size: 24px;
+        font-family: 'Roboto';
+    }
+}
+
+.blur {
+    filter: blur(8px);
+}

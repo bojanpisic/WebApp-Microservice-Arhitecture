@@ -1,0 +1,36 @@
+<header>
+    <div (click)="goBack()" class="back">
+        <svg viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style="height: 1em; width: 1em; display: block;"><path d="m10.8 16c-.4 0-.7-.1-.9-.4l-6.8-6.7c-.5-.5-.5-1.3 0-1.8l6.8-6.7c.5-.5 1.2-.5 1.7 0s .5 1.2 0 1.7l-5.8 5.9 5.8 5.9c.5.5.5 1.2 0 1.7-.2.3-.5.4-.8.4"></path></svg>
+    </div>
+    <span>Special offers</span>
+</header>
+<main *ngIf="itsOk">
+    <ul>
+        <li *ngFor="let flight of myFlights">
+            <app-flight (emitRateAirline)="onRateAirline($event)"
+                        (emitRateFlight)="onRateFlight($event)"
+                        [rate]="true"
+                        [flightRated]="flight.isFlightRated"
+                        [airlineRated]="flight.isAirlineRated"
+                        [flight]="flight" [seat]="true"
+                        [seatName]="flight.seat"></app-flight>
+        </li>
+        <div class="addMore">
+            <span>Upcoming reservations</span>
+        </div>
+        <li *ngFor="let trip of myTrips; let i = index">
+            <div *ngFor="let flight of trip.flights; let i = index"  [ngStyle]="{'border-bottom': '.5px solid gainsboro'}">
+                <app-flight [seat]="true" [seatName]="flight.seat" [flight]="flight" [markFlightName]="false"></app-flight>
+            </div>
+            <div>
+                <div class="book">
+                    <div class="price">
+                        <span>Price:</span>
+                        <span id="price">$ {{trip.totalPrice}}</span>
+                    </div>
+                    <a (click)='quitReservation(trip.reservationId)'>QUIT</a>
+                </div>
+            </div>
+        </li>
+    </ul>
+</main>

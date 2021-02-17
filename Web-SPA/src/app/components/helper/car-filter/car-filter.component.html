@@ -1,0 +1,60 @@
+<nav>
+    <img (click)='goBack()' src="../../../../assets/icons8-delete.svg">
+    <span>Filters</span>
+    <!-- <a href="#" id="clear">Clear</a> -->
+</nav>
+<main *ngIf="isOk">
+    <h3>Price range</h3>
+    <div class="middle">
+        <div class="multi-range-slider">
+            <input [(ngModel)]="slidingMinPriceValue" [ngStyle]="{'padding-right': getRightStylePrice()}" type="range" id="input-left" min="0" [max]="slidingMaxPriceValue" [value]="leftValuePrice()">
+            <input [(ngModel)]="slidingMaxPriceValue" [ngStyle]="{'padding-left': getLeftStylePrice()}" type="range" id="input-right" [min]="slidingMinPriceValue" max="100" [value]="rightValuePrice()">
+
+            <div class="slider">
+                <div class="track"></div>
+                <div class="range" [ngStyle]="{'left': getLeftStylePrice(), 'right': getRightStylePrice()}"></div>
+                <div class="thumb left" [ngStyle]="{'left': getLeftStylePrice()}"></div>
+                <div class="thumb right" [ngStyle]="{'right': getRightStylePrice()}"></div>
+            </div>
+        </div>
+    </div>
+    <div id="min-price">
+        <p><span style="color: hotpink;">$</span> MIN PRICE:</p>
+        <input onkeydown="return false" type="number" id="min" [value]="slidingMinPriceValue * 30">
+    </div>
+    <div id="max-price">
+        <p><span style="color: hotpink;">$</span> MAX PRICE:</p>
+        <input onkeydown="return false" type="number" [value]="slidingMaxPriceValue * 30">
+    </div>
+    <div class="sep-div">
+        <hr class="sep">
+    </div>
+    <h3>Seats</h3>
+    <div id="min-dur">
+        <p style="margin-top: 0px">MIN SEATS:</p><!--treba dodati da kad ovde izmenim da se i tamo izmeni-->
+        <input type="number" id="minSeats" [(ngModel)]="minSeatsNumber">
+    </div>
+    <div id="max-dur">
+        <p style="margin-top: 0px">MAX SEATS:</p><!--treba dodati da kad ovde izmenim da se i tamo izmeni-->
+        <input type="number" id="maxSeats" [(ngModel)]="maxSeatsNumber">
+    </div>
+    <div class="sep-div">
+        <hr class="sep">
+    </div>
+    <h3 style="display: inline-block;">Companies</h3>
+    <span id="airlines-button" (click)="allCompaniesButton()">All</span>
+    <ul class="airlines">
+        <li *ngFor="let company of allCompanies; let i = index">
+            <div>
+                <label class="checkbox-label">
+                    <input type="checkbox" [checked]="checkedCompanies[i]" (click)="toggleCompanyCheckBox(i)">
+                    <span class="checkbox-custom"></span>
+                </label>
+                <span>{{company.name}}</span>
+            </div>
+        </li>
+    </ul>
+</main>
+<button id="search" type="button" (click)="onApplyFilters($event)">APPLY FILTERS</button>
+
+

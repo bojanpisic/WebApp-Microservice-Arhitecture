@@ -1,0 +1,23 @@
+<header [ngClass]="{'blur': fillInfo || exit || error}">
+    <div (click)="goBack()" class="back">
+        <svg viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style="height: 1em; width: 1em; display: block;"><path d="m10.8 16c-.4 0-.7-.1-.9-.4l-6.8-6.7c-.5-.5-.5-1.3 0-1.8l6.8-6.7c.5-.5 1.2-.5 1.7 0s .5 1.2 0 1.7l-5.8 5.9 5.8 5.9c.5.5.5 1.2 0 1.7-.2.3-.5.4-.8.4"></path></svg>
+    </div>
+    <span *ngIf="showTripDetails">Details</span>
+    <span *ngIf="pickSeats">{{flights[(index < 0 || index > flights.length) ? 0 : index].from}} <img src="../../../../assets/airplane-header.svg"> {{flights[(index < 0 || index > flights.length) ? 0 : index].to}}</span>
+    <span *ngIf="pickSeats">{{index + 1}}/{{flights.length}}</span>
+    <span *ngIf="showConfirmReservation">Confirm reservation</span>
+</header>
+<app-trip-details *ngIf="showTripDetails" [flights]="flights"></app-trip-details>
+<app-pick-seats [index]="index" *ngIf="pickSeats" (bookSeat)="onPickSeat($event)" [mySeats]="this.pickedSeats" [flight]="flights[(index < 0 || index > flights.length) ? 0 : index]" [blur]="blur"></app-pick-seats>
+<app-modal *ngIf="exit" (remove)='onExitReservation($event)' [type]='exitReservation'></app-modal>
+<app-modal *ngIf="error" (remove)='onErrorReservation($event)' [type]='errorReservation'></app-modal>
+<app-invite-friends [pickSeatForMe]="pickSeatForMe" *ngIf="fillInfo" (passenger)="addPassenger($event)" [seat]="pickedSeat" [flight]="flights[(index < 0 || index > flights.length) ? 0 : index]" [person]="passenger"></app-invite-friends>
+<app-confirm-trip-reservation [errorToDate]="errorToDate" (dateEmitter)="onDateEmitter($event)" (bonusEmitter)="onBonusEmitter($event)" (carEmitter)="onCarEmitter($event)" [data]="confirmData" *ngIf="showConfirmReservation"></app-confirm-trip-reservation>
+<app-offer-car *ngIf="showOfferCar"></app-offer-car>
+<footer [ngClass]="{'blur': fillInfo || exit || error}">
+    <button id="bookNow" *ngIf="showTripDetails" (click)="nextStep()">BOOK NOW!</button>
+    <button id="back" *ngIf="pickSeats" (click)="goBack()">Back</button>
+    <button id="next" *ngIf="!lastStep && pickSeats" (click)="nextStep()">Next</button>
+    <button id="finish" *ngIf="lastStep && pickSeats" (click)="finish()">Finish</button>
+    <button id="confirm" *ngIf="showConfirmReservation" (click)="nextStep()">CONFIRM RESERVATION</button>
+</footer>

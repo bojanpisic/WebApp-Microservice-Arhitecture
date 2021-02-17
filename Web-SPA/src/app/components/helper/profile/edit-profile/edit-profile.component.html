@@ -1,0 +1,161 @@
+<header>
+    <nav>
+        <img (click)="goBack()" src="../../../../assets/back.png">
+        <span>Edit profile</span>
+    </nav>
+</header>
+<main *ngIf="ok">
+    <h4>Personal info</h4>
+    <div class="container">
+        <span>Username</span>
+        <button [disabled] = '!btnUsernameEnabled' (click)="editUsername()">{{!showUsername ? 'Edit' : 'Cancel'}}</button>
+        <p *ngIf="!showUsername">{{user.username}}</p>
+        <div *ngIf="showUsername" class="edit">
+            <form [formGroup]="form" (ngSubmit)="saveUsername()">
+                <input [ngClass]="{'error-input': form.controls.username.invalid}" formControlName="username" type="text">
+                <div class="error" *ngIf="form.controls.username.invalid">
+                    Username is required!
+                </div>
+                <button type="submit" class="saveBtn">Save</button>
+            </form>
+        </div>
+    </div>
+    <div class="separator-div">
+        <hr class="separator">
+    </div>
+    <div class="container">
+        <span>First name</span>
+        <button [disabled] = '!btnFirstNameEnabled' (click)="editFirstName()">{{!showFirstName ? 'Edit' : 'Cancel'}}</button>
+        <p *ngIf="!showFirstName">{{user.firstName}}</p>
+        <div *ngIf="showFirstName" class="edit">
+            <span>This is the name on your travel document, which could be a license or a passport.</span>
+            <form [formGroup]="form" (ngSubmit)="saveFirstName()">
+                <input [ngClass]="{'error-input': form.controls.firstName.invalid}" formControlName="firstName" type="text">
+                <div class="error" *ngIf="form.controls.firstName.invalid">
+                    First name is required!
+                </div>
+                <button type="submit" class="saveBtn">Save</button>
+            </form>
+        </div>
+    </div>
+    <div class="separator-div">
+        <hr class="separator">
+    </div>
+    <div class="container">
+        <span>Last name</span>
+        <button [disabled] = '!btnLastNameEnabled' (click)="editLastName()">{{!showLastName ? 'Edit' : 'Cancel'}}</button>
+        <p *ngIf="!showLastName">{{user.lastName}}</p>
+        <div *ngIf="showLastName" class="edit">
+            <span>This is the name on your travel document, which could be a license or a passport.</span>
+            <form [formGroup]="form" (ngSubmit)="saveLastName()">
+                <input [ngClass]="{'error-input': form.controls.lastName.invalid}" formControlName="lastName" type="text">
+                <div class="error" *ngIf="form.controls.lastName.invalid">
+                    Last name is required!
+                </div>
+                <button type="submit" class="saveBtn">Save</button>
+            </form>
+        </div>
+    </div>
+    <div class="separator-div">
+        <hr class="separator">
+    </div>
+    <div class="container">
+        <span>E-mail</span>
+        <button [disabled] = '!btnEMailEnabled' (click)="editEMail()">{{!showEMail ? 'Edit' : 'Cancel'}}</button>
+        <p *ngIf="!showEMail">{{user.email}}</p>
+        <div *ngIf="showEMail" class="edit">
+            <form [formGroup]="form" (ngSubmit)="saveEMail()">
+                <input [ngClass]="{'error-input': form.controls.email.invalid}" formControlName="email" type="text">
+                <div class="error" *ngIf="form.controls.email.errors?.required">
+                    Email address is required!
+                </div>
+                <div class="error" *ngIf="form.controls.email.errors?.pattern">
+                    Please provide a valid email address!
+                </div>
+                <button type="submit" class="saveBtn">Save</button>
+            </form>
+        </div>
+    </div>
+    <div class="separator-div">
+        <hr class="separator">
+    </div>
+    <div class="container">
+        <span>Password</span>
+        <button [disabled] = '!btnPasswordEnabled' (click)="editPassword()">{{!showPassword ? 'Edit' : 'Cancel'}}</button>
+        <input *ngIf="!showPassword" id="pass" type="password" disabled>
+        <div *ngIf="showPassword" class="edit">
+            <form [formGroup]="form" (ngSubmit)="savePassword()">
+                <input [ngClass]="{'error-input': form.controls.oldPassword.invalid && (form.controls.oldPassword.touched || form.controls.oldPassword.dirty || errorOldPassword)}" formControlName="oldPassword" type="password">
+                <div class="error" *ngIf="form.controls.oldPassword.errors?.invalidPassword && (form.controls.oldPassword.touched || form.controls.oldPassword.dirty || errorOldPassword)">
+                    Number of characters 8-20.<br>
+                    At least one number.<br>
+                    At least one letter.
+                </div>
+                <div class="error" *ngIf="form.controls.password.errors?.required && (errorPassword || form.controls.password.touched || form.controls.password.dirty)">
+                    Password is required!
+                </div>
+                <span id="confirmPassword">New password</span>
+                <input [ngClass]="{'error-input': form.controls.password.invalid && (form.controls.password.touched || form.controls.password.dirty || errorPassword)}" formControlName="password" type="password">
+                <div class="error" *ngIf="form.controls.password.errors?.invalidPassword && (form.controls.password.touched || form.controls.password.dirty || errorPassword)">
+                    Number of characters 8-20.<br>
+                    At least one number.<br>
+                    At least one letter.
+                </div>
+                <div class="error" *ngIf="form.controls.password.errors?.required && (errorPassword || form.controls.password.touched || form.controls.password.dirty)">
+                    Password is required!
+                </div>
+                <span id="confirmPassword">Confirm new password</span>
+                <div>
+                    <input style="margin-top: 1em" [ngClass]="{'error-input': passwordMatch}" formControlName="confirmPassword" [type]="confirmPasswordType">
+                    <img (click)="toggleEyePicture()" src="{{confirmPasswordPicture}}">
+                </div>
+                <div *ngIf="passwordMatch" class="error">
+                    Passwords do not match!
+                </div>
+                <button type="submit" class="saveBtn">Save</button>
+            </form>
+        </div>
+    </div>
+    <div class="separator-div">
+        <hr class="separator">
+    </div>
+    <div class="container">
+        <span>Phone</span>
+        <button [disabled] = '!btnPhoneEnabled' (click)="editPhone()">{{!showPhone ? 'Edit' : 'Cancel'}}</button>
+        <p *ngIf="!showPhone">{{user.phone}}</p>
+        <div *ngIf="showPhone" class="edit">
+            <form [formGroup]="form" (ngSubmit)="savePhone()">
+                <input [ngClass]="{'error-input': form.controls.phone.invalid}" formControlName="phone" type="text">
+                <div class="error" *ngIf="form.controls.phone.errors?.required">
+                    Phone number is required!
+                </div>
+                <div class="error" *ngIf="form.controls.phone.errors?.pattern">
+                    Should be in format:<br>
+                    (+XXX)XX/XXX-XXX<br>
+                    or:<br>
+                    (+XXX)XX/XXX-XXXX
+                </div>
+                <button type="submit" class="saveBtn">Save</button>
+            </form>
+        </div>
+    </div>
+    <div class="separator-div">
+        <hr class="separator">
+    </div>
+    <div class="container">
+        <span>Address</span>
+        <button [disabled] = '!btnAddressEnabled' (click)="editAddress()">{{!showAddress ? 'Edit' : 'Cancel'}}</button>
+        <p *ngIf="!showAddress">{{user.address}}</p>
+        <div *ngIf="showAddress" class="edit">    
+            <form [formGroup]="form" (ngSubmit)="saveAddress()">
+                <app-places-search (focused)="removeErrorClass()" [error]="errorAddress" (inputValue)="onInputChange($event)" [addAirlineAddress]="true" [airlineAddress]="user.address !== undefined ? user.address : undefined" (cityName)='onInput($event)'></app-places-search>
+                <br>
+                <button type="submit" class="saveBtn">Save</button>
+            </form>
+        </div>
+    </div>
+    <div class="separator-div">
+        <hr class="separator">
+    </div>
+</main>
+<button id="logout" (click)="onLogOut()">LOG OUT</button>

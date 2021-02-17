@@ -1,0 +1,153 @@
+@import '../../../scss/layout/cards_slider';
+@import '../../../scss/layout/header';
+@import '../../../scss/layout/footer';
+
+.app {
+    min-height: 120vh;
+    @extend %app;
+    margin: 10vh 0 20vh 0;
+
+    .full {
+        @extend %full;
+    }
+
+    .hide-scroll {
+        @extend %hide-scroll;
+    }
+
+    .hs {
+        @extend %hs;
+        @extend %ul;
+        grid-auto-columns: calc(80% - 20px *2);
+        grid-template-rows: 70vh;
+
+        li {
+            @extend %li-item;
+            .item {
+                height: calc(100% - .25*20px);
+                width: 100%;
+                background-color: red;
+                border-radius: 50px;
+                position: relative;
+
+                .header {
+                    @extend %container-top;
+                    position: absolute;
+                    border-top-left-radius: 50px;
+                    border-top-right-radius: 50px;
+                    text-align: center;
+                    border: none;
+
+                    p {
+                        line-height: 20px;
+                        font-size: 16px;
+                        color: white;
+                        font-weight: bold;
+                        margin: 12px 0;
+                    }
+                }
+
+                .container {
+                    margin: 0;
+                    padding: 64px 19px;
+                    height: 100%;
+                    overflow: scroll;
+         
+                    ul {
+                        margin: 0;
+                        padding: 0;
+
+                        li {
+                            display: inline;
+                            padding: 0;
+                            background-color: transparent;
+                        }
+                    }
+
+                    .info {
+                        background-color: transparent;
+                        text-align: right;
+                        p {
+                            margin: 0;
+                            line-height: 17px;
+                            font-size: 14px;
+                            color: white;
+                        }
+                
+                        #location{
+                            line-height: 17px;
+                            font-size: 14px;
+                            margin-top: 10px;
+                        }
+                
+                        #name{
+                            line-height: 20px;
+                            font-size: 18px;
+                            font-weight: bold;
+
+                            img {
+                                border-radius: 50%;
+                                height: 17px;
+                                width: 17px;
+                                margin-right: 4px;
+                                margin-bottom: 2px;
+                                vertical-align: middle;
+                            }
+                        }
+
+                        ul {
+                            background-color: transparent;
+                            list-style: none;
+                            margin: 0;
+                            margin-top: 10px;
+                            padding: 0;
+                            max-height: calc(17px * 7);
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            display: -webkit-box;
+                            -webkit-line-clamp: 7;
+                            -webkit-box-orient: vertical;
+    
+                            li {
+                                background-color: transparent;
+                            }
+                        }
+                    }
+                }
+
+                .footer {
+                    @extend %container;
+                    position: absolute;
+                    border-bottom-left-radius: 50px;
+                    border-bottom-right-radius: 50px;
+                    text-align: right;
+                    border: none;
+
+                    a {
+                        display: inline-block;
+                        line-height: 16px;
+                        font-size: 16px;
+                        margin: 5px 14px 0 0;
+                        font-weight: bold;
+                        color: white;
+                        background-color: transparent;
+                        width: auto;
+
+                        img {
+                            display: inline-block;
+                            height: 14px;
+                            width: 14px;
+                            transform: rotate(180deg);
+                            vertical-align: top;
+                            margin-left: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .hs:before, .hs:after {
+        @extend %hs-before-after;
+    }
+}

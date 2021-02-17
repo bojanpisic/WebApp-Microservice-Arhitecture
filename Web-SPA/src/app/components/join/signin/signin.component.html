@@ -1,0 +1,34 @@
+<nav>
+  <img routerLink='' src="../../assets/back.png" alt="">
+</nav>
+<main>
+  <h1>Sign in</h1>
+  <form [formGroup]="userService.formModel">
+    <div class="content">
+        <p class="required">Username or email:</p>
+        <input [ngClass]="{'error-input': userService.formModel.controls.UserName.invalid && (userService.formModel.controls.UserName.touched || userService.formModel.controls.UserName.dirty || errorUsername)}"
+        formControlName="UserName" type="text">
+        <div class="error" *ngIf="userService.formModel.controls.UserName.errors?.required && (userService.formModel.controls.UserName.touched || userService.formModel.controls.UserName.dirty || errorUsername)">
+            Username is required!
+        </div>
+    </div>
+    <div class="content" style="border-bottom: none;">
+        <p class="required">Password:</p>
+        <input [ngClass]="{'error-input': userService.formModel.controls.Password.invalid && (userService.formModel.controls.Password.touched || userService.formModel.controls.Password.dirty || errorPassword)}"
+        formControlName="Password" type="password">
+        <div class="error" *ngIf="userService.formModel.controls.Password.errors?.invalidPassword && (userService.formModel.controls.Password.touched || userService.formModel.controls.Password.dirty || errorPassword)">
+            Number of characters 8-20.<br>
+            At least one number.<br>
+            At least one letter.
+        </div>
+        <div class="error" *ngIf="userService.formModel.controls.Password.errors?.required && (errorPassword || userService.formModel.controls.Password.touched || userService.formModel.controls.Password.dirty)">
+            Password is required!
+        </div>
+    </div>
+    <input id="submit" type="submit" (click)="signInClick()" value='SIGN IN'>
+</form>
+  <app-social-network></app-social-network>
+  <div class="login-div">
+    <p>Don't have an account? <a href="#" routerLink="/signup">Sign up</a></p>
+  </div>
+</main>

@@ -1,0 +1,152 @@
+<header [ngClass]="{'blur': blur}">
+    <div (click)="exit()" class="back">
+        <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: rgb(34, 34, 34); height: 16px; width: 16px; stroke: rgb(34, 34, 34); stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>
+    </div>
+    <span>Configure seats</span>
+</header>
+<main [ngClass]="{'blur': blur}" *ngIf="itsOk">
+    <div class="cabin">
+
+    </div>
+    <div class="class">
+        <h3>First class</h3>
+        <div class="container">
+            <ul class="left">
+                <li *ngFor="let seat of (firstClassSeats | seatPlacement:'left':'F'); let i = index">
+                    <div *ngIf="seat !== 'left' && !seat.reserved" (click)='configure(seat)' class="seat-with-price not-reserved-f">
+                        <span>${{seat.price}}</span>
+                        <p>{{seat.column}}{{seat.row}}</p>
+                    </div>
+                    <div *ngIf="seat !== 'left' && seat.reserved" class="seat-with-price reserved">
+                        <span>${{seat.price}}</span>
+                        <p>{{seat.column}}{{seat.row}}</p>
+                    </div>
+                    <div *ngIf="seat === 'left'" [ngStyle]="{'border': '2px solid #8795fa'}" class="seat" (click)="addSeat(i, 'left', 'F')">
+                        <p [ngStyle]="{'color': '#8795fa'}">+</p>
+                    </div>
+                </li>
+            </ul>
+            <ul class="right">
+                <li *ngFor="let seat of (firstClassSeats | seatPlacement:'right':'F'); let i = index">
+                    <div *ngIf="seat !== 'right' && !seat.reserved" (click)='configure(seat)' class="seat-with-price not-reserved-f">
+                        <span>${{seat.price}}</span>
+                        <p>{{seat.column}}{{seat.row}}</p>
+                    </div>
+                    <div *ngIf="seat !== 'right' && seat.reserved" class="seat-with-price reserved">
+                        <span>${{seat.price}}</span>
+                        <p>{{seat.column}}{{seat.row}}</p>
+                    </div>
+                    <div *ngIf="seat === 'right'" [ngStyle]="{'border': '2px solid #8795fa'}" class="seat" (click)="addSeat(i, 'right', 'F')">
+                        <p [ngStyle]="{'color': '#8795fa'}">+</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="class">
+        <h3>Business</h3>
+        <div class="container">
+            <ul class="left">
+                <li *ngFor="let seat of (businessSeats | seatPlacement:'left':'B'); let i = index">
+                    <div *ngIf="seat !== 'left' && !seat.reserved" (click)='configure(seat)' class="seat-with-price not-reserved-b">
+                        <span>${{seat.price}}</span>
+                        <p>{{seat.column}}{{seat.row}}</p>
+                    </div>
+                    <div *ngIf="seat !== 'left' && seat.reserved" class="seat-with-price reserved">
+                        <span>${{seat.price}}</span>
+                        <p>{{seat.column}}{{seat.row}}</p>
+                    </div>
+                    <div *ngIf="seat === 'left'" [ngStyle]="{'border': '2px solid #fa8795'}" class="seat" (click)="addSeat(i, 'left', 'B')">
+                        <p [ngStyle]="{'color': '#fa8795'}">+</p>
+                    </div>
+                </li>
+            </ul>
+            <ul class="right">
+                <li *ngFor="let seat of (businessSeats | seatPlacement:'right':'B'); let i = index">
+                    <div *ngIf="seat !== 'right' && !seat.reserved" (click)='configure(seat)' class="seat-with-price not-reserved-b">
+                        <span>${{seat.price}}</span>
+                        <p>{{seat.column}}{{seat.row}}</p>
+                    </div>
+                    <div *ngIf="seat !== 'right' && seat.reserved" class="seat-with-price reserved">
+                        <span>${{seat.price}}</span>
+                        <p>{{seat.column}}{{seat.row}}</p>
+                    </div>
+                    <div *ngIf="seat === 'right'" [ngStyle]="{'border': '2px solid #fa8795'}" class="seat" (click)="addSeat(i, 'right', 'B')">
+                        <p [ngStyle]="{'color': '#fa8795'}">+</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="class">
+        <h3>Economy</h3>
+        <div class="container">
+            <ul class="left">
+                <li *ngFor="let seat of (economySeats | seatPlacement:'left':'E'); let i = index">
+                    <div *ngIf="seat !== 'left' && !seat.reserved" (click)='configure(seat)' class="seat-with-price not-reserved-e">
+                        <span>${{seat.price}}</span>
+                        <p>{{seat.column}}{{seat.row}}</p>
+                    </div>
+                    <div *ngIf="seat !== 'left' && seat.reserved" class="seat-with-price reserved">
+                        <span>${{seat.price}}</span>
+                        <p>{{seat.column}}{{seat.row}}</p>
+                    </div>
+                    <div *ngIf="seat === 'left'" [ngStyle]="{'border': '2px solid #3eb0f7'}" class="seat" (click)="addSeat(i, 'left', 'E')">
+                        <p [ngStyle]="{'color': '#3eb0f7'}">+</p>
+                    </div>
+                </li>
+            </ul>
+            <ul class="right">
+                <li *ngFor="let seat of (economySeats | seatPlacement:'right':'E'); let i = index">
+                    <div *ngIf="seat !== 'right' && !seat.reserved" (click)='configure(seat)' class="seat-with-price not-reserved-e">
+                        <span>${{seat.price}}</span>
+                        <p>{{seat.column}}{{seat.row}}</p>
+                    </div>
+                    <div *ngIf="seat !== 'right' && seat.reserved" class="seat-with-price reserved">
+                        <span>${{seat.price}}</span>
+                        <p>{{seat.column}}{{seat.row}}</p>
+                    </div>
+                    <div *ngIf="seat === 'right'" [ngStyle]="{'border': '2px solid #3eb0f7'}" class="seat" (click)="addSeat(i, 'right', 'E')">
+                        <p [ngStyle]="{'color': '#3eb0f7'}">+</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="class">
+        <h3>Basic Economy</h3>
+        <div class="container">
+            <ul class="left">
+                <li *ngFor="let seat of (basicEconomySeats | seatPlacement:'left':'BE'); let i = index">
+                    <div *ngIf="seat !== 'left' && !seat.reserved" (click)='configure(seat)' class="seat-with-price not-reserved-be">
+                        <span>${{seat.price}}</span>
+                        <p>{{seat.column}}{{seat.row}}</p>
+                    </div>
+                    <div *ngIf="seat !== 'left' && seat.reserved" class="seat-with-price reserved">
+                        <span>${{seat.price}}</span>
+                        <p>{{seat.column}}{{seat.row}}</p>
+                    </div>
+                    <div *ngIf="seat === 'left'" [ngStyle]="{'border': '2px solid #fab387'}" class="seat" (click)="addSeat(i, 'left', 'BE')">
+                        <p [ngStyle]="{'color': '#fab387'}">+</p>
+                    </div>
+                </li>
+            </ul>
+            <ul class="right">
+                <li *ngFor="let seat of (basicEconomySeats | seatPlacement:'right':'BE'); let i = index">
+                    <div *ngIf="seat !== 'right' && !seat.reserved" (click)='configure(seat)' class="seat-with-price not-reserved-be">
+                        <span>${{seat.price}}</span>
+                        <p>{{seat.column}}{{seat.row}}</p>
+                    </div>
+                    <div *ngIf="seat !== 'right' && seat.reserved" class="seat-with-price reserved">
+                        <span>${{seat.price}}</span>
+                        <p>{{seat.column}}{{seat.row}}</p>
+                    </div>
+                    <div *ngIf="seat === 'right'" [ngStyle]="{'border': '2px solid #fab387'}" class="seat" (click)="addSeat(i, 'right', 'BE')">
+                        <p [ngStyle]="{'color': '#fab387'}">+</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+<app-configure-seats-modal *ngIf="showModify" [seat]="pickedSeat" (delete)="onDelete($event)" (changePrice)="onChangePrice($event)"></app-configure-seats-modal>

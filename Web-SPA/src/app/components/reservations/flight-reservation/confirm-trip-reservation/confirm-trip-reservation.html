@@ -1,0 +1,54 @@
+<main>
+    <ul>
+        <li *ngFor="let flight of data.flights; let i = index">
+            <app-flight [flight]="flight" [seat]="true"
+                [seatName]="{
+                    class: data.mySeats[i].clas,
+                    column: data.mySeats[i].col,
+                    row: data.mySeats[i].row
+                }">
+            </app-flight>
+        </li>
+    </ul>
+    <p id="totalPrice">Total price is: <span>${{data.totalPrice}}</span></p>
+    <p *ngIf="data.bonus === 0">
+        Unfortunatelly, you have no <img src="../../../../assets/icons8-coins-16.png"> bonus points! Travel with us to gain some.
+    </p>
+    <p *ngIf="data.bonus !== 0">
+        You've collected <img src="../../../../assets/icons8-coins-16.png"><span class="bonusPrice">{{data.bonus}}</span> bonus points so far. Would you like to use them?<br><br>
+        Price using bonus points is: <span class="bonusPrice">${{data.priceWithBonus}}</span>!
+    </p>
+    <div class="radio-group">
+        <label class="radio">
+            <input (change)="onPaymentMethod($event)" type="radio" name="flight-type" value="useBonus" [checked]="useBonus">
+            Use bonus
+            <span></span>
+        </label>
+        <label class="radio">
+            <input (click)="onPaymentMethod($event)" type="radio" name="flight-type" value="dontUseBonus" [checked]="!useBonus">
+            Without bonus
+            <span></span>
+        </label>
+    </div>
+    <br><br>
+    <p>Please let us know if you would like to rent a car at your final destination!</p>
+    <div class="radio-group">
+        <label class="radio">
+            <input (change)="onPickCar($event)" type="radio" name="carRadio" value="withCar" [checked]="withCar">
+            With car
+            <span></span>
+        </label>
+        <label class="radio">
+            <input (click)="onPickCar($event)" type="radio" name="carRadio" value="withoutCar" [checked]="!withCar">
+            Without car
+            <span></span>
+        </label>
+    </div>
+    <div class="content">
+        <p class="required">To date:</p>
+        <input (input)="onInputToDateCar($event)" onkeydown="return false" [ngClass]="{'error-input': errorToDate}" type="date">
+        <div class="error" *ngIf="errorToDate">
+            To date is required!
+        </div>
+    </div>
+</main>

@@ -1,0 +1,67 @@
+version: '3.4'
+
+services:
+  ocelotapi:
+    image: ${DOCKER_REGISTRY-}ocelotapi
+    container_name: ocelot
+    ports:
+      - 8084:80
+    depends_on:
+      - usermicroservice
+      - airlinemicroservice
+
+  rabbitmq:
+    container_name: rabbitmq
+    hostname: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest       
+    image: rabbitmq:3-management
+
+  usermicroservice:
+    container_name: usermicroservice
+    image: ${DOCKER_REGISTRY-}usermicroservice
+    build:
+      context: .
+      dockerfile: UserMicroservice/Dockerfile
+    ports:
+      - 8080:80
+    depends_on:
+      rabbitmq:
+        condition: service_started
+
+  airlinemicroservice:
+    container_name: airlinemicroservice
+    image: ${DOCKER_REGISTRY-}airlinemicroservice
+    build:
+      context: .
+      dockerfile: AirlineMicroservice/Dockerfile
+    ports:
+      - 8081:80
+    depends_on:
+      rabbitmq:
+        condition: service_started
+
+  mysql-server:
+    image: mysql/mysql-server:5.7.32
+    environment: 
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Password1!"
+      MSSQL_PID: Express
+      MYSQL_ROOT_PASSWORD: "root"
+      MY_SQL_USER: "user"
+      MY_SQL_PASSWORD: "pass"
+    ports: 
+      - "3306:3306"
+    volumes:
+      - mysqldb:/var/lib/mysql
+
+
+
+
+volumes:
+  mysqldb:
+

@@ -1,0 +1,124 @@
+<nav>
+  <img routerLink='' src="../../assets/back.png" alt="">
+</nav>
+<main>
+  <h1>Sign up</h1>
+  <!-- <form [formGroup]="userService.formModel">
+    <div class="progress">
+      <div class="progress-track"></div>
+      <div id="step1" class="progress-step" (click)="next('step1')" [ngClass]="{ 'is-active': step === 'step1', 'is-complete': step === 'step2' || step === 'finish'}">
+      </div>
+      <div id="step2" class="progress-step" (click)="next('step2')" [ngClass]="{ 'is-active': step === 'step2', 'is-complete': step === 'finish'}">
+      </div>
+    </div>
+    <input id="first-name" type="text" placeholder="First Name" *ngIf="step === 'step1'" formControlName="FirstName">
+    <input id="last-name" type="text" placeholder="Last Name" *ngIf="step === 'step1'" formControlName="LastName">
+    <input id="address" type="text" placeholder="City" *ngIf="step === 'step1'" formControlName="City">
+    <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" placeholder="Phone number" *ngIf="step === 'step1'" formControlName="Phone">
+    <input id="username" type="text" placeholder="Username" *ngIf="step === 'step2'" formControlName="UserName">
+    <input id="email" type="email" placeholder="Email Address" *ngIf="step === 'step2'" formControlName="Email">
+    <input id="password" type="password" placeholder="Password" *ngIf="step === 'step2'" formControlName="Password">
+    <input id="confirm-password" type="password" placeholder="Confirm Password" *ngIf="step === 'step2'" formControlName="ConfirmPassword">
+    
+    <input id="submit" type="button" (click)="next(step==='step1' ? 'step2' : 'step1')" value= 'NEXT' *ngIf="step !== 'step2'">
+    <input id="submit" type="submit" (click)="Register()" value='FINISH' *ngIf="step === 'step2'">
+
+  </form> -->
+  <form [formGroup]="userService.formModel">
+    <div class="progress">
+      <div class="progress-track"></div>
+      <div id="step1" class="progress-step" (click)="next('step1')" [ngClass]="{ 'is-active': step === 'step1', 'is-complete': step === 'step2' || step === 'finish'}">
+      </div>
+      <div id="step2" class="progress-step" (click)="next('step2')" [ngClass]="{ 'is-active': step === 'step2', 'is-complete': step === 'finish'}">
+      </div>
+    </div>
+    <div class="content" *ngIf="step === 'step1'">
+      <p class="required">First name:</p>
+      <input [ngClass]="{'error-input': userService.formModel.controls.FirstName.invalid && (userService.formModel.controls.FirstName.touched || userService.formModel.controls.FirstName.dirty || errorFirstName)}"
+      formControlName="FirstName" type="text">
+      <div class="error" *ngIf="userService.formModel.controls.FirstName.errors?.required && (userService.formModel.controls.FirstName.touched || userService.formModel.controls.FirstName.dirty || errorFirstName)">
+          First name is required!
+      </div>
+    </div>
+    <div class="content" *ngIf="step === 'step1'">
+      <p class="required">Last name:</p>
+      <input [ngClass]="{'error-input': userService.formModel.controls.LastName.invalid && (userService.formModel.controls.LastName.touched || userService.formModel.controls.LastName.dirty || errorLastName)}"
+      formControlName="LastName" type="text">
+      <div class="error" *ngIf="userService.formModel.controls.LastName.errors?.required && (userService.formModel.controls.LastName.touched || userService.formModel.controls.LastName.dirty || errorLastName)">
+          Last name is required!
+      </div>
+    </div>
+    <div class="content" *ngIf="step === 'step1'">
+      <p class="required">Phone:</p>
+      <input [ngClass]="{'error-input': userService.formModel.controls.Phone.invalid && (userService.formModel.controls.Phone.touched || userService.formModel.controls.Phone.dirty || errorPhone)}"
+      formControlName="Phone" type="text">
+      <div class="error" *ngIf="userService.formModel.controls.Phone.errors?.required && (userService.formModel.controls.Phone.touched || userService.formModel.controls.Phone.dirty || errorPhone)">
+          Phone is required!
+      </div>
+      <div class="error" *ngIf="userService.formModel.controls.Phone.errors?.pattern">
+        Should be in format:<br>
+        (+XXX)XX/XXX-XXX<br>
+        or:<br>
+        (+XXX)XX/XXX-XXXX
+    </div>
+    </div>
+    <div class="content" style="border-bottom: none;" *ngIf="step === 'step1'">
+      <p class="required">City:</p>
+      <input [ngClass]="{'error-input': userService.formModel.controls.City.invalid && (userService.formModel.controls.City.touched || userService.formModel.controls.City.dirty || errorCity)}"
+      formControlName="City" type="text">
+      <div class="error" *ngIf="userService.formModel.controls.City.errors?.required && (userService.formModel.controls.City.touched || userService.formModel.controls.City.dirty || errorCity)">
+          City is required!
+      </div>
+    </div>
+    <div class="content" *ngIf="step === 'step2'">
+        <p class="required">Username:</p>
+        <input [ngClass]="{'error-input': userService.formModel.controls.UserName.invalid && (userService.formModel.controls.UserName.touched || userService.formModel.controls.UserName.dirty || errorUsername)}"
+        formControlName="UserName" type="text">
+        <div class="error" *ngIf="userService.formModel.controls.UserName.errors?.required && (userService.formModel.controls.UserName.touched || userService.formModel.controls.UserName.dirty || errorUsername)">
+            Username is required!
+        </div>
+    </div>
+    <div class="content" *ngIf="step === 'step2'">
+        <p class="required">Email:</p>
+        <input [ngClass]="{'error-input': userService.formModel.controls.Email.invalid && (userService.formModel.controls.Email.touched || userService.formModel.controls.Email.dirty || errorEmail)}"
+        formControlName="Email" type="text">
+        <div class="error" *ngIf="userService.formModel.controls.Email.errors?.required && (userService.formModel.controls.Email.touched || userService.formModel.controls.Email.dirty || errorEmail)">
+            Email is required!
+        </div>
+        <div class="error" *ngIf="userService.formModel.controls.Email.errors?.pattern && (userService.formModel.controls.Email.touched || userService.formModel.controls.Email.dirty || errorEmail)">
+            Invalid email!
+        </div>
+    </div>
+    <div class="content" *ngIf="step === 'step2'">
+        <p class="required">Password:</p>
+        <input [ngClass]="{'error-input': userService.formModel.controls.Password.invalid && (userService.formModel.controls.Password.touched || userService.formModel.controls.Password.dirty || errorPassword)}"
+        formControlName="Password" type="password">
+        <div class="error" *ngIf="userService.formModel.controls.Password.errors?.invalidPassword && (userService.formModel.controls.Password.touched || userService.formModel.controls.Password.dirty || errorPassword)">
+            Number of characters 8-20.<br>
+            At least one number.<br>
+            At least one letter.
+        </div>
+        <div class="error" *ngIf="userService.formModel.controls.Password.errors?.required && (errorPassword || userService.formModel.controls.Password.touched || userService.formModel.controls.Password.dirty)">
+            Password is required!
+        </div>
+    </div>
+    <div class="content" style="border-bottom: none;" *ngIf="step === 'step2'">
+        <p class="required">Confirm password:</p>
+        <input (input)="onConfirmPassword()" [ngClass]="{'error-input': (userService.formModel.controls.ConfirmPassword.invalid && (userService.formModel.controls.ConfirmPassword.touched || userService.formModel.controls.ConfirmPassword.dirty || errorConfirmPassword)) || errorConfirmPasswordMatch}"
+        formControlName="ConfirmPassword" type="password">
+        <div class="error" *ngIf="userService.formModel.controls.ConfirmPassword.errors?.required && (userService.formModel.controls.ConfirmPassword.touched || userService.formModel.controls.ConfirmPassword.dirty || errorConfirmPassword)">
+            Password confirmation is required!
+        </div>
+        <div class="error" *ngIf="errorConfirmPasswordMatch">
+            Passwords do not match!
+        </div>
+    </div>
+    <input id="submit" type="button" (click)="next('step2')" value= 'NEXT' *ngIf="step !== 'step2'">
+    <input id="submit" type="submit" (click)="Register()" value='FINISH' *ngIf="step === 'step2'">
+</form>
+  <app-social-network></app-social-network>
+  <div class="login-div">
+    <p>Already have an account? <a href="#" routerLink='/signin' routerLinkActive="router-link-active" >Log in</a></p>
+  </div>
+</main>
+

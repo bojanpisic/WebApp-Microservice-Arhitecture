@@ -1,0 +1,33 @@
+<div class="radio-group">
+    <label class="radio">
+        <input (change)="sameLocation()" type="radio" name="flight-type" value="same-location" checked>
+        Same location
+        <span></span>
+    </label>
+    <label class="radio">
+        <input (click)="differentLocation()" type="radio" name="flight-type" value="different-location">
+        Different location
+        <span></span>
+    </label>
+</div>
+<p *ngIf="errorForm" style="margin: 20px 30px 0 30px; padding: 4px 0; text-align: center; font-size: 14px; color: white; background-color: #d93900;">Please fill all fields!</p>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <p [ngStyle]="{'grid-column': sameLocationChoosed ? '1/ span 2' : '1'}">PICK-UP LOCATION</p>
+    <p [ngStyle]="{'display': sameLocationChoosed ? 'none' : 'block'}">DROP-OFF LOCATION</p>
+    <app-places-search [ngStyle]="{'grid-column': '1/ span 2'}" (focused)="removeErrorClassPickUp()" [error]="errorPickUpLocation" (inputValue)="onPickUpLocationInputChange($event)" *ngIf="sameLocationChoosed" [pickUpLocation] = "true" (cityName)='onPickUpLocation($event)'></app-places-search>
+    <app-places-search [left] = "true" (focused)="removeErrorClassPickUp()" [error]="errorPickUpLocation" (inputValue)="onPickUpLocationInputChange($event)" *ngIf="!sameLocationChoosed" [pickUpLocation] = "true" (cityName)='onPickUpLocation($event)'></app-places-search>
+    <app-places-search [right] = "true" (focused)="removeErrorClassDropOff()" [error]="errorDropOffLocation" (inputValue)="onDropOffLocationInputChange($event)" *ngIf="!sameLocationChoosed" [pickUpLocation] = "false" (cityName)='onDropOffLocation($event)'></app-places-search>
+    <p id="checkin">PICK-UP DATE</p>
+    <p id="checkout">DROP-OFF DATE</p>
+    <input onkeydown="return false" id="fromDate" formControlName="pickupDate" [ngStyle]="{'grid-column': '1/ 1',
+                       'border-top-right-radius': '0px',
+                       'border-bottom-right-radius': '0px'}"
+                        class="left-input" type="date">
+    <input onkeydown="return false" id="toDate" formControlName="dropoffDate" style="border-left: 0px;" class="right-input" type="date">
+    <p id = "travellers">TRAVELLERS</p>
+    <app-person-num-search id = "travellers-div"></app-person-num-search>
+    <input class="submit" type="submit" value="SEARCH">
+</form>
+<div class="separator-div">
+    <hr class="separator">
+</div>

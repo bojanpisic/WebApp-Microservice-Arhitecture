@@ -1,0 +1,39 @@
+<header>
+    <div *ngIf="!chooseSeat" (click)="goBack()" class="back">
+        <svg viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style="height: 1em; width: 1em; display: block;"><path d="m10.8 16c-.4 0-.7-.1-.9-.4l-6.8-6.7c-.5-.5-.5-1.3 0-1.8l6.8-6.7c.5-.5 1.2-.5 1.7 0s .5 1.2 0 1.7l-5.8 5.9 5.8 5.9c.5.5.5 1.2 0 1.7-.2.3-.5.4-.8.4"></path></svg>
+    </div>
+    <div *ngIf="chooseSeat" (click)="toggleChooseSeat()" class="back">
+        <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: rgb(34, 34, 34); height: 16px; width: 16px; stroke: currentcolor; stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>
+    </div>
+    <span *ngIf="!chooseSeat">Add special offer</span>
+    <span *ngIf="chooseSeat">Choose seat</span>
+</header>
+<main *ngIf="!chooseSeat">
+    <div *ngIf="specialOffer.flights.length > 0" class="addedFlights">
+        <div class="specialOffer">
+            <div class="price">
+                <span>Old price: ${{specialOffer.oldPrice}}</span>
+                <p id="price">${{specialOffer.newPrice}}</p>
+            </div>
+            <!-- <a>Edit</a> -->
+        </div>
+        <div *ngFor="let flight of specialOffer.flights; let i = index"  [ngStyle]="{'border-bottom': '.5px solid gainsboro'}">
+            <app-flight [flight]="flight" [seat]="true" [seatName]="selectedSeats[i]"></app-flight>
+        </div>
+    </div>
+    <div *ngIf="specialOffer.flights.length > 0" class="addMore">
+        <span>Add more flights to offer</span>
+    </div>
+    <ul [ngStyle]="{'margin-top': specialOffer.flights.length > 0 ? '30px' : '15px'}">
+        <li *ngFor="let flight of flights">
+            <app-flight [flight]="flight"></app-flight>
+            <button (click)="toggleChooseSeat(flight)">Choose seat<img style="filter: opacity(.8);" src="../../../../assets/bold_arrow_pink.svg"></button>
+        </li>
+    </ul>
+</main>
+<div *ngIf="chooseSeat">
+    <app-add-seats-special-offer [takenSeats]="specialOffer.seats" [flightId]="choosenFlight.flightId" (addSeat)="onAddSeat($event)"></app-add-seats-special-offer>
+</div>
+<footer *ngIf="!chooseSeat">
+    <a (click)="onFinish()">FINISH</a>
+</footer>

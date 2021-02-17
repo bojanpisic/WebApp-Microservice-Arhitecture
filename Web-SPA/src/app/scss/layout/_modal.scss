@@ -1,0 +1,63 @@
+@import '../../app.component.scss';
+
+* {
+  box-sizing: border-box;
+}
+
+%modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    width: calc(100% - 60px);
+    height: calc(100vh - 200px);
+    margin: 100px 30px;
+    background-color: white;
+    border-radius: 30px;
+    box-shadow: $smallest-shadow;
+    text-align: center;
+    align-content: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+%modal-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 64px;
+    width: 100%;
+    padding: 10px;
+    border-bottom: 1px solid rgb(238, 238, 238);
+    display: grid;
+    grid-template-columns: 44px auto 44px;
+}
+
+%modal-header-x {
+    height: 44px;
+    width: 44px;
+    margin: auto;
+    border: none;
+    background: transparent;
+}
+
+%modal-header-headline {
+    font-size: 16px;
+    line-height: 20px;
+    color: rgb(34, 34, 34);
+    font-weight: bold;
+    margin: auto;
+}
+
+%modal-footer {
+    height: 64px;
+    width: 100%;
+    border-top: 1px solid rgb(238, 238, 238);
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    background-color: white;
+    z-index: 9999;
+    display: grid;
+    grid-template-columns: auto auto;
+}

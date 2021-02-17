@@ -1,0 +1,12 @@
+<nav [ngClass]="{blur: showModal}" *ngIf="!filter">
+    <img (click)='goBack()' src="../../../../assets/back.png">
+    <a (click)="toggleFilter($event)"><img src="../../../../assets/icons8-slider-100.png">Filters</a>
+</nav>
+<ul [ngClass]="{blur: showModal}" *ngIf="!filter">
+    <li *ngFor="let car of cars">
+        <app-car (book)="onBook($event)" [customerView]="true" [car]="car"></app-car>
+    </li>
+</ul>
+<app-modal *ngIf="showModalError" [type]="'bookError'" (remove)="onModalError($event)"></app-modal>
+<app-modal (remove)="onModal($event)" type="carReservation" *ngIf="showModal" [car]="selectedOffer"></app-modal>
+<app-car-filter *ngIf="filter" (appliedFilters)="onApplyFilter($event)" (closeFilter)="toggleFilter($event)"></app-car-filter>

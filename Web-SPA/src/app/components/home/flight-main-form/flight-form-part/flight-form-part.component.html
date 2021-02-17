@@ -1,0 +1,17 @@
+<div class="container" [ngStyle]="{'grid-template-rows': flightType === 'roundTripFlight' ? 
+                                   'auto auto auto auto auto auto auto auto' : 'auto auto auto auto auto auto auto'}">
+    <p>FROM</p>
+    <p>WHERE</p>
+    <app-places-search [left] = "true" (focused)="removeErrorClassFrom()" [error]="errorFromLocation" (inputValue)="onFromLocationInputChange($event)" [pickUpLocation] = "true" (cityName)='onFromLocation($event)'></app-places-search>
+    <app-places-search [right] = "true" (focused)="removeErrorClassTo()" [error]="errorToLocation" (inputValue)="onToLocationInputChange($event)" [pickUpLocation] = "false" (cityName)='onToLocation($event)'></app-places-search>
+    <p id="checkin">DEPART</p>
+    <p id="checkout" [ngStyle]="{'display': flightType === 'roundTripFlight' ? 'block' : 'none'}">RETURN</p>
+    <input id="inputDepart" [(ngModel)]="inputDepart" [ngStyle]="{'grid-column': flightType === 'roundTripFlight' ? '1/ 1' : '1/ span 2',
+                       'border-top-right-radius': flightType === 'roundTripFlight' ? '0px' : '3px',
+                       'border-bottom-right-radius': flightType === 'roundTripFlight' ? '0px' : '3px'}"
+                       class="leftinput" type="date">
+    <input id="inputReturn" [(ngModel)]="inputReturn" style="border-left: 0px;" [ngStyle]="{'display': (flightType === 'roundTripFlight') ? 'block' : 'none'}" class="rightinput" type="date">
+    <div *ngIf="flightType === 'multiCityFlight'" class="sep-div">
+        <hr class="sep">
+    </div>
+</div>

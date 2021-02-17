@@ -1,0 +1,13 @@
+<nav [ngClass]="{blur: showModal}" *ngIf="!filter">
+    <img (click)='goBack()' src="../../../../assets/back.png">
+    <a (click)="toggleFilter()" id="filter"><img src="../../../../assets/icons8-slider-100.png">Filters</a>
+</nav>
+<ul [ngClass]="{blur: showModal}" *ngIf="!filter">
+    <!--ovde izlistavamo sve nase specijalne karte, svaka od njih moze biti oneway, roundtrip ili multicity-->
+    <li *ngFor="let trip of trips; let i = index">
+        <app-trip (showModal)="onShowModal($event)" [trip]="trip" [userId]="userId" [indexOfTrip]="i"></app-trip>
+    </li>
+</ul>
+<h2 *ngIf="trips.length === 0 && !filter" style="padding: 44px; color: rgb(36,36,36)">There is no available flights for selected dates!</h2>
+<app-filter [ngClass]="{blur: showModal}" *ngIf="filter" (appliedFilters)="onApplyFilter($event)" (closeFilter)="toggleFilter()"></app-filter>
+<app-modal *ngIf="showModal" [type]="'bookError'" (remove)="onModal($event)"></app-modal>

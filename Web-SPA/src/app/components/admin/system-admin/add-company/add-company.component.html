@@ -1,0 +1,98 @@
+<header>
+    <div *ngIf="step !== 2" (click)="onExit()" class="back">
+        <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: rgb(34, 34, 34); height: 16px; width: 16px; stroke: rgb(34, 34, 34); stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>
+    </div>
+    <div *ngIf="step === 2" (click)="onBack()" class="back">
+        <svg viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style="height: 1em; width: 1em; display: block; fill: rgb(34, 34, 34);"><path d="m10.8 16c-.4 0-.7-.1-.9-.4l-6.8-6.7c-.5-.5-.5-1.3 0-1.8l6.8-6.7c.5-.5 1.2-.5 1.7 0s .5 1.2 0 1.7l-5.8 5.9 5.8 5.9c.5.5.5 1.2 0 1.7-.2.3-.5.4-.8.4"></path></svg>
+    </div>
+    <span *ngIf="step === 1">Register admin</span>
+    <span *ngIf="companyType === 'register-airline' && step === 2">Register airline</span>
+    <span *ngIf="companyType !== 'register-airline' && step === 2">Register service</span>
+    <span *ngIf="step === 3">Confirmation</span>
+    <span>{{step}}/3</span>
+</header>
+<main>
+    <form *ngIf="step === 1" [formGroup]="formUser" (ngSubmit)="onSubmitUser()">
+        <div class="content">
+            <p class="required">Username:</p>
+            <input [ngClass]="{'error-input': formUser.controls.username.invalid && (formUser.controls.username.touched || formUser.controls.username.dirty || errorUsername)}"
+            formControlName="username" type="text">
+            <div class="error" *ngIf="formUser.controls.username.errors?.required && (formUser.controls.username.touched || formUser.controls.username.dirty || errorUsername)">
+                Username is required!
+            </div>
+        </div>
+        <div class="content">
+            <p class="required">Email:</p>
+            <input [ngClass]="{'error-input': formUser.controls.email.invalid && (formUser.controls.email.touched || formUser.controls.email.dirty || errorEmail)}"
+            formControlName="email" type="text">
+            <div class="error" *ngIf="formUser.controls.email.errors?.required && (formUser.controls.email.touched || formUser.controls.email.dirty || errorEmail)">
+                Email is required!
+            </div>
+            <div class="error" *ngIf="formUser.controls.email.errors?.pattern && (formUser.controls.email.touched || formUser.controls.email.dirty || errorEmail)">
+                Invalid email!
+            </div>
+        </div>
+        <div class="content">
+            <p class="required">Password:</p>
+            <input [ngClass]="{'error-input': formUser.controls.password.invalid && (formUser.controls.password.touched || formUser.controls.password.dirty || errorPassword)}"
+            formControlName="password" type="password">
+            <div class="error" *ngIf="formUser.controls.password.errors?.invalidPassword && (formUser.controls.password.touched || formUser.controls.password.dirty || errorPassword)">
+                Number of characters 6-20.<br>
+                At least one number.<br>
+                At least one letter.
+            </div>
+            <div class="error" *ngIf="formUser.controls.password.errors?.required && (errorPassword || formUser.controls.password.touched || formUser.controls.password.dirty)">
+                Password is required!
+            </div>
+        </div>
+        <div class="content" style="border-bottom: none;">
+            <p class="required">Confirm password:</p>
+            <input (input)="onConfirmPassword()" [ngClass]="{'error-input': (formUser.controls.confirmPassword.invalid && (formUser.controls.confirmPassword.touched || formUser.controls.confirmPassword.dirty || errorConfirmPassword)) || errorConfirmPasswordMatch}"
+            formControlName="confirmPassword" type="password">
+            <div class="error" *ngIf="formUser.controls.confirmPassword.errors?.required && (formUser.controls.confirmPassword.touched || formUser.controls.confirmPassword.dirty || errorConfirmPassword)">
+                Password confirmation is required!
+            </div>
+            <div class="error" *ngIf="errorConfirmPasswordMatch">
+                Passwords do not match!
+            </div>
+        </div>
+        <button type="submit">CONFIRM</button>
+    </form>
+    <form *ngIf="step === 2" [formGroup]="formCompany" (ngSubmit)="onSubmitCompany()">
+        <div class="content">
+            <p class="required">Name:</p>
+            <input [ngClass]="{'error-input': formCompany.controls.name.invalid && (errorName || formCompany.controls.name.touched || formCompany.controls.name.dirty)}"
+            formControlName="name" type="text">
+            <div class="error" *ngIf="formCompany.controls.name.errors?.required && (errorName || formCompany.controls.name.touched || formCompany.controls.name.dirty)">
+                Company name is required!
+            </div>
+        </div>
+        <div class="content" style="border-bottom: none;">
+            <p class="required">Address:</p>
+            <app-places-search (focused)="removeErrorClass()" [error]="errorAddress" (inputValue)="onInputChange($event)" [addAirlineAddress]="true" [airlineAddress]="address !== undefined ? address : undefined" (cityName)='onInput($event)'></app-places-search>
+        </div>
+        <button type="submit">CONFIRM</button>
+    </form>
+    <div *ngIf="step === 3">
+        <div class="content">
+            <p>Username:</p>
+            <p style="color: hotpink; display: block;">{{data.username}}</p>
+        </div>
+        <div class="content">
+            <p>Email:</p>
+            <p style="color: hotpink; display: block;">{{data.email}}</p>
+        </div>
+        <div class="content">
+            <p>Company name:</p>
+            <p style="color: hotpink; display: block;">{{data.companyName}}</p>
+        </div>
+        <div class="content" style="border-bottom: none;">
+            <p>Company address:</p>
+            <p style="color: hotpink; display: block;">{{data.city}}, {{data.state}}</p>
+        </div>
+    </div>
+</main>
+<footer *ngIf="step === 3">
+    <button (click)="onRegister()">FINISH</button>
+</footer>
+<app-notification></app-notification>

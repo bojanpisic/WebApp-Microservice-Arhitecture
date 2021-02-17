@@ -1,0 +1,41 @@
+<header [ngClass]="{blur: showModal}">
+    <div (click)="goBack()" class="back">
+        <svg viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style="height: 1em; width: 1em; display: block;"><path d="m10.8 16c-.4 0-.7-.1-.9-.4l-6.8-6.7c-.5-.5-.5-1.3 0-1.8l6.8-6.7c.5-.5 1.2-.5 1.7 0s .5 1.2 0 1.7l-5.8 5.9 5.8 5.9c.5.5.5 1.2 0 1.7-.2.3-.5.4-.8.4"></path></svg>
+    </div>
+    <span>Special offers</span>
+</header>
+<main [ngClass]="{blur: showModal}" *ngIf="itsOk">
+    <h3 style="margin-top: 60px; color: rgb(36, 36, 36)" *ngIf="noOffers">
+        There is no special offers at the moment! :-(
+    </h3>
+    <ul>
+        <li *ngFor="let specialOffer of specialOffers; let i = index">
+            <div class="specialOffer">
+                <div class="price">
+                    <span>Old price: ${{specialOffer.oldPrice}}</span>
+                    <p id="price">${{specialOffer.newPrice}}</p>
+                </div>
+                <p>Special offer</p>
+            </div>
+            <div *ngFor="let flight of specialOffer.flights; let i = index"  [ngStyle]="{'border-bottom': (i !== specialOffer.flights.length - 1) ? '.5px solid gainsboro' : 'none'}">
+                <app-flight [flight]="flight" [seat]="true" [seatName]="flight.seatNum"></app-flight>
+            </div>
+            <form [formGroup]="formPassport" (ngSubmit)="onSubmitPassport()" *ngIf="!bookIt[i]">
+                <div class="content">
+                    <p class="required">Your passport:</p>
+                    <input [ngClass]="{'error-input': formPassport.controls.passport.invalid && (formPassport.controls.passport.touched || formPassport.controls.passport.dirty || errorPassport)}"
+                    formControlName="passport" type="text">
+                    <div class="error" *ngIf="formPassport.controls.passport.errors?.required && (formPassport.controls.passport.touched || formPassport.controls.passport.dirty || errorPassport)">
+                        Passport is required!
+                    </div>
+                </div>
+                <a (click)='viewDeal(i, specialOffer.id)'>Cancel</a>
+                <button id="confirmButton" type="submit">CONFIRM</button>
+            </form>
+            <div *ngIf="bookIt[i]" class="book">
+                <a (click)='viewDeal(i, specialOffer.id)'>BOOK NOW!</a>
+            </div>
+        </li>
+    </ul>
+</main>
+<app-modal *ngIf="showModal" [type]="'bookError'" (remove)="onModal($event)"></app-modal>

@@ -1,0 +1,322 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+@import '../../../app.component.scss';
+
+.container{
+    padding: 20px;
+    position: relative;
+    display: grid;
+    // box-shadow: $lightest-shadow;
+    grid-template-columns: 110px calc(100% - 260px) 150px;
+    grid-template-rows: auto auto auto auto auto;
+    grid-template-areas: "spandate none spanairlines"
+                         "date none airlines"
+                         "spanfrom none spanto"
+                         "from none to"
+                         "spandeparture none spanarrival"
+                         "departure none arrival"
+                         "spanflight none spandistance"
+                         "flight none distance";
+
+    span {
+        font-size: 14px;
+        line-height: 18px;
+        color: rgb(113,113,113);
+        font-family: 'Roboto';
+    }
+
+    p {
+        margin: 0;
+        font-size: 16px;
+        line-height: 20px;
+        color: rgb(34,34,34);
+        font-weight: bold;
+    }
+
+    #left {
+        position: absolute;
+        top: calc(50% - 25px);
+        left: calc(50% - 70px);
+        width: 40px;
+        border: 0;
+        border-bottom: 1.5px dashed $light-blue;
+    }
+
+    #right {
+        position: absolute;
+        top: calc(50% - 25px);
+        right: calc(50% - 70px);
+        width: 40px;
+        border: 0;
+        border-bottom: 1.5px dashed $light-blue;
+    }
+
+    #plane {
+        position: absolute;
+        height: 40px;
+        width: 40px;
+        top: calc(50% - 35px);
+        left: calc(50% - 20px);
+        transform: rotate(45deg);
+    }
+
+    #spandate {
+        grid-area: spandate;
+    }
+
+    #spanairlines {
+        grid-area: spanairlines;
+        text-align: right;
+    }
+
+    #date {
+        grid-area: date;
+        margin-bottom: 20px;
+    }
+
+    #airlines {
+        grid-area: airlines;
+        text-align: right;
+        margin-bottom: 20px;
+
+        img {
+            border-radius: 50%;
+            height: 16px;
+            width: 16px;
+            margin-right: 4px;
+            margin-bottom: 2px;
+            vertical-align: middle;
+        }
+    }
+
+    #spanfrom {
+        grid-area: spanfrom;
+    }
+
+    #spanto {
+        grid-area: spanto;
+        text-align: right;
+    }
+
+    #from {
+        grid-area: from;
+        margin-bottom: 20px;
+        color: $blue;
+    }
+
+    #to {
+        grid-area: to;
+        text-align: right;
+        margin-bottom: 20px;
+        color: $blue;
+    }
+
+    #spandeparture {
+        grid-area: spandeparture;
+    }
+
+    #departure {
+        grid-area: departure;
+        margin-bottom: 15px;
+    }
+
+    #time {
+        img {
+            height: 12px;
+            width: 12px;
+            vertical-align: middle;
+            margin-right: 3px;
+        }
+        grid-column-start: 1;
+        grid-column-end: 4;
+        grid-row: 5;
+        text-transform: none;
+        margin: 0 auto;
+        color: rgb(60,60,60);
+        text-transform: uppercase;
+        font-size: .65em;
+        font-weight: bold;
+    }
+
+    #spanarrival {
+        grid-area: spanarrival;
+        text-align: right;
+    }
+
+    #arrival {
+        grid-area: arrival;
+        text-align: right;
+        margin-bottom: 15px;
+    }
+
+    #spanflight {
+        grid-area: spanflight;
+    }
+
+    #flight {
+        grid-area: flight;
+    }
+
+    #spandistance {
+        grid-area: spandistance;
+        text-align: right;
+    }
+
+    #distance {
+        grid-area: distance;
+        text-align: right;
+    }
+
+    #stops {
+        grid-column-start: 1;
+        grid-column-end: 4;
+        grid-row-start: 7;
+        grid-row-end: 9;
+        text-align: center;
+       
+        ul {
+            list-style-type: none;
+            padding: 0;
+            line-height: .95em;
+            transform: scaleX(.95);
+            margin: 0;
+
+            li {
+                padding: 0;
+                display: inline;
+                p {
+                    display: inline;
+                }
+            }
+        }
+    }
+
+}
+
+.rateExperience {
+    grid-column: 1/ span 4;
+    margin: 0 8px;
+
+    p {
+        margin: 0;
+        padding: 16px 0;
+        border-top: 1px solid rgb(234, 234, 234);
+        font-weight: bold;
+        line-height: 20px;
+        font-size: 16px;
+        color: #222222;
+        position: relative;
+
+        svg {
+            position: absolute;
+            top: 17px; right: 0;
+        }
+    }
+
+    .rateService, .rateCar {
+        padding: 16px 0 8px 0;
+        display: grid;
+        width: 100%;
+        grid-template-columns: auto 32px 60px 32px;
+        grid-template-rows: 20px 18px;
+        grid-template-areas: "pText minus input plus"
+                             "spanText minus input plus";
+                             
+
+        p {
+            grid-area: pText;
+            margin: 0;
+            border-top: none;
+            padding: 0;
+            color: #222222;
+            font-weight: bold;
+            line-height: 20px;
+            font-size: 16px;
+        }
+
+        span {
+            grid-area: spanText;
+            font-size: 14px;
+            line-height: 18px;
+            color: rgb(113, 113, 113);
+        }
+
+        #rateService, #rateCar, input {
+            grid-area: input;
+            text-align: center;
+            width: 60px;
+            height: 32px;
+            font-size: 16px;
+            padding: 8px 5px;
+            border: none;
+            color: rgb(34, 34, 34);
+            font-weight: bold;
+        }
+
+        :focus {
+            outline: none;
+        }
+
+        .minusBtn, .plusBtn {
+            margin-top: 3px;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            background-color: white;
+            padding: 4px;
+        }
+
+        .minusBtn {
+            grid-area: minus;
+            border: 1px solid rgb(113, 113, 113);
+        }
+
+        .plusBtn {
+            grid-area: plus;
+            border: 1px solid rgb(113, 113, 113);
+        }
+
+        .disabled {
+            border: 1px solid rgb(234, 234, 234);
+
+            svg {
+                fill: rgb(234, 234, 234);
+            }
+        }
+    }
+
+    #confirmRates {
+        display: block;
+        margin: 0 0 15px auto;
+        width: 124px;
+        padding: 8px 0;
+        line-height: 20px;
+        font-size: 16px;
+        color: #222222;
+        border: 1px solid #222222;
+        background-color: white;
+        font-weight: bold;
+        border-radius: 4px;
+        box-shadow: $smallest-shadow;
+    }
+
+    #confirmRates {
+        border: 1px solid $blue;
+        outline: none;
+    }
+}
+
+.book {
+    margin: auto 8px 0 0;
+    height: 44px;
+    padding: 12px 0;
+    a {
+        display: block;
+        margin: 0 0 0 auto;
+        text-align: right;
+        font-size: 18px;
+        line-height: 20px;
+        text-decoration: none;
+        font-family:'Bebas Neue', cursive;
+        color: $blue;
+    }
+}

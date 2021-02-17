@@ -1,0 +1,13 @@
+<!-- <p>Location:</p>
+<app-places-search (focused)="removeErrorClass()" [error]="errorLocation" (inputValue)="onInputChange($event)" [addFlight]="true" [ngStyle]="{'padding-left': '0px'}" (cityName)='onLocation($event)'></app-places-search> -->
+<div [ngClass]="{droppedDown1: dropdown}" (click)="toggleDropDown()" class="pickedDestination">
+    <p *ngIf="pickedDestination !== undefined">{{pickedDestination.city}}, {{pickedDestination.state}}<svg [ngStyle]="{'transform': !dropdown ? 'rotateZ(-90deg)' : 'rotateZ(90deg)'}" viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style="height: 16px; width: 16px; display: inline-block;"><path d="m10.8 16c-.4 0-.7-.1-.9-.4l-6.8-6.7c-.5-.5-.5-1.3 0-1.8l6.8-6.7c.5-.5 1.2-.5 1.7 0s .5 1.2 0 1.7l-5.8 5.9 5.8 5.9c.5.5.5 1.2 0 1.7-.2.3-.5.4-.8.4"></path></svg></p>
+    <p *ngIf="pickedDestination === undefined">Pick stop destination<svg [ngStyle]="{'transform': !dropdown ? 'rotateZ(-90deg)' : 'rotateZ(90deg)'}" viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style="height: 16px; width: 16px; display: inline-block;"><path d="m10.8 16c-.4 0-.7-.1-.9-.4l-6.8-6.7c-.5-.5-.5-1.3 0-1.8l6.8-6.7c.5-.5 1.2-.5 1.7 0s .5 1.2 0 1.7l-5.8 5.9 5.8 5.9c.5.5.5 1.2 0 1.7-.2.3-.5.4-.8.4"></path></svg></p>
+</div>
+<div *ngIf="dropdown" class="dropdown1">
+    <ul>
+        <li *ngFor="let destination of destinations">
+            <p (click)="setDestination(destination)">{{destination.city}}, {{destination.state}}</p>
+        </li>
+    </ul>
+</div>

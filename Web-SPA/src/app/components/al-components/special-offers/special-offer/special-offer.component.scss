@@ -1,0 +1,467 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+@import '../../../../app.component.scss';
+
+.all {
+    margin: 0 25px;
+    list-style-type: none;
+    padding: 0;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    position: relative;
+    border: 1px solid lighten($purple, 10%);
+
+
+    .container{
+        position: relative;
+        display: grid;
+        padding: 16px 1.5em;
+        // box-shadow: $lightest-shadow;
+        grid-template-columns: 110px calc(100% - 260px) 150px;
+        grid-template-rows: auto auto auto auto auto;
+        grid-template-areas: "spandate none spanairlines"
+                             "date none airlines"
+                             "from-full none to-full"
+                             "from none to"
+                             "spandeparture none spanarrival"
+                             "departure none arrival"
+                             "spanflight none spanseat"
+                             "flight none seat";
+    
+        #left {
+            position: absolute;
+            top: calc(50% - 25px);
+            left: calc(50% - 70px);
+            width: 40px;
+            border: 0;
+            border-bottom: 1.5px dashed $light-blue;
+        }
+    
+        #right {
+            position: absolute;
+            top: calc(50% - 25px);
+            right: calc(50% - 70px);
+            width: 40px;
+            border: 0;
+            border-bottom: 1.5px dashed $light-blue;
+        }
+    
+        #plane {
+            position: absolute;
+            height: 40px;
+            width: 40px;
+            top: calc(50% - 35px);
+            left: calc(50% - 20px);
+            transform: rotate(45deg);
+        }
+
+        #reverse-plane {
+            position: absolute;
+            height: 40px;
+            width: 40px;
+            top: calc(50% - 35px);
+            left: calc(50% - 20px);
+            transform: rotate(-135deg);
+        }
+        
+        p {
+            margin: 0;
+            font-weight: bold;
+        }
+    
+        #spandate, #spanairlines, #spandeparture,
+        #spanarrival, #spanflight, #spanseat, #time {
+            color: rgb(60,60,60);
+            text-transform: uppercase;
+            font-size: .65em;
+            font-weight: bold;
+        }
+    
+        #spandate {
+            grid-area: spandate;
+        }
+    
+        #spanairlines {
+            grid-area: spanairlines;
+            text-align: right;
+        }
+    
+        // #date {         
+        //     grid-area: date;
+        //     font-size: .85em;
+        #date {
+            grid-area: date;
+            font-size: .85em;
+            margin-bottom: 20px;
+        }
+    
+        #airlines {
+            grid-area: airlines;
+            text-align: right;
+            font-size: .85em;
+            margin-bottom: 20px;
+    
+            img {
+                border-radius: 50%;
+                height: 17px;
+                width: 17px;
+                margin-right: 4px;
+                margin-bottom: 2px;
+                vertical-align: middle;
+            }
+        }
+    
+        #from-full {
+            grid-area: from-full;
+            font-size: .7em;
+        }
+    
+        #to-full {
+            grid-area: to-full;
+            text-align: right;
+            font-size: .7em;
+        }
+    
+        #from {
+            grid-area: from;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: $blue;
+        }
+    
+        #to {
+            grid-area: to;
+            text-align: right;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: $blue;
+        }
+    
+        #spandeparture {
+            grid-area: spandeparture;
+        }
+    
+        #departure {
+            grid-area: departure;
+            font-size: .85em;
+            margin-bottom: 15px;
+        }
+
+        #time {
+            img {
+                height: 12px;
+                width: 12px;
+                vertical-align: middle;
+                margin-right: 3px;
+            }
+            grid-column-start: 1;
+            grid-column-end: 4;
+            grid-row: 5;
+            text-transform: none;
+            margin: 0 auto;
+        }
+    
+        #spanarrival {
+            grid-area: spanarrival;
+            text-align: right;
+        }
+    
+        #arrival {
+            grid-area: arrival;
+            text-align: right;
+            font-size: .85em;
+            margin-bottom: 15px;
+        }
+    
+        #spanflight {
+            grid-area: spanflight;
+        }
+    
+        #flight {
+            grid-area: flight;
+            font-size: .85em;
+        }
+    
+        #spanseat {
+            grid-area: spanseat;
+            text-align: right;
+        }
+    
+        #seat {
+            grid-area: seat;
+            text-align: right;
+            font-size: .85em;
+            color: $red;
+        }
+
+        #stops {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 16px;
+
+            span {
+                color: rgb(60,60,60);
+                text-transform: uppercase;
+                font-size: .65em;
+                font-weight: bold;
+                vertical-align: bottom;
+            }
+           
+            ul {
+                list-style-type: none;
+                padding: 0;
+                line-height: .95em;
+                transform: scaleX(.95);
+
+                li {
+                    padding: 0;
+                    display: inline;
+                    p {
+                        display: inline;
+                        font-size: .85em;
+                    }
+                }
+            }
+        }
+    
+    }
+
+    #stops-info-arrow {
+        width: 100%;
+        padding-top: 5px;
+        border-top: .5px solid gainsboro;
+        text-align: center;
+        margin-bottom: 0px;
+    
+        img {
+            height: 15px;
+            width: 15px;
+            transform: rotate(-90deg);
+            transition: transform 0.5s;
+        }
+    }
+
+    .stops-info {
+        ul {
+            padding: 0;
+            list-style: none;
+            padding: 10px 24px;
+
+            li {
+
+                display: grid;
+                grid-template-columns: auto auto auto;
+                grid-template-rows: auto auto;
+                grid-template-areas: "stopfrom stoptime stopto"
+                                     "stopdeparture none stoparrival"
+                                     "stoppause stoppause stoppause";
+
+                span {
+                    color: rgb(60,60,60);
+                    text-transform: uppercase;
+                    font-size: .65em;
+                    font-weight: bold;
+                }
+
+                img {
+                    height: 12px;
+                    width: 12px;
+                    vertical-align: middle;
+                    margin-right: 3px;
+                }
+
+                #stop-from {
+                    grid-area: stopfrom;
+                    margin-bottom: 5px;
+                    span {
+                        font-size: inherit;
+                        color: $red;
+                    }
+                }
+
+                #stop-time {
+                    grid-area: stoptime;
+                    text-align: center;
+                    text-transform: none;
+                }
+
+                #stop-to {
+                    grid-area: stopto;
+                    text-align: right;
+                    span {
+                        font-size: inherit;
+                        color: $red;
+                    }
+                }
+
+                #stop-departure {
+                    grid-area: stopdeparture;
+                    margin-bottom: 10px;
+                    span {
+                        font-size: inherit;
+                        color: $red;
+                    }
+                }
+
+                #stop-arrival {
+                    grid-area: stoparrival;
+                    text-align: right;
+                    span {
+                        font-size: inherit;
+                        color: $red;
+                    }
+                }
+
+                #stop-pause {
+                    grid-area: stoppause;
+                    margin-bottom: 15px;
+                    text-align: center;
+                    padding: 0 auto;
+
+                    span {
+                        display: inline-block;
+                        padding: 4px 1px;
+                        border-top: 1px dashed gainsboro;
+                        border-bottom: 1px dashed gainsboro;
+                    }
+                }
+            }
+        }
+    }
+    
+}
+
+.all:before {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+    z-index: -1;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    box-shadow: $lightest-big-shadow;
+}
+
+.price {
+    width: 100%;
+    text-align: center;
+    margin-top: -36px;
+    padding-bottom: 15px;
+    
+    #oldprice {
+        font-size: .9em;
+        vertical-align: top;
+        font-weight: bold;
+        position: relative;
+    }
+
+    #oldprice:before {
+        content: "OLD";
+        position: absolute;
+        font-size: .65em;
+        font-weight: bold;
+        color: rgb(60,60,60);
+        top: -8px;
+        left: 0;
+    }
+
+    #newprice {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: white;
+        padding: 12px .5em .2em 10px;
+        background-color: $red;
+        border-radius: 10px;
+        position: relative;
+    }
+
+    #newprice:before {
+        content: "NEW";
+        position: absolute;
+        font-size: .5em;
+        font-weight: bold;
+        color: white;
+        top: 3px;
+        left: 10px;
+    }
+}
+
+.price-more {
+    height: 40px;
+    width: 100%;
+    text-align: center;
+    padding-top: 25px;
+    background-color: lighten($purple, 20%);
+
+    #total {
+        display: inline-block;
+        font-size: .9em;
+        font-weight: 700;
+        margin-right: 15px;
+        vertical-align: 5px;
+        color: white;
+        transform: scaleX(.95);
+    }
+    
+    #oldprice {
+        font-size: .9em;
+        vertical-align: top;
+        font-weight: bold;
+        position: relative;
+        color: rgb(240, 240, 240);
+        margin-right: 5px;
+    }
+
+    #oldprice:before {
+        content: "OLD";
+        position: absolute;
+        font-size: .65em;
+        font-weight: bold;
+        color: rgb(240, 240, 240);
+        top: -8px;
+        left: 0;
+    }
+
+    #newprice {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: white;
+        padding: 12px .5em .2em 10px;
+        background-color: $red;
+        border-radius: 10px;
+        position: relative;
+    }
+
+    #newprice:before {
+        content: "NEW";
+        position: absolute;
+        font-size: .5em;
+        font-weight: bold;
+        color: white;
+        top: 3px;
+        left: 10px;
+    }
+}
+
+#book {
+    display: block;
+    width: calc(100% - 50px);
+    height: 2.2em;
+    margin: 0 25px;
+    font-size: 1.1em;
+    outline: none;
+    background-color: white;
+    background-color: $purple;
+    color: white;
+    border: 0;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: $lightest-big-shadow;
+}
+
+
+
