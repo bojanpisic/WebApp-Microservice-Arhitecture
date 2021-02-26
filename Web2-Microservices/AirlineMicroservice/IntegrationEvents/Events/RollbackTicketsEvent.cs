@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace AirlineMicroservice.IntegrationEvents.Events
 {
-    public class TestEvent : IntegrationEvent
+    public class RollbackTicketsEvent:IntegrationEvent
     {
-        public string s { get; set; }
+        public List<int> TicketIds { get; set; }
 
-        public TestEvent(string s)
+        public RollbackTicketsEvent(List<int> ticketIds)
         {
-            this.s = s;
+            TicketIds = ticketIds;
         }
     }
 }

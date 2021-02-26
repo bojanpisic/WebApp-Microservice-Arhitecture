@@ -51,7 +51,30 @@
       "UpstreamPathTemplate": "/airline/{everything}/{id}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     },
-
+    {
+      "DownstreamPathTemplate": "/api/home/all-airlines?{a}={b}&{c}={d}&{e}={f}&{g}={j}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "airlinemicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/airline/home/all-airlines?{a}={b}&{c}={d}&{e}={f}&{g}={j}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/home/flights?{a}={b}&{c}={d}&{e}={f}&{g}={j}&{a2}={b2}&{c2}={d2}&{e2}={f2}&{g2}={j2}&{t}={y}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "airlinemicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/airline/home/flights?{a}={b}&{c}={d}&{e}={f}&{g}={j}&{a2}={b2}&{c2}={d2}&{e2}={f2}&{g2}={j2}&{t}={y}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
 
     //user routes
     {

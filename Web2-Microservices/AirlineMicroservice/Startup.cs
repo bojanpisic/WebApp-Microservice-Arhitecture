@@ -197,8 +197,7 @@ namespace AirlineMicroservice
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
             services.AddTransient<CreateAirlineIntegrationEventHandler>();
-            services.AddTransient<TestEventHandler>();
-
+            services.AddTransient<RollbackTicketsEventHandler>();
         }
 
         private void ConfigureEventBus(IApplicationBuilder app)
@@ -206,7 +205,7 @@ namespace AirlineMicroservice
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
             eventBus.Subscribe<CreateAirlineIntegrationEvent, CreateAirlineIntegrationEventHandler>();
-            eventBus.Subscribe<TestEvent, TestEventHandler>();
+            eventBus.Subscribe<RollbackTicketsEvent, RollbackTicketsEventHandler>();
         }
     }
 }

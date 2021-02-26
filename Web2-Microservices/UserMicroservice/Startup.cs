@@ -24,6 +24,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UserMicroservice.Data;
 using UserMicroservice.IntegrationEvents.EventHandling;
+using UserMicroservice.IntegrationEvents.Events;
 using UserMicroservice.Models;
 using UserMicroservice.Repository;
 
@@ -229,14 +230,23 @@ namespace UserMicroservice
             });
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+
             services.AddTransient<RollbackAirlineAdminHandler>();
             services.AddTransient<RollbackRACSAdminHandler>();
+            services.AddTransient<SendConfirmationEmailEventHandler>();
+            services.AddTransient<SendMailIntegrationEventHandler>();
+            services.AddTransient<SendMailToFriendIntegrationEventHandler>();
+
         }
 
         private void ConfigureEventBus(IApplicationBuilder app)
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            //eventBus.Subscribe<TestEvent, TestEventHandler>();
+            eventBus.Subscribe<RollbackAirlineAdmin, RollbackAirlineAdminHandler>();
+            eventBus.Subscribe<RollbackRACSAdmin, RollbackRACSAdminHandler>();
+            eventBus.Subscribe<SendMailToFriendIntegrationEvent, SendMailToFriendIntegrationEventHandler>();
+            eventBus.Subscribe<SendConfirmationEmailEvent, SendConfirmationEmailEventHandler>();
+            eventBus.Subscribe<SendMailToFriendIntegrationEvent, SendMailToFriendIntegrationEventHandler>();
         }
     }
 }

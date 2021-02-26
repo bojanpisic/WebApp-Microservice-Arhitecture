@@ -193,11 +193,8 @@ namespace AirlineMicroservice.Controllers
                     });
                 }
 
-                //CAR RESERVATION
 
-
-                //saga transakcija
-
+                List<int> ticketIds = new List<int>();
                 try
                 {
                     foreach (var seat in seatsForUpdate)
@@ -206,6 +203,12 @@ namespace AirlineMicroservice.Controllers
                     }
 
                     await unitOfWork.Commit();
+
+                    foreach (var seat in seatsForUpdate)
+                    {
+                        ticketIds.Add(seat.Ticket == null ? seat.Ticket2.Ticket2Id : seat.Ticket.TicketId);
+                    }
+
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
@@ -215,6 +218,28 @@ namespace AirlineMicroservice.Controllers
                 {
                     return StatusCode(500, "One of transactions failed. Failed to reserve flight");
                 }
+
+
+                //CAR RESERVATION
+
+                if (dto.CarReservation != null)
+                {
+                    if (dto.CarReservation.TakeOverDate < DateTime.Now.Date)
+                    {
+                        return BadRequest("Date is in past");
+                    }
+
+                    if (dto.CarReservation.TakeOverDate > dto.CarReservation.ReturnDate)
+                    {
+                        return BadRequest("Takeover date shoud be lower then return date.");
+                    }
+
+
+                    var @event = new RentCarEvent(dto.CarReservation.CarRentId, dto.CarReservation.TakeOverDate, dto.CarReservation.ReturnDate,
+                        dto.CarReservation.TakeOverCity, dto.CarReservation.ReturnCity, userId, ticketIds);
+                    eventBus.Publish(@event);
+                }
+
 
                 List<FlightInfo> userFlightInfo = new List<FlightInfo>();
 
@@ -278,6 +303,9 @@ namespace AirlineMicroservice.Controllers
                         Console.WriteLine("failed to send email");
                     }
                 }
+
+
+
 
                 return Ok();
             }

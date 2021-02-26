@@ -188,12 +188,7 @@ namespace RACSMicroservice
             ConfigureEventBus(app); //subscribe microservice 
         }
 
-        private void ConfigureEventBus(IApplicationBuilder app)
-        {
-            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
-            eventBus.Subscribe<CreateRACSIntegrationEvent, CreateRACSIntegrationEventHandler>();
-        }
         private void RegisterEventBus(IServiceCollection services)
         {
             var subscriptionClientName = Configuration.GetSection("RabbitMQ:SubscriptionClientName").Value;
@@ -215,7 +210,19 @@ namespace RACSMicroservice
             });
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+
             services.AddTransient<CreateRACSIntegrationEventHandler>();
+            services.AddTransient<RentCarEventHandler>();
+
+        }
+
+        private void ConfigureEventBus(IApplicationBuilder app)
+        {
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+
+            eventBus.Subscribe<CreateRACSIntegrationEvent, CreateRACSIntegrationEventHandler>();
+            eventBus.Subscribe<RentCarEvent, RentCarEventHandler>();
+
         }
     }
 }

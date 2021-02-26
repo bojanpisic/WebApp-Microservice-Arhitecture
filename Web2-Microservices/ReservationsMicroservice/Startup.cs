@@ -152,13 +152,14 @@ namespace ReservationsMicroservice
             });
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-            // services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
+
         }
 
         private void ConfigureEventBus(IApplicationBuilder app)
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            //
+
+
         }
     }
 }

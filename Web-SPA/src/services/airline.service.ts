@@ -22,7 +22,6 @@ export class AirlineService {
    }
 
    reserveTrip(data) {
-    console.log('SALJEM:', data);
     const body = {
       MySeatsIds: data.mySeatsIds,
       MyPassport: data.myPassport,
@@ -36,7 +35,6 @@ export class AirlineService {
   }
 
   reserveSpecialOffer(data) {
-    console.log(data);
     const body = {
       Id: data.id,
       Passport: data.passport
@@ -102,7 +100,6 @@ export class AirlineService {
   }
 
   getTripInfo(data: any): Observable<any> {
-    console.log(data);
     const body = {
       MySeatsIds: data.mySeatsIds,
       Friends: data.friends,
@@ -114,7 +111,6 @@ export class AirlineService {
 
   getAirline(data: any): Observable<any> {
     const url = this.BaseURI + '/airline/get-airline';
-    console.log(url);
     return this.http.get<any>(url);
   }
 
@@ -130,7 +126,6 @@ export class AirlineService {
 
   getTopRatedAirlines(): Observable<any> {
     const url = this.BaseURI + '/airline/home/get-toprated-airlines';
-    console.log(url);
     return this.http.get<any>(url);
   }
 
@@ -147,7 +142,6 @@ export class AirlineService {
 
   getAirlinePhoto(data: any): Observable<any> {
     const url = `${this.BaseURI + '/airline/get-airline-logo'}/${data}`;
-    console.log(url);
     return this.http.get(url);
   }
 
