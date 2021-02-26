@@ -54,30 +54,20 @@ namespace AirlineMicroservice.Controllers
                 {
                     return BadRequest("Cant delete seat. Seat is reserved");
                 }
-                try
-                {
-                    unitOfWork.SeatRepository.Delete(seat);
-                    await unitOfWork.Commit();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    return BadRequest("Something is changed. Cant delete");
-                }
-                catch (Exception)
-                {
-                    return StatusCode(500, "Failed to delete seat. Transaction failed.");
-                }
+
+                unitOfWork.SeatRepository.Delete(seat);
+                await unitOfWork.Commit();
 
                 return Ok();
-                //var seats = await unitOfWork.SeatRepository.Get(s => s.Flight == seat.Flight);
-
-                //List<object> obj = new List<object>();
-
-                //foreach (var item in seats)
-                //{
-                //    obj.Add(new { item.Column, item.Row, item.Flight.FlightId, item.Class, item.SeatId, item.Price });
-                //}
-                //return Ok(obj);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return BadRequest("Something is changed. Cant delete");
+            }
+            catch (DbUpdateException)
+            {
+                Console.WriteLine("failed to delete seat. Transaction failed");
+                return StatusCode(500, "Failed to delete seat. Transaction failed.");
             }
             catch (Exception)
             {
@@ -138,27 +128,16 @@ namespace AirlineMicroservice.Controllers
                     Flight = flight
                 };
 
-                try
-                {
-                    await unitOfWork.SeatRepository.Insert(seat);
-                    await unitOfWork.Commit();
-                }
-                catch (Exception)
-                {
-                    //unitOfWork.Rollback();
-                    return StatusCode(500, "Failed to add seat. Transaction failed.");
-                }
+
+                await unitOfWork.SeatRepository.Insert(seat);
+                await unitOfWork.Commit();
 
                 return Ok();
-                //var allSeats = await unitOfWork.SeatRepository.Get(s => s.Flight == flight);
-                //List<object> obj = new List<object>();
-
-                //foreach (var item in allSeats)
-                //{
-                //    obj.Add(new { item.Column, item.Row, item.Flight.FlightId, item.Class, item.SeatId, item.Price });
-                //}
-
-                //return Ok(obj);
+            }
+            catch (DbUpdateException)
+            {
+                Console.WriteLine("transaction failed");
+                return StatusCode(500, "Failed to add seat.");
             }
             catch (Exception)
             {
@@ -214,32 +193,21 @@ namespace AirlineMicroservice.Controllers
 
                 seat.Price = seatDto.Price;
 
-                try
-                {
-                    unitOfWork.SeatRepository.Update(seat);
-                    await unitOfWork.Commit();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    return BadRequest("Something is changed. Cant change");
-                }
-                catch (Exception)
-                {
-                    //unitOfWork.Rollback();
-                    return StatusCode(500, "Failed to update seat. Transaction failed.");
-                }
+
+                unitOfWork.SeatRepository.Update(seat);
+                await unitOfWork.Commit();
 
                 return Ok();
-                //var seats = await unitOfWork.SeatRepository.Get(s => s.Flight == seat.Flight);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return BadRequest("Something is changed. Cant change");
+            }
+            catch(DbUpdateException)
+            {
+                Console.WriteLine("Failed to update seat. Transaction failed");
+                return StatusCode(500, "Failed to update seat.");
 
-                //List<object> obj = new List<object>();
-
-                //foreach (var item in seats)
-                //{
-                //    obj.Add(new { item.Column, item.Row, item.Flight.FlightId, item.Class, item.SeatId, item.Price });
-                //}
-
-                //return Ok(obj);
             }
             catch (Exception)
             {

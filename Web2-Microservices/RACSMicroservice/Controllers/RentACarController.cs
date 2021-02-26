@@ -492,5 +492,89 @@ namespace RACSMicroservice.Controllers
             }
         }
         #endregion
+
+
+        [HttpPost]
+        [Route("rate-car-service")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> RateRACS(RateDto dto)
+        {
+            try
+            {
+                string userId = User.Claims.First(c => c.Type == "UserID").Value;
+                string userRole = User.Claims.First(c => c.Type == "Roles").Value;
+
+                if (!userRole.Equals("RegularUser"))
+                {
+                    return Unauthorized();
+                }
+
+                HttpStatusCode result = (await httpClient.GetAsync(String.Format("http://usermicroservice:80/api/user/find-user?id={0}", userId))).StatusCode;
+
+                if (result.Equals(HttpStatusCode.NotFound))
+                {
+                    return NotFound();
+                }
+
+                if (dto.Rate > 5 || dto.Rate < 1)
+                {
+                    return BadRequest("Invalid rate. Rate from 1 to 5");
+                }
+
+                var racs = await unitOfWork.RentCarServiceRepository.GetRacsWithRates(dto.Id);
+
+                //if (rent.IsRACSRated)
+                //{
+                //    return BadRequest("you already rate this racs");
+                //}
+
+                if (racs.Rates.FirstOrDefault(r => r.UserId == userId) != null)
+                {
+                    return BadRequest("You already rate this racs");
+                }
+
+                var rents = await unitOfWork.CarRentRepository
+                    .Get(crr => crr.UserId == userId &&
+                    crr.RentedCar.RentACarService == null ?
+                    crr.RentedCar.Branch.RentACarService.RentACarServiceId == dto.Id : crr.RentedCar.RentACarService.RentACarServiceId == dto.Id
+                    , null, "RentedCar");
+
+                //var rent = rents.FirstOrDefault(r => r.RentedCar.CarId == dto.Id);
+                var rent = rents.FirstOrDefault();
+
+                if (rent == null)
+                {
+                    return BadRequest("Cant rate this service.");
+                }
+
+                if (rent.ReturnDate > DateTime.Now)
+                {
+                    return BadRequest("You can rate this rent service only when rate period expires");
+                }
+
+                racs.Rates.Add(new RentCarServiceRates()
+                {
+                    Rate = dto.Rate,
+                    UserId = userId,
+                    RentACarService = racs
+                });
+
+                try
+                {
+                    unitOfWork.RentCarServiceRepository.Update(racs);
+                    await unitOfWork.Commit();
+                }
+                catch (Exception)
+                {
+                    return StatusCode(500, "Failed to rate car. One of transactions failed");
+                }
+
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Failed to rate rent service");
+            }
+        }
     }
 }

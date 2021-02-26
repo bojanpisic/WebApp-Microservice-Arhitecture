@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,12 @@ namespace UserMicroservice.Repository
         }
 
         #region User methods
+
+        public async Task<IdentityResult> DeleteUserById(string id) 
+        {
+            User u = await userManager.FindByIdAsync(id) as User;
+            return await userManager.DeleteAsync(u);
+        }
         public async Task<Person> GetUserById(string id)
         {
             return await userManager.FindByIdAsync(id);
@@ -122,103 +129,121 @@ namespace UserMicroservice.Repository
         #endregion
 
         #region Send mail methods
+
         public async Task<IdentityResult> SendConfirmationMail(Person user, string usertype, string password = "")
         {
-            var fromMail = new MailAddress("bojanpisic7@gmail.com");
-            var frontEmailPassowrd = "bojan123";
 
-            var toMail = new MailAddress(user.Email);
-            string subject;
-            string body;
+            Policy
+                   .Handle<Exception>()
+                   .Or<ArgumentException>(ex => ex.ParamName == "example")
+                   .WaitAndRetry(10, retryAttempt => TimeSpan.FromSeconds(5))
+                   .Execute(() =>
+                   {
 
-            if (usertype == "user")
-            {
+                       var fromMail = new MailAddress("bojanpisic7@gmail.com");
+                       var frontEmailPassowrd = "bojan123";
 
-                string confirmationToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
-                string confirmationTokenHtmlVersion = HttpUtility.UrlEncode(confirmationToken);
+                       var toMail = new MailAddress(user.Email);
+                       string subject;
+                       string body;
 
-                var varifyUrl = "http://localhost:4200/signin/" + user.Id + "/" +
-                    confirmationTokenHtmlVersion;
+                       if (usertype == "user")
+                       {
 
-                subject = "Your account is successfull created. Please confirm your email.";
-                body = "<br/><br/>We are excited to tell you that your account is" +
-                                " successfully created. Please click on the below link to verify your account" +
-                                " <br/><br/><a href='" + varifyUrl + "'> Click here</a> ";
-            }
-            else
-            {
-                var loginurl = "http://localhost:4200/signin";
+                           string confirmationToken = userManager.GenerateEmailConfirmationTokenAsync(user).ToString();
+                           string confirmationTokenHtmlVersion = HttpUtility.UrlEncode(confirmationToken);
 
-                subject = "Your account is successfull created.";
-                body = "<br/>Your username is: " + user.UserName + "<br/>Password for your account is" + password + "<br/>" +
-                    "Please change your password when you log in. <br/>" +
-                    "Login to SkyRoads by clicking on this link: <a href='" + loginurl + "'> Login</a>";
-            }
+                           var varifyUrl = "http://localhost:4200/signin/" + user.Id + "/" +
+                               confirmationTokenHtmlVersion;
 
-            var smtp = new SmtpClient
-            {
-                Host = "smtp.gmail.com",
-                Port = 587,
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromMail.Address, frontEmailPassowrd)
-            };
+                           subject = "Your account is successfull created. Please confirm your email.";
+                           body = "<br/><br/>We are excited to tell you that your account is" +
+                                           " successfully created. Please click on the below link to verify your account" +
+                                           " <br/><br/><a href='" + varifyUrl + "'> Click here</a> ";
+                       }
+                       else
+                       {
+                           var loginurl = "http://localhost:4200/signin";
 
-            using (var message = new MailMessage(fromMail, toMail)
-            {
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = true
-            })
-                smtp.Send(message);
+                           subject = "Your account is successfull created.";
+                           body = "<br/>Your username is: " + user.UserName + "<br/>Password for your account is" + password + "<br/>" +
+                               "Please change your password when you log in. <br/>" +
+                               "Login to SkyRoads by clicking on this link: <a href='" + loginurl + "'> Login</a>";
+                       }
 
+                       var smtp = new SmtpClient
+                       {
+                           Host = "smtp.gmail.com",
+                           Port = 587,
+                           EnableSsl = true,
+                           DeliveryMethod = SmtpDeliveryMethod.Network,
+                           UseDefaultCredentials = false,
+                           Credentials = new NetworkCredential(fromMail.Address, frontEmailPassowrd)
+                       };
+
+                       using (var message = new MailMessage(fromMail, toMail)
+                       {
+                           Subject = subject,
+                           Body = body,
+                           IsBodyHtml = true
+                       })
+                           smtp.Send(message);
+
+                   });
             return IdentityResult.Success;
+
         }
 
-        public async Task<IdentityResult> SendRentConfirmationMail(string receiverEmail, RentInfo info)
+        public async Task<IdentityResult> SendRentConfirmationMail(string receiverEmail, RentInfo rent)
         {
-            //await Task.Yield();
+            await Task.Yield();
 
-            //var fromMail = new MailAddress("bojanpisic7@gmail.com");
-            //var frontEmailPassowrd = "bojan123";
+            Policy
+                   .Handle<Exception>()
+                   .Or<ArgumentException>(ex => ex.ParamName == "example")
+                   .WaitAndRetry(10, retryAttempt => TimeSpan.FromSeconds(5))
+                   .Execute(() =>
+                   {
+                       var fromMail = new MailAddress("bojanpisic7@gmail.com");
+                       var frontEmailPassowrd = "bojan123";
 
-            //var toMail = new MailAddress(receiverEmal);
-            //string subject;
-            //string body;
+                       var toMail = new MailAddress(receiverEmail);
+                       string subject;
+                       string body;
 
-            //subject = "Your rent is successfull created.";
-            //body = "<br/><br/>Your rent is created. Check your rents on your profile.<br/><br/>Reservation details: " +
-            //        "<br/><t/><t/>From: " + rent.TakeOverCity +
-            //        "<br/><t/><t/>To: " + rent.ReturnCity +
-            //        "<br/><t/><t/>Take over date: " + rent.TakeOverDate +
-            //        "<br/><t/><t/>Return date: " + rent.ReturnDate +
-            //        "<br/><br/>Car details<br/>" +
-            //        "<br/><t/><t/>Brand: " + rent.RentedCar.Brand +
-            //        "<br/><t/><t/>Model: " + rent.RentedCar.Model +
-            //        "<br/><t/><t/>Car type: " + rent.RentedCar.Type +
-            //        "<br/><t/><t/>Price per day: " + rent.RentedCar.PricePerDay + "$" +
-            //        "</br>Total price: " + rent.TotalPrice + "$" +
-            //        "<br/><t/><t/>"
-            //        + "<br/><br/> SkyRoads";
+                       subject = "Your rent is successfull created.";
+                       body = "<br/><br/>Your rent is created. Check your rents on your profile.<br/><br/>Reservation details: " +
+                               "<br/><t/><t/>From: " + rent.TakeOverCity +
+                               "<br/><t/><t/>To: " + rent.ReturnCity +
+                               "<br/><t/><t/>Take over date: " + rent.TakeOverDate +
+                               "<br/><t/><t/>Return date: " + rent.ReturnDate +
+                               "<br/><br/>Car details<br/>" +
+                               "<br/><t/><t/>Brand: " + rent.Brand +
+                               "<br/><t/><t/>Model: " + rent.Model +
+                               "<br/><t/><t/>Car type: " + rent.Type +
+                               "<br/><t/><t/>Price per day: " + rent.PricePerDay + "$" +
+                               "</br>Total price: " + rent.TotalPrice + "$" +
+                               "<br/><t/><t/>"
+                               + "<br/><br/> SkyRoads";
 
-            //var smtp = new SmtpClient
-            //{
-            //    Host = "smtp.gmail.com",
-            //    Port = 587,
-            //    EnableSsl = true,
-            //    DeliveryMethod = SmtpDeliveryMethod.Network,
-            //    UseDefaultCredentials = false,
-            //    Credentials = new NetworkCredential(fromMail.Address, frontEmailPassowrd)
-            //};
+                       var smtp = new SmtpClient
+                       {
+                           Host = "smtp.gmail.com",
+                           Port = 587,
+                           EnableSsl = true,
+                           DeliveryMethod = SmtpDeliveryMethod.Network,
+                           UseDefaultCredentials = false,
+                           Credentials = new NetworkCredential(fromMail.Address, frontEmailPassowrd)
+                       };
 
-            //using (var message = new MailMessage(fromMail, toMail)
-            //{
-            //    Subject = subject,
-            //    Body = body,
-            //    IsBodyHtml = true
-            //})
-            //    smtp.Send(message);
+                       using (var message = new MailMessage(fromMail, toMail)
+                       {
+                           Subject = subject,
+                           Body = body,
+                           IsBodyHtml = true
+                       })
+                           smtp.Send(message);
+                   });
 
             return IdentityResult.Success;
         }
@@ -226,106 +251,118 @@ namespace UserMicroservice.Repository
         public async Task<IdentityResult> SendTicketConfirmationMail(string receiverEmail, TripInfo info)
         {
             await Task.Yield();
+            Policy
+               .Handle<Exception>()
+               .Or<ArgumentException>(ex => ex.ParamName == "example")
+               .WaitAndRetry(10, retryAttempt => TimeSpan.FromSeconds(5))
+               .Execute(() =>
+               {
+                   var fromMail = new MailAddress("bojanpisic7@gmail.com");
+                   var frontEmailPassowrd = "bojan123";
 
-            var fromMail = new MailAddress("bojanpisic7@gmail.com");
-            var frontEmailPassowrd = "bojan123";
-
-            var toMail = new MailAddress(receiverEmail);
-            string subject;
-            string body;
+                   var toMail = new MailAddress(receiverEmail);
+                   string subject;
+                   string body;
 
 
-            subject = "Your trip is successfull created.";
-            body = "<br/><br/>Your trip is created. Check your flights on your profile.<br/><br/>Reservation details:";
-            foreach (var item in info.FlightInfo)
-            {
-                body += "<br/><t/>Ticket:" +
-                    "<br/><t/><t/>Flight number: " + item.FlightNumber +
-                    "<br/><t/><t/>From: " + item.From +
-                    "<br/><t/><t/>To: " + item.To +
-                    "<br/><t/><t/>Departure: " + item.Departure +
-                    "<br/><t/><t/>Arrival: " + item.Arrival +
-                    "<br/><t/><t/>Travel time: " + item.TripTime +
-                    "<br/><t/><t/>Travel length: " + item.TripLength + "km" +
-                    "<br/><t/><t/>Seat details: " +
-                    "<br/><t/><t/><t/>Seat number: " + item.SeatRow + item.SeatColumn +
-                    "<br/><t/><t/><t/>Class: " + item.SeatClass +
-                    "<br/><t/><t/>Ticket price: " + item.TicketPrice + "$";
-            }
+                   subject = "Your trip is successfull created.";
+                   body = "<br/><br/>Your trip is created. Check your flights on your profile.<br/><br/>Reservation details:";
+                   foreach (var item in info.FlightInfo)
+                   {
+                       body += "<br/><t/>Ticket:" +
+                           "<br/><t/><t/>Flight number: " + item.FlightNumber +
+                           "<br/><t/><t/>From: " + item.From +
+                           "<br/><t/><t/>To: " + item.To +
+                           "<br/><t/><t/>Departure: " + item.Departure +
+                           "<br/><t/><t/>Arrival: " + item.Arrival +
+                           "<br/><t/><t/>Travel time: " + item.TripTime +
+                           "<br/><t/><t/>Travel length: " + item.TripLength + "km" +
+                           "<br/><t/><t/>Seat details: " +
+                           "<br/><t/><t/><t/>Seat number: " + item.SeatRow + item.SeatColumn +
+                           "<br/><t/><t/><t/>Class: " + item.SeatClass +
+                           "<br/><t/><t/>Ticket price: " + item.TicketPrice + "$";
+                   }
 
-            body += "</br></br>Total price: " + info.TotalPrice +
-                "<br/><t/><t/>"
-                + "<br/><br/> SkyRoads";
+                   body += "</br></br>Total price: " + info.TotalPrice +
+                       "<br/><t/><t/>"
+                       + "<br/><br/> SkyRoads";
 
-            var smtp = new SmtpClient
-            {
-                Host = "smtp.gmail.com",
-                Port = 587,
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromMail.Address, frontEmailPassowrd)
-            };
+                   var smtp = new SmtpClient
+                   {
+                       Host = "smtp.gmail.com",
+                       Port = 587,
+                       EnableSsl = true,
+                       DeliveryMethod = SmtpDeliveryMethod.Network,
+                       UseDefaultCredentials = false,
+                       Credentials = new NetworkCredential(fromMail.Address, frontEmailPassowrd)
+                   };
 
-            using (var message = new MailMessage(fromMail, toMail)
-            {
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = true
-            })
-                smtp.Send(message);
+                   using (var message = new MailMessage(fromMail, toMail)
+                   {
+                       Subject = subject,
+                       Body = body,
+                       IsBodyHtml = true
+                   })
+                       smtp.Send(message);
+               });
 
             return IdentityResult.Success;
         }
         public async Task<IdentityResult> SendMailToFriend(Person inviter, string receiverEmail, FlightInfo info)
         {
             await Task.Yield();
+            Policy
+             .Handle<Exception>()
+             .Or<ArgumentException>(ex => ex.ParamName == "example")
+             .WaitAndRetry(10, retryAttempt => TimeSpan.FromSeconds(5))
+             .Execute(() =>
+             {
+                 var fromMail = new MailAddress("bojanpisic7@gmail.com");
+                 var frontEmailPassowrd = "bojan123";
 
-            var fromMail = new MailAddress("bojanpisic7@gmail.com");
-            var frontEmailPassowrd = "bojan123";
+                 var toMail = new MailAddress(receiverEmail);
+                 string subject;
+                 string body;
 
-            var toMail = new MailAddress(receiverEmail);
-            string subject;
-            string body;
+                 var url = "http://localhost:4200/signin/messages";
 
-            var url = "http://localhost:4200/signin/messages";
+                 subject = "You have trip invite!";
+                 body = "<br/><br/>Your friend " + inviter.FirstName + " " + inviter.LastName + " invited you on a trip!" +
+                                 "<br/>Trip informations<br/>" +
+                                  "<br/><t/>Ticket:" +
+                                  "<br/><t/><t/>Flight number: " + info.FlightNumber +
+                                  "<br/><t/><t/>From: " + info.From +
+                                  "<br/><t/><t/>To: " + info.To +
+                                  "<br/><t/><t/>Departure: " + info.Departure +
+                                  "<br/><t/><t/>Arrival: " + info.Arrival +
+                                  "<br/><t/><t/>Travel time: " + info.TripTime +
+                                  "<br/><t/><t/>Travel length: " + info.TripLength + "km" +
+                                  "<br/><t/><t/>Seat details: " +
+                                  "<br/><t/><t/><t/>Seat number: " + info.SeatRow + info.SeatColumn +
+                                  "<br/><t/><t/><t/>Class: " + info.SeatClass +
+                                  "<br/><t/><t/>Ticket price: " + info.TicketPrice + "$" +
+                                  "<br/><br/>" +
+                                  "<a href='" + url + "'>Click here </a> to answer on invite!" +
+                                         " <br/><br/> SkyRoads";
 
-            subject = "You have trip invite!";
-            body = "<br/><br/>Your friend " + inviter.FirstName + " " + inviter.LastName + " invited you on a trip!" +
-                            "<br/>Trip informations<br/>" +
-                             "<br/><t/>Ticket:" +
-                             "<br/><t/><t/>Flight number: " + info.FlightNumber +
-                             "<br/><t/><t/>From: " + info.From +
-                             "<br/><t/><t/>To: " + info.To +
-                             "<br/><t/><t/>Departure: " + info.Departure +
-                             "<br/><t/><t/>Arrival: " + info.Arrival +
-                             "<br/><t/><t/>Travel time: " + info.TripTime +
-                             "<br/><t/><t/>Travel length: " + info.TripLength + "km" +
-                             "<br/><t/><t/>Seat details: " +
-                             "<br/><t/><t/><t/>Seat number: " + info.SeatRow + info.SeatColumn +
-                             "<br/><t/><t/><t/>Class: " + info.SeatClass +
-                             "<br/><t/><t/>Ticket price: " + info.TicketPrice + "$" +
-                             "<br/><br/>" +
-                             "<a href='" + url + "'>Click here </a> to answer on invite!" +
-                                    " <br/><br/> SkyRoads";
+                 var smtp = new SmtpClient
+                 {
+                     Host = "smtp.gmail.com",
+                     Port = 587,
+                     EnableSsl = true,
+                     DeliveryMethod = SmtpDeliveryMethod.Network,
+                     UseDefaultCredentials = false,
+                     Credentials = new NetworkCredential(fromMail.Address, frontEmailPassowrd)
+                 };
 
-            var smtp = new SmtpClient
-            {
-                Host = "smtp.gmail.com",
-                Port = 587,
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromMail.Address, frontEmailPassowrd)
-            };
-
-            using (var message = new MailMessage(fromMail, toMail)
-            {
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = true
-            })
-                smtp.Send(message);
+                 using (var message = new MailMessage(fromMail, toMail)
+                 {
+                     Subject = subject,
+                     Body = body,
+                     IsBodyHtml = true
+                 })
+                     smtp.Send(message);
+             });
 
             return IdentityResult.Success;
         }

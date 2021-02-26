@@ -744,5 +744,80 @@ namespace RACSMicroservice.Controllers
         }
 
         #endregion
+
+        [HttpPost]
+        [Route("rate-car")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> RateCar(RateDto dto)
+        {
+            try
+            {
+                string userId = User.Claims.First(c => c.Type == "UserID").Value;
+                string userRole = User.Claims.First(c => c.Type == "Roles").Value;
+
+                if (!userRole.Equals("RegularUser"))
+                {
+                    return Unauthorized();
+                }
+
+                HttpStatusCode result = (await httpClient.GetAsync(String.Format("http://usermicroservice:80/api/user/find-user?id={0}", userId))).StatusCode;
+
+                if (result.Equals(HttpStatusCode.NotFound))
+                {
+                    return NotFound();
+                }
+
+                if (dto.Rate > 5 || dto.Rate < 1)
+                {
+                    return BadRequest("Invalid rate. Rate from 1 to 5");
+                }
+
+                var rent = await unitOfWork.CarRentRepository.GetRentByFilter(r => r.UserId == userId && r.RentedCar.CarId == dto.Id);
+
+                //var rents = await unitOfWork.CarRentRepository.Get(crr => crr.User == user, null, "RentedCar");
+
+                //var rent = rents.FirstOrDefault(r => r.RentedCar.CarId == dto.Id);
+
+                if (rent == null)
+                {
+                    return BadRequest("This car is not on your rent list");
+                }
+                if (rent.RentedCar.Rates.FirstOrDefault(r => r.UserId == userId) != null)
+                {
+                    return BadRequest("You already rated this car");
+                }
+
+                if (rent.ReturnDate > DateTime.Now)
+                {
+                    return BadRequest("You can rate this car only when rate period expires");
+                }
+
+                var rentedCar = rent.RentedCar;
+
+                rentedCar.Rates.Add(new CarRate()
+                {
+                    Rate = dto.Rate,
+                    UserId = userId,
+                    Car = rentedCar
+                });
+
+                try
+                {
+                    unitOfWork.CarRepository.Update(rentedCar);
+
+                    await unitOfWork.Commit();
+                }
+                catch (Exception)
+                {
+                    return StatusCode(500, "Failed to rate car. One of transactions failed");
+                }
+
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Failed to rate car");
+            }
+        }
     }
 }

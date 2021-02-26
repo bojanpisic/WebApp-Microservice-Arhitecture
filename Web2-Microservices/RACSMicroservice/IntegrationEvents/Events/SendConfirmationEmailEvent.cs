@@ -1,17 +1,19 @@
-﻿using System;
+﻿using EventBus.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UserMicroservice.DTOs
+namespace RACSMicroservice.IntegrationEvents.Events
 {
-    public class RentInfo
+    public class SendConfirmationEmailEvent: IntegrationEvent
     {
-        public RentInfo(string takeOverCity, string returnCity,
-    float totalPrice, DateTime rentDate,
-    DateTime takeOverDate, DateTime returnDate, string brand,
-    string model, string type, float pricePerDay)
+        public SendConfirmationEmailEvent(string receiverEmail, string takeOverCity, string returnCity,
+            float totalPrice, DateTime rentDate,
+            DateTime takeOverDate, DateTime returnDate, string brand,
+            string model, string type, float pricePerDay)
         {
+            ReceiverEmail = receiverEmail;
             TakeOverCity = takeOverCity;
             ReturnCity = returnCity;
             TotalPrice = totalPrice;
@@ -24,6 +26,7 @@ namespace UserMicroservice.DTOs
             PricePerDay = pricePerDay;
         }
 
+        public string ReceiverEmail { get; set; }
         public string TakeOverCity { get; set; }
         public string ReturnCity { get; set; }
         public float TotalPrice { get; set; }

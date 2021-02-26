@@ -1,11 +1,14 @@
 ﻿using AirlineMicroservice.DTOs;
+using AirlineMicroservice.IntegrationEvents.Events;
 using AirlineMicroservice.Models;
 using AirlineMicroservice.Repository;
+using EventBus.Abstractions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,60 +25,64 @@ namespace AirlineMicroservice.Controllers
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly HttpClient httpClient;
+        private readonly IEventBus eventBus;
 
-
-        public AirlineController(IUnitOfWork _unitOfWork, HttpClient httpClient)
+        public AirlineController(IUnitOfWork _unitOfWork, HttpClient httpClient, IEventBus eventBus)
         {
             this.unitOfWork = _unitOfWork;
             this.httpClient = httpClient;
+            this.eventBus = eventBus;
         }
 
         
 
-        [HttpPost]
-        [Route("create-airline")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> CreateAirline([FromBody] AirlineInfoDto registerDto) 
-        {
-            try
-            {
+        //[HttpPost]
+        //[Route("create-airline")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //public async Task<IActionResult> CreateAirline([FromBody] AirlineInfoDto registerDto) 
+        //{
+        //    try
+        //    {
 
-                string userId = User.Claims.First(c => c.Type == "UserID").Value;
-                string userRole = User.Claims.First(c => c.Type == "Roles").Value;
+        //        string userId = User.Claims.First(c => c.Type == "UserID").Value;
+        //        string userRole = User.Claims.First(c => c.Type == "Roles").Value;
 
-                if (!userRole.Equals("SystemAdmin"))
-                {
-                    return Unauthorized();
-                }
+        //        if (!userRole.Equals("SystemAdmin"))
+        //        {
+        //            return Unauthorized();
+        //        }
 
-                HttpStatusCode result = (await httpClient.GetAsync(String.Format("http://usermicroservice:80/api/user/find-user?id={0}", userId))).StatusCode;
+        //        HttpStatusCode result = (await httpClient.GetAsync(String.Format("http://usermicroservice:80/api/user/find-user?id={0}", userId))).StatusCode;
 
-                if (result.Equals(HttpStatusCode.NotFound))
-                {
-                    return NotFound();
-                }
+        //        if (result.Equals(HttpStatusCode.NotFound))
+        //        {
+        //            return NotFound();
+        //        }
 
-                var airline = new Airline()
-                {
-                    Name = registerDto.Name,
-                    Address = new Address()
-                    {
-                        City = registerDto.City,
-                        State = registerDto.State,
-                        Lat = registerDto.Lat,
-                        Lon = registerDto.Lon
-                    },
-                    AdminId = registerDto.AdminId
-                };
+        //        var airline = new Airline()
+        //        {
+        //            Name = registerDto.Name,
+        //            Address = new Address()
+        //            {
+        //                City = registerDto.City,
+        //                State = registerDto.State,
+        //                Lat = registerDto.Lat,
+        //                Lon = registerDto.Lon
+        //            },
+        //            AdminId = registerDto.AdminId
+        //        };
 
-                return Ok();
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "Failed to create airline");
-            }
+        //        return Ok();
+        //    }
+        //    catch (Exception)
+        //    {
+        //        var @event = new RollbackAirlineAdmin(registerDto.AdminId);
+        //        eventBus.Publish(@event);
+
+        //        return StatusCode(500, "Failed to create airline");
+        //    }
             
-        }
+        //}
 
         [HttpGet]
         [Route("get-airline")]
@@ -181,29 +188,16 @@ namespace AirlineMicroservice.Controllers
                 var result = IdentityResult.Success;
                 if (addressChanged)
                 {
-                    try
-                    {
-                        unitOfWork.AirlineRepository.Update(airline);
-                        unitOfWork.AirlineRepository.UpdateAddress(airline.Address);
 
-                        await unitOfWork.Commit();
-                    }
-                    catch (Exception)
-                    {
-                        return StatusCode(500, "Failed to change airline info. One of transactions failed.");
-                    }
+                    unitOfWork.AirlineRepository.Update(airline);
+                    unitOfWork.AirlineRepository.UpdateAddress(airline.Address);
+
+                    await unitOfWork.Commit();
                 }
                 else
                 {
-                    try
-                    {
-                        unitOfWork.AirlineRepository.Update(airline);
-                        await unitOfWork.Commit();
-                    }
-                    catch (Exception)
-                    {
-                        return StatusCode(500, "Failed to change airline info. Transaction failed.");
-                    }
+                    unitOfWork.AirlineRepository.Update(airline);
+                    await unitOfWork.Commit();
                 }
 
                 if (result.Succeeded)
@@ -212,6 +206,13 @@ namespace AirlineMicroservice.Controllers
                 }
 
                 return BadRequest(result.Errors);
+            }
+
+            catch (DbUpdateException)
+            {
+                Console.WriteLine("Transaction failed");
+                return StatusCode(500, "Failed to change airline info");
+
             }
             catch (Exception)
             {
@@ -261,17 +262,15 @@ namespace AirlineMicroservice.Controllers
                     airline.LogoUrl = stream.ToArray();
                 }
 
-                try
-                {
-                    unitOfWork.AirlineRepository.Update(airline);
-                    await unitOfWork.Commit();
-                }
-                catch (Exception)
-                {
-                    return StatusCode(500, "Failed to change. Transaction failed.");
-                }
+                unitOfWork.AirlineRepository.Update(airline);
+                await unitOfWork.Commit();
 
                 return Ok();
+            }
+            catch (DbUpdateException)
+            {
+                Console.WriteLine("Transaction failed");
+                return StatusCode(500, "Failed to change.");
             }
             catch (Exception)
             {
@@ -459,25 +458,29 @@ namespace AirlineMicroservice.Controllers
 
                 airline.SpecialOffers.Add(specialOffer);
 
-                try
-                {
-                    await unitOfWork.SpecialOfferRepository.Insert(specialOffer);
-                    unitOfWork.AirlineRepository.Update(airline);
 
-                    foreach (var seat in seats)
-                    {
-                        seat.Available = false;
-                        unitOfWork.SeatRepository.Update(seat);
-                    }
+                await unitOfWork.SpecialOfferRepository.Insert(specialOffer);
+                unitOfWork.AirlineRepository.Update(airline);
 
-                    await unitOfWork.Commit();
-                }
-                catch (Exception)
+                foreach (var seat in seats)
                 {
-                    return StatusCode(500, "Failed to add special offer. One of transactions failed.");
+                    seat.Available = false;
+                    unitOfWork.SeatRepository.Update(seat);
                 }
+
+                await unitOfWork.Commit();
 
                 return Ok();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                Console.WriteLine("Concurrency exception thrown");
+                return StatusCode(500, "Failed to add special offer");
+            }
+            catch (DbUpdateException)
+            {
+                Console.WriteLine("Transaction failed");
+                return StatusCode(500, "Failed to add special offer");
             }
             catch (Exception)
             {
@@ -523,24 +526,78 @@ namespace AirlineMicroservice.Controllers
                     return NotFound("Special offer not found");
                 }
 
-                try
-                {
-                    unitOfWork.SpecialOfferRepository.Delete(specOffer);
-                    await unitOfWork.Commit();
-                }
-                catch (Exception)
-                {
-                    return StatusCode(500, "Failed to delete special offer");
-                }
+                unitOfWork.SpecialOfferRepository.Delete(specOffer);
+                await unitOfWork.Commit();
 
                 return Ok();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                Console.WriteLine("Concurrency exception thrown");
+                return StatusCode(500, "Failed to delete special offer");
+
+            }
+            catch (DbUpdateException)
+            {
+                Console.WriteLine("Transaction failed");
+                return StatusCode(500, "Failed to delete special offer");
+
             }
             catch (Exception)
             {
                 return StatusCode(500, "Failed to delete special offer");
             }
+
         }
 
         #endregion
+
+
+        [HttpPost]
+        [Route("rate-airline")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> RateAirline(RateDto dto)
+        {
+            try
+            {
+                string userId = User.Claims.First(c => c.Type == "UserID").Value;
+                string userRole = User.Claims.First(c => c.Type == "Roles").Value;
+
+                if (!userRole.Equals("RegularUser"))
+                {
+                    return Unauthorized();
+                }
+
+                HttpStatusCode result = (await httpClient.GetAsync(String.Format("http://usermicroservice:80/api/user/find-user?id={0}", userId))).StatusCode;
+
+                if (result.Equals(HttpStatusCode.NotFound))
+                {
+                    return NotFound();
+                }
+                if (dto.Rate > 5 || dto.Rate < 1)
+                {
+                    return BadRequest("Invalid rate. Rate from 1 to 5");
+                }
+
+                var @event = new RateAirlineIntegrationEvent(userId, dto.Id, dto.Rate);
+
+                try
+                {
+                    eventBus.Publish(@event);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Failed to publish rateAirline event");
+                    return StatusCode(500, "Failed to rate airline.");
+                }
+
+                return Ok();
+
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Failed to rate airline");
+            }
+        }
     }
 }

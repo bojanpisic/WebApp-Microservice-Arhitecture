@@ -23,6 +23,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using UserMicroservice.Data;
+using UserMicroservice.IntegrationEvents.EventHandling;
 using UserMicroservice.Models;
 using UserMicroservice.Repository;
 
@@ -228,13 +229,14 @@ namespace UserMicroservice
             });
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-            // services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
+            services.AddTransient<RollbackAirlineAdminHandler>();
+            services.AddTransient<RollbackRACSAdminHandler>();
         }
 
         private void ConfigureEventBus(IApplicationBuilder app)
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            //
+            //eventBus.Subscribe<TestEvent, TestEventHandler>();
         }
     }
 }

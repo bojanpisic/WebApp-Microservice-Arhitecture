@@ -15,6 +15,7 @@ namespace UserMicroservice.Repository
         Task<IdentityResult> RegisterSystemAdmin(Person admin, string password);
         Task<IdentityResult> RegisterRACSAdmin(Person admin, string password);
         Task<Person> GetPerson(string email, string password);
+        Task<IdentityResult> DeleteUserById(string id);
         //Task<Person> GetPersonById(int id, UserManager<Person> userManager);
         Task<bool> CheckPassword(Person user, string password);
         Task<bool> IsEmailConfirmed(Person user);

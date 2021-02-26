@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -146,32 +147,16 @@ namespace AirlineMicroservice.Controllers
                         Airline = airline,
                     }
                 };
-                try
-                {
-                    await unitOfWork.DestinationRepository.Insert(destination);
-                    await unitOfWork.Commit();
-                }
-                catch (Exception)
-                {
-                    return StatusCode(500, "Failed to add destination.");
-                }
+
+                await unitOfWork.DestinationRepository.Insert(destination);
+                await unitOfWork.Commit();
 
                 return Ok();
-                //var allDestinations = await unitOfWork.DestinationRepository.GetAirlineDestinations(airline);
-
-                //List<object> obj = new List<object>();
-
-                //foreach (var item in allDestinations)
-                //{
-                //    obj.Add(new
-                //    {
-                //        city = item.City,
-                //        state = item.State,
-                //        destinationId = item.DestinationId,
-                //        imageUrl = item.ImageUrl
-                //    });
-                //}
-                //return Ok(obj);
+            }
+            catch (DbUpdateException) 
+            {
+                Console.WriteLine("DbUpdate exception");
+                return StatusCode(500, "Failed to add destination.");
             }
             catch (Exception)
             {

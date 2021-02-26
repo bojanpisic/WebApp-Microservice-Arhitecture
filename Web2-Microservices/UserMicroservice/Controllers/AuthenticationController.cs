@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -69,25 +70,24 @@ namespace UserMicroservice.Controllers
                     City = userDto.City,
                     EmailConfirmed = false,
                 };
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return StatusCode(500, "Registration failed.");
-            }
-            try
-            {
+
                 await unitOfWork.AuthenticationRepository.RegisterUser(newUser, userDto.Password);
                 await unitOfWork.AuthenticationRepository.AddToRole(newUser, "RegularUser");
 
                 await unitOfWork.Commit();
+
+            }
+            catch (DbUpdateException) 
+            {
+                Console.WriteLine("Failed to register. transaction failed");
+                return StatusCode(500, "Registration failed.");
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-
                 return StatusCode(500, "Registration failed.");
             }
+
             try
             {
                 var emailSent = await unitOfWork.AuthenticationRepository.SendConfirmationMail(newUser, "user");

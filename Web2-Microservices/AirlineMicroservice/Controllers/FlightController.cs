@@ -1,10 +1,13 @@
 ﻿using AirlineMicroservice.DTOs;
+using AirlineMicroservice.IntegrationEvents.Events;
 using AirlineMicroservice.Models;
 using AirlineMicroservice.Repository;
+using EventBus.Abstractions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -22,11 +25,13 @@ namespace AirlineMicroservice.Controllers
     {
         private IUnitOfWork unitOfWork;
         private readonly HttpClient httpClient;
+        private readonly IEventBus eventBus;
 
-        public FlightController(IUnitOfWork _unitOfWork, HttpClient httpClient)
+        public FlightController(IUnitOfWork _unitOfWork, HttpClient httpClient, IEventBus eventBus)
         {
             this.unitOfWork = _unitOfWork;
             this.httpClient = httpClient;
+            this.eventBus = eventBus;
         }
 
         [HttpGet]
@@ -165,20 +170,16 @@ namespace AirlineMicroservice.Controllers
                         }
                     };
                 }
-                try
-                {
-                    await unitOfWork.FlightRepository.Insert(flight);
-                    await unitOfWork.Commit();
-                }
-                catch (Exception)
-                {
-                    return StatusCode(500, "Failed to add flight.");
-                }
+
+                await unitOfWork.FlightRepository.Insert(flight);
+                await unitOfWork.Commit();
 
                 return Ok();
-                //var flights = await unitOfWork.FlightRepository.Get(f => f.AirlineId == airline.AirlineId);
-
-                //return Ok(flights);
+            }
+            catch (DbUpdateException)
+            {
+                Console.WriteLine("Insert flight failed");
+                return StatusCode(500, "Failed to add flight.");
             }
             catch (Exception)
             {
@@ -263,6 +264,54 @@ namespace AirlineMicroservice.Controllers
             catch (Exception)
             {
                 return StatusCode(500, "Failed to return flights.");
+            }
+        }
+
+        [HttpPost]
+        [Route("rate-flight")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> RateFlight(RateDto dto)
+        {
+            try
+            {
+                string userId = User.Claims.First(c => c.Type == "UserID").Value;
+                string userRole = User.Claims.First(c => c.Type == "Roles").Value;
+
+                if (!userRole.Equals("RegularUser"))
+                {
+                    return Unauthorized();
+                }
+
+                HttpStatusCode result = (await httpClient.GetAsync(String.Format("http://usermicroservice:80/api/user/find-user?id={0}", userId))).StatusCode;
+
+                if (result.Equals(HttpStatusCode.NotFound))
+                {
+                    return NotFound();
+                }
+
+                if (dto.Rate > 5 || dto.Rate < 1)
+                {
+                    return BadRequest("Invalid rate. Rate from 1 to 5");
+                }
+
+
+                var @event = new RateFlightIntegrationEvent(userId, dto.Id, dto.Rate);
+
+                try
+                {
+                    eventBus.Publish(@event);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Failed to publish rateFlight event");
+                    return StatusCode(500, "Failed to rate flight.");
+                }
+
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Failed to rate flight");
             }
         }
 

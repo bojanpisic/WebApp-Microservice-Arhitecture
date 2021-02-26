@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -59,11 +60,6 @@ namespace UserMicroservice.Controllers
                 //    return Unauthorized();
                 //}
 
-
-
-
-
-
                 //if ((await unitOfWork.AuthenticationRepository.GetPersonByEmail(userDto.Email)) != null)
                 //{
                 //    return BadRequest("User with that email already exists!");
@@ -82,39 +78,27 @@ namespace UserMicroservice.Controllers
                 {
                     return BadRequest("Passwords dont match");
                 }
-                
+
                 createUser = new Person()
                 {
                     Email = userDto.Email,
                     UserName = userDto.UserName,
                 };
+                var result = await this.unitOfWork.AuthenticationRepository.RegisterSystemAdmin(createUser, userDto.Password);
+                var addToRoleResult = await unitOfWork.AuthenticationRepository.AddToRole(createUser, "Admin");
+                await unitOfWork.Commit();
+
+                await unitOfWork.AuthenticationRepository.SendConfirmationMail(createUser, "admin", userDto.Password);
+            }
+            catch (DbUpdateException) 
+            {
+                Console.WriteLine("faield to register system admin. Transaction failed");
+                return StatusCode(500, "Failed to register system admin");
+
             }
             catch (Exception)
             {
                 return StatusCode(500, "Failed to register system admin");
-            }
-
-            try
-            {
-                var result = await this.unitOfWork.AuthenticationRepository.RegisterSystemAdmin(createUser, userDto.Password);
-                var addToRoleResult = await unitOfWork.AuthenticationRepository.AddToRole(createUser, "Admin");
-                await unitOfWork.Commit();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return StatusCode(500, "Internal server error. Registration failed.");
-            }
-
-            try
-            {
-                var emailSent = await unitOfWork.AuthenticationRepository.SendConfirmationMail(createUser, "admin", userDto.Password);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-
-                return StatusCode(500, "Internal server error. Sending email failed.");
             }
 
             return Ok();
@@ -169,34 +153,25 @@ namespace UserMicroservice.Controllers
                     UserName = registerDto.UserName,
                 };
 
-
-                try
-                {
-                    await this.unitOfWork.AuthenticationRepository.RegisterAirlineAdmin(admin, registerDto.Password);
-                    await unitOfWork.AuthenticationRepository.AddToRole(admin, "AirlineAdmin");
-                    await unitOfWork.Commit();
-                }
-                catch (Exception)
-                {
-                    return StatusCode(500, "Failed to register airline admin. One of transactions failed");
-                }
+                await this.unitOfWork.AuthenticationRepository.RegisterAirlineAdmin(admin, registerDto.Password);
+                await unitOfWork.AuthenticationRepository.AddToRole(admin, "AirlineAdmin");
+                await unitOfWork.Commit();
 
                 Console.WriteLine("ADMIN ID  {0}", admin.Id);
 
                 var @event = new CreateAirlineIntegrationEvent(registerDto.Name, registerDto.City, registerDto.State, 
                                                                     registerDto.Lat, registerDto.Lon, admin.Id);
 
-                try
-                {
-                    eventBus.Publish(@event);
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine("Failed to publish createAirline event");
-                    return StatusCode(500, "Failed to register airline admin.");
-                }
+                eventBus.Publish(@event);
+                
+                await unitOfWork.AuthenticationRepository.SendConfirmationMail(admin, "admin", registerDto.Password);
 
                 return Ok();
+            }
+            catch (DbUpdateException)
+            {
+                Console.WriteLine("Failed to register airline admin. One of transactions failed");
+                return StatusCode(500, "Failed to register airline admin.");
             }
             catch (Exception)
             {
@@ -253,45 +228,31 @@ namespace UserMicroservice.Controllers
                     UserName = registerDto.UserName,
                 };
 
-                try
-                {
-                    await this.unitOfWork.AuthenticationRepository.RegisterRACSAdmin(admin, registerDto.Password);
-                    await unitOfWork.AuthenticationRepository.AddToRole(admin, "RentACarServiceAdmin");
-                    await unitOfWork.Commit();
-                }
-                catch (Exception)
-                {
-                    return StatusCode(500, "Failed to register racs admin. One of transactions failed");
-                }
+
+                await this.unitOfWork.AuthenticationRepository.RegisterRACSAdmin(admin, registerDto.Password);
+                await unitOfWork.AuthenticationRepository.AddToRole(admin, "RentACarServiceAdmin");
+                await unitOfWork.Commit();
+
 
                 var @event = new CreateRACSIntegrationEvent(registerDto.Name, registerDto.City, registerDto.State, registerDto.Lon, registerDto.Lat, admin.Id);
 
-                try
-                {
-                    eventBus.Publish(@event);
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine("Failed to publish createRacs event");
-                    return StatusCode(500, "Failed to register racs admin.");
-                }
+                eventBus.Publish(@event);
 
-
-                try
-                {
-                    var emailSent = await unitOfWork.AuthenticationRepository.SendConfirmationMail(admin, "admin", registerDto.Password);
-                }
-                catch (Exception)
-                {
-                    return StatusCode(500, "Failed to send registration email");
-                }
+                await unitOfWork.AuthenticationRepository.SendConfirmationMail(admin, "admin", registerDto.Password);
 
                 return Ok();
+            }
+            catch (DbUpdateException)
+            {
+                Console.WriteLine("faield to register racs admin. Transaction failed");
+                return StatusCode(500, "Failed to register racs admin");
             }
             catch (Exception)
             {
                 return StatusCode(500, "Failed to register racs admin");
             }
+
+
         }
 
         [HttpPost]
@@ -351,19 +312,17 @@ namespace UserMicroservice.Controllers
                 bonus.BonusPerKilometer = dto.Bonus;
                 bonus.DiscountPerReservation = dto.Discount;
 
-                try
-                {
-                    unitOfWork.BonusRepository.Update(bonus);
-                    await unitOfWork.Commit();
-                }
-                catch (Exception)
-                {
-                    return StatusCode(500, "Transaction failed");
-                }
+                unitOfWork.BonusRepository.Update(bonus);
+                await unitOfWork.Commit();
 
                 return Ok();
 
             }
+            catch (DbUpdateException) 
+            {
+                Console.WriteLine("Failed to sset bonus. Transaction failed");
+                return StatusCode(500, "Failed to set bonus");
+                            }
             catch (Exception)
             {
                 return StatusCode(500, "Failed to set bonus");
