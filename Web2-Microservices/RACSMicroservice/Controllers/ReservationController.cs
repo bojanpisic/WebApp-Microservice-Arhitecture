@@ -17,6 +17,8 @@ using System.Threading.Tasks;
 
 namespace RACSMicroservice.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ReservationController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
@@ -270,7 +272,7 @@ namespace RACSMicroservice.Controllers
                     return NotFound();
                 }
 
-                var ress = await unitOfWork.CarRentRepository.Get(crr => crr.CarRentId == id, null, "RentedCar,User");
+                var ress = await unitOfWork.CarRentRepository.Get(crr => crr.CarRentId == id, null, "RentedCar");
                 var rent = ress.FirstOrDefault();
                 var car = rent.RentedCar;
 
@@ -297,13 +299,14 @@ namespace RACSMicroservice.Controllers
                     specOffer.IsReserved = false;
                 }
 
-                car.Rents.Remove(rent);
-
+                //car.Rents.Remove(rent);
+                
                 if (specOffer != null)
                 {
                     unitOfWork.RACSSpecialOfferRepository.Update(specOffer);
                 }
-                unitOfWork.CarRepository.Update(car);
+                unitOfWork.CarRentRepository.Delete(rent);
+                //unitOfWork.CarRepository.Update(car);
 
                 await unitOfWork.Commit();
 
@@ -342,9 +345,10 @@ namespace RACSMicroservice.Controllers
                 {
                     return NotFound();
                 }
+
                 var rents = await unitOfWork.CarRentRepository.GetRents(userId);
                 var retVal = new List<object>();
-
+                Console.WriteLine(rents.Count());
                 foreach (var rent in rents)
                 {
                     var sum = 0.0;
@@ -359,11 +363,7 @@ namespace RACSMicroservice.Controllers
                     {
                         brand = rent.RentedCar.Brand,
                         carId = rent.RentedCar.CarId,
-                        carServiceId = rent.RentedCar.RentACarService == null ?
-                                       rent.RentedCar.Branch.RentACarService.RentACarServiceId : rent.RentedCar.RentACarService.RentACarServiceId,
                         model = rent.RentedCar.Model,
-                        name = rent.RentedCar.RentACarService == null ?
-                                       rent.RentedCar.Branch.RentACarService.Name : rent.RentedCar.RentACarService.Name,
                         seatsNumber = rent.RentedCar.SeatsNumber,
                         pricePerDay = rent.RentedCar.PricePerDay,
                         type = rent.RentedCar.Type,
@@ -373,10 +373,15 @@ namespace RACSMicroservice.Controllers
                         to = rent.ReturnCity,
                         dep = rent.TakeOverDate,
                         ret = rent.ReturnDate,
+                        carServiceId = rent.RentedCar.RentACarService == null ?
+                                       rent.RentedCar.Branch.RentACarService.RentACarServiceId : rent.RentedCar.RentACarService.RentACarServiceId,
+                        name = rent.RentedCar.RentACarService == null ?
+                                       rent.RentedCar.Branch.RentACarService.Name : rent.RentedCar.RentACarService.Name,
                         city = rent.RentedCar.RentACarService == null ?
                                        rent.RentedCar.Branch.RentACarService.Address.City : rent.RentedCar.RentACarService.Address.City,
                         state = rent.RentedCar.RentACarService == null ?
                                        rent.RentedCar.Branch.RentACarService.Address.State : rent.RentedCar.RentACarService.Address.State,
+
                         isCarRated = rent.RentedCar.Rates.FirstOrDefault(r => r.UserId == userId) != null ? true : false,
                         isRACSRated = (await unitOfWork.RentCarServiceRepository.Get(r => r.RentACarServiceId == (rent.RentedCar.RentACarService == null ?
                                        rent.RentedCar.Branch.RentACarService.RentACarServiceId : rent.RentedCar.RentACarService.RentACarServiceId), null, "Rates"))
@@ -391,9 +396,12 @@ namespace RACSMicroservice.Controllers
 
                 return Ok(retVal);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Failed to cancel rent car");
+                Console.WriteLine("failed to return car reservations");
+
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Something went wrong");
             }
         }
 

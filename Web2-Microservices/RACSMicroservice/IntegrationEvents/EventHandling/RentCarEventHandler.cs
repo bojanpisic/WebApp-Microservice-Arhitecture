@@ -28,7 +28,7 @@ namespace RACSMicroservice.IntegrationEvents.EventHandling
 
                 if (car == null)
                 {
-                    return NotFound("Car not found");
+                    //return NotFound("Car not found");
                 }
 
                 //provera da li ima special offer za taj period

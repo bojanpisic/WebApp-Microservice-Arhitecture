@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CarRentService {
-  readonly BaseURI = 'http://localhost:8084';
+  readonly BaseURI = 'http://localhost:8084/racs';
 
   cars: Array<{
     brand: string,

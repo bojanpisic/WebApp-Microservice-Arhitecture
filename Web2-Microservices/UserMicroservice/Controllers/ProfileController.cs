@@ -329,6 +329,10 @@ namespace UserMicroservice.Controllers
 
                 if (!userRole.Equals("ReqularUser") && firstLogin)
                 {
+                    user.PasswordChanged = true;
+                    unitOfWork.UserRepository.Update(user);
+                    await unitOfWork.Commit();
+
                     var tokenDescriptor = new SecurityTokenDescriptor
                     {
                         Subject = new ClaimsIdentity(new Claim[]

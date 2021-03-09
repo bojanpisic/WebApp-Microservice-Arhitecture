@@ -24,7 +24,6 @@ namespace RACSMicroservice.Helpers
             System.Console.WriteLine("Appling Migrations To RACS database...");
 
             context.Database.Migrate();
-
         }
     }
 }

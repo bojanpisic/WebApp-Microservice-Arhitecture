@@ -24,13 +24,16 @@ namespace RACSMicroservice.Repository
         {
             return await context.CarRents
                 .Include(c => c.RentedCar)
-                .ThenInclude(car => car.Branch)
+                    .ThenInclude(car => car.Branch)
+                        .ThenInclude(b => b.RentACarService)
+                            .ThenInclude(r => r.Address)
                 .Include(c => c.RentedCar)
-                .ThenInclude(car => car.RentACarService)
-                .ThenInclude(racs => racs.Address)
+                    .ThenInclude(car => car.RentACarService)
+                        .ThenInclude(racs => racs.Address)
                 .Include(c => c.RentedCar)
-                .ThenInclude(c => c.Rates)
-                .Where(c => c.UserId == userId).ToListAsync();
+                    .ThenInclude(c => c.Rates)
+                .Where(c => c.UserId == userId)
+                .ToListAsync();
         }
 
         public async Task<CarRent> GetRentByFilter(Expression<Func<CarRent, bool>> filter = null)

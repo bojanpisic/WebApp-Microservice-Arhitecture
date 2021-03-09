@@ -30,7 +30,7 @@ namespace UserMicroservice.IntegrationEvents.EventHandling
 
         private async void RemoveAdmin(string adminId)
         {
-            await unitOfWork.AuthenticationRepository.DeleteById(adminId);
+            await unitOfWork.AuthenticationRepository.DeleteUserById(adminId);
         }
     }
 }

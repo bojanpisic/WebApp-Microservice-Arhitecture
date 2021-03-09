@@ -20,7 +20,7 @@ namespace RACSMicroservice.Repository
         private ICarRentRepository carRentRepository;
         private IRentCarServiceRepository rentCarServiceRepository;
         private IRACSSpecialOffer racsSpecialOfferRepository;
-        public IRACSSpecialOffer RentCarServiceRepository
+        public IRACSSpecialOffer RACSSpecialOfferRepository
         {
             get
             {
@@ -28,7 +28,7 @@ namespace RACSMicroservice.Repository
                     new RACSSpecialOfferRepository(this.context);
             }
         }
-        public IRentCarServiceRepository RACSSpecialOfferRepository
+        public IRentCarServiceRepository RentCarServiceRepository
         {
             get
             {

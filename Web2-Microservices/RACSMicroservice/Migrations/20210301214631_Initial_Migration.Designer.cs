@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using UserMicroservice.Data;
+using RACSMicroservice.Data;
 
-namespace UserMicroservice.Migrations
+namespace RACSMicroservice.Migrations
 {
-    [DbContext(typeof(UserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(RACSContext))]
+    [Migration("20210301214631_Initial_Migration")]
+    partial class Initial_Migration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,10 +80,6 @@ namespace UserMicroservice.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<string>("Email")
                         .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
                         .HasMaxLength(256);
@@ -132,8 +130,6 @@ namespace UserMicroservice.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -162,12 +158,10 @@ namespace UserMicroservice.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -204,12 +198,10 @@ namespace UserMicroservice.Migrations
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Value")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -219,109 +211,237 @@ namespace UserMicroservice.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("UserMicroservice.Models.Bonus", b =>
+            modelBuilder.Entity("RACSMicroservice.Models.Address", b =>
                 {
-                    b.Property<int>("BonusId")
+                    b.Property<int>("AddressId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    b.Property<int>("BonusPerKilometer")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DiscountPerReservation")
-                        .HasColumnType("int");
-
-                    b.HasKey("BonusId");
-
-                    b.ToTable("Bonuses");
-                });
-
-            modelBuilder.Entity("UserMicroservice.Models.Friendship", b =>
-                {
-                    b.Property<string>("User1Id")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
-                    b.Property<string>("User2Id")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
-                    b.Property<bool>("Accepted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("Rejacted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.HasKey("User1Id", "User2Id");
-
-                    b.HasIndex("User2Id");
-
-                    b.ToTable("Friendships");
-                });
-
-            modelBuilder.Entity("UserMicroservice.Models.Invitation", b =>
-                {
-                    b.Property<int>("InvitationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Expires")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<float>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<string>("ReceiverId")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
-                    b.Property<int>("SeatId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SenderId")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
-                    b.HasKey("InvitationId");
-
-                    b.HasIndex("ReceiverId");
-
-                    b.HasIndex("SenderId");
-
-                    b.ToTable("Invitations");
-                });
-
-            modelBuilder.Entity("UserMicroservice.Models.Person", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.Property<string>("City")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("FirstName")
+                    b.Property<double>("Lat")
+                        .HasColumnType("double");
+
+                    b.Property<double>("Lon")
+                        .HasColumnType("double");
+
+                    b.Property<int>("RentACarServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("State")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("AddressId");
+
+                    b.HasIndex("RentACarServiceId")
+                        .IsUnique();
+
+                    b.ToTable("Address");
+                });
+
+            modelBuilder.Entity("RACSMicroservice.Models.Branch", b =>
+                {
+                    b.Property<int>("BranchId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("City")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<int>("RentACarServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("State")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("BranchId");
+
+                    b.HasIndex("RentACarServiceId");
+
+                    b.ToTable("Branches");
+                });
+
+            modelBuilder.Entity("RACSMicroservice.Models.Car", b =>
+                {
+                    b.Property<int>("CarId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Brand")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<byte[]>("ImageUrl")
                         .HasColumnType("longblob");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("Model")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<bool>("PasswordChanged")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<float>("PricePerDay")
+                        .HasColumnType("float");
 
-                    b.HasDiscriminator().HasValue("Person");
+                    b.Property<int?>("RentACarServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("timestamp(6)");
+
+                    b.Property<int>("SeatsNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("CarId");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("RentACarServiceId");
+
+                    b.ToTable("Cars");
                 });
 
-            modelBuilder.Entity("UserMicroservice.Models.User", b =>
+            modelBuilder.Entity("RACSMicroservice.Models.CarRate", b =>
                 {
-                    b.HasBaseType("UserMicroservice.Models.Person");
+                    b.Property<int>("CarRateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<int>("BonusPoints")
+                    b.Property<int?>("CarId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Rate")
+                        .HasColumnType("float");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("CarRateId");
+
+                    b.HasIndex("CarId");
+
+                    b.ToTable("CarRates");
+                });
+
+            modelBuilder.Entity("RACSMicroservice.Models.CarRent", b =>
+                {
+                    b.Property<int>("CarRentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RentDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("RentedCarCarId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReturnCity")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("ReturnDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("TakeOverCity")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("TakeOverDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<float>("TotalPrice")
+                        .HasColumnType("float");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("CarRentId");
+
+                    b.HasIndex("RentedCarCarId");
+
+                    b.ToTable("CarRents");
+                });
+
+            modelBuilder.Entity("RACSMicroservice.Models.CarSpecialOffer", b =>
+                {
+                    b.Property<int>("CarSpecialOfferId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CarId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsReserved")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<float>("NewPrice")
+                        .HasColumnType("float");
+
+                    b.Property<float>("OldPrice")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("ToDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("CarSpecialOfferId");
+
+                    b.HasIndex("CarId");
+
+                    b.ToTable("CarSpecialOffers");
+                });
+
+            modelBuilder.Entity("RACSMicroservice.Models.RentACarService", b =>
+                {
+                    b.Property<int>("RentACarServiceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("About")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("AdminId")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<byte[]>("LogoUrl")
+                        .HasColumnType("longblob");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("RentACarServiceId");
+
+                    b.ToTable("RentACarServices");
+                });
+
+            modelBuilder.Entity("RACSMicroservice.Models.RentCarServiceRates", b =>
+                {
+                    b.Property<int>("RentCarServiceRatesId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<float>("Rate")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("RentACarServiceId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.HasIndex("UserId");
+                    b.HasKey("RentCarServiceRatesId");
 
-                    b.HasDiscriminator().HasValue("User");
+                    b.HasIndex("RentACarServiceId");
+
+                    b.ToTable("RentCarServiceRates");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -375,37 +495,61 @@ namespace UserMicroservice.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("UserMicroservice.Models.Friendship", b =>
+            modelBuilder.Entity("RACSMicroservice.Models.Address", b =>
                 {
-                    b.HasOne("UserMicroservice.Models.User", "User1")
-                        .WithMany("FriendshipInvitations")
-                        .HasForeignKey("User1Id")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("UserMicroservice.Models.User", "User2")
-                        .WithMany("FriendshipRequests")
-                        .HasForeignKey("User2Id")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.HasOne("RACSMicroservice.Models.RentACarService", "RentACarService")
+                        .WithOne("Address")
+                        .HasForeignKey("RACSMicroservice.Models.Address", "RentACarServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("UserMicroservice.Models.Invitation", b =>
+            modelBuilder.Entity("RACSMicroservice.Models.Branch", b =>
                 {
-                    b.HasOne("UserMicroservice.Models.User", "Receiver")
-                        .WithMany("TripRequests")
-                        .HasForeignKey("ReceiverId");
-
-                    b.HasOne("UserMicroservice.Models.User", "Sender")
-                        .WithMany("TripInvitations")
-                        .HasForeignKey("SenderId");
+                    b.HasOne("RACSMicroservice.Models.RentACarService", "RentACarService")
+                        .WithMany("Branches")
+                        .HasForeignKey("RentACarServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("UserMicroservice.Models.User", b =>
+            modelBuilder.Entity("RACSMicroservice.Models.Car", b =>
                 {
-                    b.HasOne("UserMicroservice.Models.User", null)
-                        .WithMany("Friends")
-                        .HasForeignKey("UserId");
+                    b.HasOne("RACSMicroservice.Models.Branch", "Branch")
+                        .WithMany("Cars")
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("RACSMicroservice.Models.RentACarService", "RentACarService")
+                        .WithMany("Cars")
+                        .HasForeignKey("RentACarServiceId");
+                });
+
+            modelBuilder.Entity("RACSMicroservice.Models.CarRate", b =>
+                {
+                    b.HasOne("RACSMicroservice.Models.Car", "Car")
+                        .WithMany("Rates")
+                        .HasForeignKey("CarId");
+                });
+
+            modelBuilder.Entity("RACSMicroservice.Models.CarRent", b =>
+                {
+                    b.HasOne("RACSMicroservice.Models.Car", "RentedCar")
+                        .WithMany("Rents")
+                        .HasForeignKey("RentedCarCarId");
+                });
+
+            modelBuilder.Entity("RACSMicroservice.Models.CarSpecialOffer", b =>
+                {
+                    b.HasOne("RACSMicroservice.Models.Car", "Car")
+                        .WithMany("SpecialOffers")
+                        .HasForeignKey("CarId");
+                });
+
+            modelBuilder.Entity("RACSMicroservice.Models.RentCarServiceRates", b =>
+                {
+                    b.HasOne("RACSMicroservice.Models.RentACarService", "RentACarService")
+                        .WithMany("Rates")
+                        .HasForeignKey("RentACarServiceId");
                 });
 #pragma warning restore 612, 618
         }

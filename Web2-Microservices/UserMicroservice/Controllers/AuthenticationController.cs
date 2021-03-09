@@ -12,6 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using UserMicroservice.DTOs;
 using UserMicroservice.Models;
 using UserMicroservice.Repository;
@@ -115,7 +116,6 @@ namespace UserMicroservice.Controllers
                 var user = await this.unitOfWork.AuthenticationRepository.GetPerson(loginUser.UserNameOrEmail
                     /*String.IsNullOrEmpty(loginUser.Email) ? loginUser.Username : loginUser.Email*/,
                     loginUser.Password);
-
                 if (user == null)
                 {
                     return NotFound("Username or email doesnt exist");

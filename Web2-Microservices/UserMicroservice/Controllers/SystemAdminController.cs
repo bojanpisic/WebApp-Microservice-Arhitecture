@@ -30,16 +30,9 @@ namespace UserMicroservice.Controllers
             this.eventBus = eventBus;
         }
 
-        [HttpGet]
-        [Route("123")]
-        public async Task<IActionResult> s() 
-        {
-            Console.WriteLine("DASSADSA");
-            return Ok("SSSSSSSSSSSSSSSSS");
-        }
-
+      
         [HttpPost("register-systemadmin")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
         public async Task<IActionResult> RegisterSystemAdmin([FromBody] RegisterAdminDto userDto)
         {
@@ -52,13 +45,13 @@ namespace UserMicroservice.Controllers
 
             try
             {
-                //string userId = User.Claims.First(c => c.Type == "UserID").Value;
-                //string userRole = User.Claims.First(c => c.Type == "Roles").Value;
+                string userId = User.Claims.First(c => c.Type == "UserID").Value;
+                string userRole = User.Claims.First(c => c.Type == "Roles").Value;
 
-                //if (!userRole.Equals("Admin"))
-                //{
-                //    return Unauthorized();
-                //}
+                if (!userRole.Equals("Admin"))
+                {
+                    return Unauthorized();
+                }
 
                 //if ((await unitOfWork.AuthenticationRepository.GetPersonByEmail(userDto.Email)) != null)
                 //{
@@ -103,6 +96,8 @@ namespace UserMicroservice.Controllers
 
             return Ok();
         }
+
+
         [HttpPost]
         [Route("register-airline")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -371,7 +366,7 @@ namespace UserMicroservice.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, "Failed to set bonus");
+                return StatusCode(500, "Failed to get bonus");
             }
         }
     }

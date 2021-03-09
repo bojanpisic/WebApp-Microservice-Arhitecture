@@ -16,6 +16,8 @@ using System.Threading.Tasks;
 
 namespace RACSMicroservice.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class RentACarController : Controller
     {
 

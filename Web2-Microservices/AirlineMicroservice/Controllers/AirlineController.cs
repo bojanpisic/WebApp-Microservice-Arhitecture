@@ -154,11 +154,14 @@ namespace AirlineMicroservice.Controllers
                     return Unauthorized();
                 }
 
-                HttpStatusCode sc = (await httpClient.GetAsync(String.Format("http://usermicroservice:80/api/user/find-user?id={0}", userId))).StatusCode;
+                HttpStatusCode result = (await httpClient.GetAsync(String.Format("http://usermicroservice:80/api/user/find-user?id={0}", userId)))
+                                            .StatusCode;
 
-                if (sc.Equals(HttpStatusCode.NotFound))
+
+                if (result.Equals(HttpStatusCode.NotFound))
                 {
-                    return NotFound();
+                    Console.WriteLine("USER NOT FOUND WITH ID " + userId);
+                    return NotFound("Something went wrong");
                 }
 
                 var airline = (await unitOfWork.AirlineRepository.Get(a => a.AdminId == userId, null, "Address")).FirstOrDefault();
@@ -185,7 +188,7 @@ namespace AirlineMicroservice.Controllers
                     addressChanged = true;
                 }
 
-                var result = IdentityResult.Success;
+                var r = IdentityResult.Success;
                 if (addressChanged)
                 {
 
@@ -200,12 +203,12 @@ namespace AirlineMicroservice.Controllers
                     await unitOfWork.Commit();
                 }
 
-                if (result.Succeeded)
+                if (r.Succeeded)
                 {
                     return Ok(result);
                 }
 
-                return BadRequest(result.Errors);
+                return BadRequest(r.Errors);
             }
 
             catch (DbUpdateException)
@@ -214,8 +217,9 @@ namespace AirlineMicroservice.Controllers
                 return StatusCode(500, "Failed to change airline info");
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return StatusCode(500, "Failed to change airline info");
             }
         }
@@ -245,7 +249,8 @@ namespace AirlineMicroservice.Controllers
 
                 if (result.Equals(HttpStatusCode.NotFound))
                 {
-                    return NotFound();
+                    Console.WriteLine("USER NOT FOUND WITH ID " + userId);
+                    return NotFound("Something went wrong");
                 }
 
                 var findResult = await unitOfWork.AirlineRepository.Get(a => a.AdminId == userId);

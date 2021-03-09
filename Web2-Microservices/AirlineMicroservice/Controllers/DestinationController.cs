@@ -25,6 +25,7 @@ namespace AirlineMicroservice.Controllers
         public DestinationController(IUnitOfWork _unitOfWork, HttpClient httpClient)
         {
             this.unitOfWork = _unitOfWork;
+            this.httpClient = httpClient;
         }
 
         #region Destination methods
@@ -43,13 +44,13 @@ namespace AirlineMicroservice.Controllers
                     return Unauthorized();
                 }
 
-                HttpStatusCode sc = (await httpClient.GetAsync(String.Format("http://usermicroservice:80/api/user/find-user?id={0}", userId))).StatusCode;
+                HttpStatusCode result = (await httpClient.GetAsync(String.Format("http://usermicroservice:80/api/user/find-user?id={0}", userId))).StatusCode;
 
-                if (sc.Equals(HttpStatusCode.NotFound))
+                if (result.Equals(HttpStatusCode.NotFound))
                 {
-                    return NotFound();
+                    Console.WriteLine("USER NOT FOUND WITH ID " + userId);
+                    return NotFound("Something went wrong");
                 }
-
 
                 var airline = (await unitOfWork.AirlineRepository.Get(a => a.AdminId == userId)).FirstOrDefault();
                 //var res = await unitOfWork.AirlineRepository.Get(a => a.AdminId == userId, null, "Flights,Address");
@@ -59,11 +60,11 @@ namespace AirlineMicroservice.Controllers
                     return NotFound("Airline not found");
                 }
 
-                var result = await unitOfWork.DestinationRepository.GetAirlineDestinations(airline);
+                var result1 = await unitOfWork.DestinationRepository.GetAirlineDestinations(airline);
 
                 List<object> obj = new List<object>();
 
-                foreach (var item in result)
+                foreach (var item in result1)
                 {
                     obj.Add(new
                     {
@@ -75,8 +76,9 @@ namespace AirlineMicroservice.Controllers
                 }
                 return Ok(obj);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return StatusCode(500, "Failed to return destinations.");
             }
         }
@@ -94,7 +96,6 @@ namespace AirlineMicroservice.Controllers
             try
             {
                 string userId = User.Claims.First(c => c.Type == "UserID").Value;
-
                 string userRole = User.Claims.First(c => c.Type == "Roles").Value;
 
                 if (!userRole.Equals("AirlineAdmin"))
@@ -158,8 +159,10 @@ namespace AirlineMicroservice.Controllers
                 Console.WriteLine("DbUpdate exception");
                 return StatusCode(500, "Failed to add destination.");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
+
                 return StatusCode(500, "Failed to add destination.");
             }
 

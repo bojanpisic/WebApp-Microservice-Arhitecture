@@ -50,7 +50,14 @@ namespace AirlineMicroservice.Repository
         {
             return await context.SpecialOffers
                 .Include(s => s.Seats)
-                .ThenInclude(seat => seat.Flight)
+                    .ThenInclude(seat => seat.Flight)
+                        .ThenInclude(f => f.From)
+                .Include(s => s.Seats)
+                    .ThenInclude(seat => seat.Flight)
+                        .ThenInclude(f => f.To)
+                .Include(s => s.Seats)
+                    .ThenInclude(seat => seat.Flight)
+                        .ThenInclude(f => f.Airline)
                 .FirstOrDefaultAsync(s => s.SpecialOfferId == id);
         }
 

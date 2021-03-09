@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +22,11 @@ namespace AirlineMicroservice.Controllers
     {
         private IUnitOfWork unitOfWork;
         private readonly HttpClient httpClient;
-        public SeatController(IUnitOfWork _unitOfWork)
+
+        public SeatController(IUnitOfWork _unitOfWork, HttpClient httpClient)
         {
             this.unitOfWork = _unitOfWork;
-            httpClient = new HttpClient();
+            this.httpClient = httpClient;
         }
         #region Seat methods
 
@@ -285,6 +287,48 @@ namespace AirlineMicroservice.Controllers
 
         }
 
+        [HttpGet]
+        [Route("get-seat")]
+        
+        public async Task<IActionResult> GetSeat(int id) 
+        {
+            if (String.IsNullOrEmpty(id.ToString()))
+            {
+                return null;
+            }
+
+            try
+            {
+                var seat = await unitOfWork.SeatRepository.GetSeat(id);
+
+                var obj = new {
+                    Column = seat.Column,
+                    Row = seat.Row,
+                    FlightId = seat.Flight.FlightId,
+                    Class1 = seat.Class,
+                    SeatId = seat.SeatId,
+                    Price = seat.Price,
+                    TakeOffDate = seat.Flight.TakeOffDateTime.Date,
+                    LandingDate = seat.Flight.LandingDateTime.Date,
+                    AirlineLogo = seat.Flight.Airline.LogoUrl,
+                    AirlineName = seat.Flight.Airline.Name,
+                    AirlineId =seat.Flight.Airline.AirlineId,
+                    From = seat.Flight.From.City,
+                    To = seat.Flight.To.City,
+                    TakeOffTime = seat.Flight.TakeOffDateTime.TimeOfDay,
+                    LandingTime = seat.Flight.TakeOffDateTime.TimeOfDay,
+                    FlightTime = seat.Flight.TripTime,
+                    FlightLength =seat.Flight.tripLength,
+                    FlightNumber = seat.Flight.FlightNumber,
+                };
+
+                return Ok(obj);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
         #endregion
     }
 }

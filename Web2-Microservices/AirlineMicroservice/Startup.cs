@@ -41,11 +41,16 @@ namespace AirlineMicroservice
             services.AddDbContext<AirlineContext>(
                          options =>
                          {
-                               //options.UseMySql(Configuration.GetConnectionString(Environment.GetEnvironmentVariable("CONTAINER") == "true" ? 
-                               //    "ContainerConnection" :
-                               //    "MySqlConnection"));
+                             //options.UseMySql(Configuration.GetConnectionString(Environment.GetEnvironmentVariable("CONTAINER") == "true" ? 
+                             //    "ContainerConnection" :
+                             //    "MySqlConnection"));
 
-                               options.UseMySql(Configuration.GetConnectionString("ContainerConnection"));
+                             //options.UseMySql(Configuration.GetConnectionString("ContainerConnection"));
+                             options.UseMySql(Configuration.GetConnectionString("ContainerConnection"), builder =>
+                             {
+                                 builder.EnableRetryOnFailure();
+                                 builder.MigrationsAssembly("AirlineMicroservice");
+                             });
                          });
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -198,6 +203,9 @@ namespace AirlineMicroservice
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
             services.AddTransient<CreateAirlineIntegrationEventHandler>();
             services.AddTransient<RollbackTicketsEventHandler>();
+            services.AddTransient<CreateFlightReservationEventHandler>();
+            services.AddTransient<RejectTripInvitationHandler>();
+
         }
 
         private void ConfigureEventBus(IApplicationBuilder app)
@@ -206,6 +214,9 @@ namespace AirlineMicroservice
 
             eventBus.Subscribe<CreateAirlineIntegrationEvent, CreateAirlineIntegrationEventHandler>();
             eventBus.Subscribe<RollbackTicketsEvent, RollbackTicketsEventHandler>();
+            eventBus.Subscribe<CreateFlightReservationEvent, CreateFlightReservationEventHandler>();
+            eventBus.Subscribe<RejectTripInvitationEvent, RejectTripInvitationHandler>();
+
         }
     }
 }

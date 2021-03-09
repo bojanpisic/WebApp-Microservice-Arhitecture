@@ -9,6 +9,7 @@ services:
     depends_on:
       - usermicroservice
       - airlinemicroservice
+      - racsmicroservice
 
   rabbitmq:
     container_name: rabbitmq
@@ -30,8 +31,8 @@ services:
     ports:
       - 8080:80
     depends_on:
-      rabbitmq:
-        condition: service_started
+      - rabbitmq
+      - mysql-server
 
   airlinemicroservice:
     container_name: airlinemicroservice
@@ -42,8 +43,20 @@ services:
     ports:
       - 8081:80
     depends_on:
-      rabbitmq:
-        condition: service_started
+      - rabbitmq
+      - mysql-server
+
+  racsmicroservice:
+    container_name: racsmicroservice
+    image: ${DOCKER_REGISTRY-}racsmicroservice
+    build:
+      context: .
+      dockerfile: RACSMicroservice/Dockerfile
+    ports:
+      - 8082:80
+    depends_on:
+      - rabbitmq
+      - mysql-server
 
   mysql-server:
     image: mysql/mysql-server:5.7.32

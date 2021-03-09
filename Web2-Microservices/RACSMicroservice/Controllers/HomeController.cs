@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace RACSMicroservice.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class HomeController : Controller
     {
         private readonly IUnitOfWork unitOfWork;

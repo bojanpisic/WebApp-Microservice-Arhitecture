@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Plain.RabbitMQ;
 using System;
 using System.Collections.Generic;
@@ -24,30 +26,14 @@ namespace UserMicroservice.Controllers
     {
         private IUnitOfWork unitOfWork;
         private readonly IEventBus eventBus;
+        private readonly HttpClient httpClient;
 
-        public UserController(IUnitOfWork _unitOfWork, IEventBus eventBus)
+        public UserController(IUnitOfWork _unitOfWork, IEventBus eventBus, HttpClient httpClient)
         {
             unitOfWork = _unitOfWork;
             this.eventBus = eventBus;
+            this.httpClient = httpClient;
         }
-
-
-        [HttpGet]
-        [Route("test")]
-        public async Task<IActionResult> s()
-        {
-            Console.WriteLine("DAAAAAAAAA");
-            return Ok("USAO");
-        }
-
-        [HttpGet]
-        [Route("test2")]
-        public async Task<IActionResult> s(string id)
-        {
-            Console.WriteLine("DAAAAAAAAA");
-            return Ok("ID JE:" + id);
-        }
-
 
         [HttpGet]
         [Route("user-json")]
@@ -90,9 +76,11 @@ namespace UserMicroservice.Controllers
 
                 if (user == null)
                 {
+                    Console.WriteLine("notfound");
                     return NotFound();
                 }
 
+                Console.WriteLine("user found");
                 return Ok();
             }
             catch (Exception)
@@ -112,7 +100,7 @@ namespace UserMicroservice.Controllers
 
             try
             {
-                var user = await unitOfWork.UserRepository.GetByID(id);
+                var user = await unitOfWork.UserRepository.GetByID(id) as User;
                 return Ok(user);
             }
             catch (Exception)
@@ -556,256 +544,163 @@ namespace UserMicroservice.Controllers
         }
         #endregion
 
- 
+        [HttpPost]
+        [Route("accept-trip-invitation")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> AcceptTripInvitation(AcceptTripDto dto)
+        {
+            try
+            {
+                string userId = User.Claims.First(c => c.Type == "UserID").Value;
 
+                string userRole = User.Claims.First(c => c.Type == "Roles").Value;
 
+                if (!userRole.Equals("RegularUser"))
+                {
+                    return Unauthorized();
+                }
+                var user = (User)await unitOfWork.UserManager.FindByIdAsync(userId);
 
-        
+                if (user == null)
+                {
+                    return NotFound("User not found");
+                }
 
-        //#endregion
+                var invitation = await unitOfWork.TripInvitationRepository.GetTripInvitationById(dto.Id);
 
-        
-        //[HttpPost]
-        //[Route("accept-trip-invitation")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //public async Task<IActionResult> AcceptTripInvitation(AcceptTripDto dto)
-        //{
-        //    try
-        //    {
-        //        string userId = User.Claims.First(c => c.Type == "UserID").Value;
-        //        var user = (User)await unitOfWork.UserManager.FindByIdAsync(userId);
+                if (invitation == null)
+                {
+                    return BadRequest("Cant find your invitation");
+                }
 
-        //        string userRole = User.Claims.First(c => c.Type == "Roles").Value;
+                var @event = new CreateFlightReservationEvent(invitation.InvitationId, user.Id, invitation.SeatId,dto.Passport, invitation.Price);
 
-        //        if (!userRole.Equals("RegularUser"))
-        //        {
-        //            return Unauthorized();
-        //        }
+                eventBus.Publish(@event);
 
-        //        if (user == null)
-        //        {
-        //            return NotFound("User not found");
-        //        }
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Failed to accept trip");
+            }
+        }
 
-        //        var invitation = await unitOfWork.TripInvitationRepository.GetTripInvitationById(dto.Id);
+        [HttpDelete]
+        [Route("reject-trip-invitation/{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> RejectTripInvitation(int id)
+        {
+            try
+            {
+                string userId = User.Claims.First(c => c.Type == "UserID").Value;
 
-        //        if (invitation == null)
-        //        {
-        //            return BadRequest("Cant find your invitation");
-        //        }
+                string userRole = User.Claims.First(c => c.Type == "Roles").Value;
 
+                if (!userRole.Equals("RegularUser"))
+                {
+                    return Unauthorized();
+                }
+                var user = (User)await unitOfWork.UserManager.FindByIdAsync(userId);
 
-        //        var flightReservation = new FlightReservation()
-        //        {
-        //            User = user,
-        //        };
+                if (user == null)
+                {
+                    return NotFound("User not found");
+                }
 
-        //        var tickets = new List<Ticket>();
+                var invitation = await unitOfWork.TripInvitationRepository.GetTripInvitationById(id);
 
-        //        tickets.Add(new Ticket()
-        //        {
-        //            Passport = dto.Passport,
-        //            Price = invitation.Price,
-        //            Seat = invitation.Seat,
-        //            SeatId = invitation.SeatId,
-        //            Reservation = flightReservation
-        //        });
+                if (invitation == null)
+                {
+                    return BadRequest("Cant find your invitation");
+                }
 
-        //        var systemB = await unitOfWork.BonusRepository.GetByID(1);
+                var @event1 = new RejectTripInvitationEvent(invitation.SeatId, invitation.InvitationId);
+                eventBus.Publish(@event1);
 
-        //        int systemBonus = 0;
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Failed to reject invitation");
+            }
+        }
 
-        //        if (systemB == null)
-        //        {
-        //            systemBonus = 0;
-        //        }
-        //        else
-        //        {
-        //            systemBonus = systemB.BonusPerKilometer;
-        //        }
+        [HttpGet]
+        [Route("get-trip-invitations")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetTripInvitations()
+        {
+            try
+            {
+                string userId = User.Claims.First(c => c.Type == "UserID").Value;
+                var user = (User)await unitOfWork.UserManager.FindByIdAsync(userId);
 
-        //        flightReservation.Tickets = tickets;
+                string userRole = User.Claims.First(c => c.Type == "Roles").Value;
 
-        //        user.FlightReservations.Add(flightReservation);
-        //        user.TripRequests.Remove(invitation);
-        //        user.BonusPoints += (int)invitation.Seat.Flight.tripLength * systemBonus;
-        //        invitation.Sender.TripInvitations.Remove(invitation);
+                if (!userRole.Equals("RegularUser"))
+                {
+                    return Unauthorized();
+                }
 
-        //        try
-        //        {
-        //            unitOfWork.UserRepository.Update(user);
-        //            unitOfWork.UserRepository.Update(invitation.Sender);
+                if (user == null)
+                {
+                    return NotFound("User not found");
+                }
 
-        //            unitOfWork.TripInvitationRepository.Delete(invitation);
+                var invitations = await unitOfWork.TripInvitationRepository.GetTripInvitations(user);
+                var retVal = new List<object>();
 
-        //            await unitOfWork.Commit();
-        //        }
-        //        catch (Exception)
-        //        {
-        //            StatusCode(500, "Failed to accept invitation");
-        //        }
-        //        try
-        //        {
+                foreach (var invite in invitations)
+                {
+                    if (invite.Expires <= DateTime.Now)
+                    {
+                        var @event1 = new RejectTripInvitationEvent(invite.SeatId, invite.InvitationId);
+                        eventBus.Publish(@event1);
 
-        //        }
-        //        catch (Exception)
-        //        {
-        //            StatusCode(500, "Successfully accepted invitation, but unable to send email.");
-        //        }
+                        continue;
+                    }
 
-        //        return Ok();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return StatusCode(500, "Failed to accept trip");
-        //    }
-        //}
+                    //get seat info 
 
-        //[HttpDelete]
-        //[Route("reject-trip-invitation/{id}")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //public async Task<IActionResult> RejectTripInvitation(int id)
-        //{
-        //    try
-        //    {
-        //        string userId = User.Claims.First(c => c.Type == "UserID").Value;
-        //        var user = (User)await unitOfWork.UserManager.FindByIdAsync(userId);
+                    var result = await httpClient.GetStringAsync(String.Format("http://airlinemicroservice:80/api/seat/get-seat?id={0}",invite.SeatId));
+                    dynamic data = JObject.Parse(result);
 
-        //        string userRole = User.Claims.First(c => c.Type == "Roles").Value;
+                    retVal.Add(new
+                    {
+                        column = data.column,
+                        row = data.row,
+                        clas = data.class1,
+                        seatId = data.seatId,
+                        seatPrice = data.price,
+                        takeOffDate = data.takeOffDate,
+                        landingDate = data.landingDate,
+                        airlineLogo = data.airlineLogo,
+                        airlineName = data.airlineName,
+                        airlineId = data.airlineId,
+                        from = data.from,
+                        to = data.to,
+                        takeOffTime = data.takeOffTime,
+                        landingTime = data.landingTime,
+                        flightTime = data.flightTime,
+                        flightLength = data.flightLength,
+                        flightNumber = data.flightNumber,
+                        flightId = data.flightId,
+                        senderId = invite.Sender.Id,
+                        senderUserName = invite.Sender.UserName,
+                        senderFirstName = invite.Sender.FirstName,
+                        senderLastName = invite.Sender.LastName,
+                        senderEmail = invite.Sender.Email,
+                        invitationId = invite.InvitationId
+                    });
+                }
 
-        //        if (!userRole.Equals("RegularUser"))
-        //        {
-        //            return Unauthorized();
-        //        }
-
-        //        if (user == null)
-        //        {
-        //            return NotFound("User not found");
-        //        }
-
-        //        var invitation = await unitOfWork.TripInvitationRepository.GetTripInvitationById(id);
-
-        //        if (invitation == null)
-        //        {
-        //            return BadRequest("Cant find your invitation");
-        //        }
-
-
-        //        user.TripRequests.Remove(invitation);
-        //        invitation.Sender.TripInvitations.Remove(invitation);
-
-        //        invitation.Seat.Available = true;
-        //        invitation.Seat.Reserved = false;
-
-        //        try
-        //        {
-        //            unitOfWork.UserRepository.Update(user);
-        //            unitOfWork.UserRepository.Update(invitation.Sender);
-        //            unitOfWork.SeatRepository.Update(invitation.Seat);
-
-        //            unitOfWork.TripInvitationRepository.Delete(invitation);
-
-        //            await unitOfWork.Commit();
-        //        }
-        //        catch (Exception)
-        //        {
-        //            StatusCode(500, "Failed to reject invitation");
-        //        }
-        //        return Ok();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return StatusCode(500, "Failed to reject invitation");
-        //    }
-        //}
-
-        //[HttpGet]
-        //[Route("get-trip-invitations")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //public async Task<IActionResult> GetTripInvitations()
-        //{
-        //    try
-        //    {
-        //        string userId = User.Claims.First(c => c.Type == "UserID").Value;
-        //        var user = (User)await unitOfWork.UserManager.FindByIdAsync(userId);
-
-        //        string userRole = User.Claims.First(c => c.Type == "Roles").Value;
-
-        //        if (!userRole.Equals("RegularUser"))
-        //        {
-        //            return Unauthorized();
-        //        }
-
-        //        if (user == null)
-        //        {
-        //            return NotFound("User not found");
-        //        }
-
-        //        var invitations = await unitOfWork.TripInvitationRepository.GetTripInvitations(user);
-        //        var retVal = new List<object>();
-
-        //        foreach (var invite in invitations)
-        //        {
-        //            if (invite.Expires <= DateTime.Now)
-        //            {
-        //                user.TripRequests.Remove(invite);
-        //                invite.Sender.TripInvitations.Remove(invite);
-
-        //                invite.Seat.Available = true;
-        //                invite.Seat.Reserved = false;
-
-        //                try
-        //                {
-        //                    unitOfWork.UserRepository.Update(user);
-        //                    unitOfWork.UserRepository.Update(invite.Sender);
-        //                    unitOfWork.SeatRepository.Update(invite.Seat);
-
-        //                    unitOfWork.TripInvitationRepository.Delete(invite);
-
-        //                    await unitOfWork.Commit();
-        //                }
-        //                catch (Exception)
-        //                {
-
-        //                }
-        //                continue;
-        //            }
-        //            retVal.Add(new
-        //            {
-        //                column = invite.Seat.Column,
-        //                row = invite.Seat.Row,
-        //                clas = invite.Seat.Class,
-        //                seatId = invite.Seat.SeatId,
-        //                seatPrice = invite.Seat.Price,
-        //                takeOffDate = invite.Seat.Flight.TakeOffDateTime.Date,
-        //                landingDate = invite.Seat.Flight.LandingDateTime.Date,
-        //                airlineLogo = invite.Seat.Flight.Airline.LogoUrl,
-        //                airlineName = invite.Seat.Flight.Airline.Name,
-        //                airlineId = invite.Seat.Flight.Airline.AirlineId,
-        //                from = invite.Seat.Flight.From.City,
-        //                to = invite.Seat.Flight.To.City,
-        //                takeOffTime = invite.Seat.Flight.TakeOffDateTime.TimeOfDay,
-        //                landingTime = invite.Seat.Flight.TakeOffDateTime.TimeOfDay,
-        //                flightTime = invite.Seat.Flight.TripTime,
-        //                flightLength = invite.Seat.Flight.tripLength,
-        //                flightNumber = invite.Seat.Flight.FlightNumber,
-        //                flightId = invite.Seat.Flight.FlightId,
-        //                senderId = invite.Sender.Id,
-        //                senderUserName = invite.Sender.UserName,
-        //                senderFirstName = invite.Sender.FirstName,
-        //                senderLastName = invite.Sender.LastName,
-        //                senderEmail = invite.Sender.Email,
-        //                invitationId = invite.InvitationId
-        //            });
-        //        }
-
-        //        return Ok(retVal);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return StatusCode(500, "Failed to return trips");
-        //    }
-        //}
-        //#endregion
+                return Ok(retVal);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Failed to return trips");
+            }
+        }
     }
 }

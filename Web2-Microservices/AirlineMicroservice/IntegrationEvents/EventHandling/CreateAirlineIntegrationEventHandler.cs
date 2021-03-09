@@ -34,6 +34,8 @@ namespace AirlineMicroservice.IntegrationEvents.EventHandling
                             },
                             AdminId = @event.AdminId,
                         });
+
+                await unitOfWork.Commit();
             }
             catch (Exception)
             {

@@ -133,11 +133,11 @@ namespace UserMicroservice.Repository
         public async Task<IdentityResult> SendConfirmationMail(Person user, string usertype, string password = "")
         {
 
-            Policy
+            await Policy
                    .Handle<Exception>()
                    .Or<ArgumentException>(ex => ex.ParamName == "example")
-                   .WaitAndRetry(10, retryAttempt => TimeSpan.FromSeconds(5))
-                   .Execute(() =>
+                   .WaitAndRetryAsync(10, retryAttempt => TimeSpan.FromSeconds(5))
+                   .ExecuteAsync(() =>
                    {
 
                        var fromMail = new MailAddress("bojanpisic7@gmail.com");
@@ -150,7 +150,7 @@ namespace UserMicroservice.Repository
                        if (usertype == "user")
                        {
 
-                           string confirmationToken = userManager.GenerateEmailConfirmationTokenAsync(user).ToString();
+                           string confirmationToken = userManager.GenerateEmailConfirmationTokenAsync(user).Result;
                            string confirmationTokenHtmlVersion = HttpUtility.UrlEncode(confirmationToken);
 
                            var varifyUrl = "http://localhost:4200/signin/" + user.Id + "/" +
@@ -188,7 +188,7 @@ namespace UserMicroservice.Repository
                            IsBodyHtml = true
                        })
                            smtp.Send(message);
-
+                       return Task.CompletedTask;
                    });
             return IdentityResult.Success;
 

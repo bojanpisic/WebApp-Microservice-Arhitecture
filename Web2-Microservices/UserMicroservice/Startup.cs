@@ -63,7 +63,13 @@ namespace UserMicroservice
                                //    "ContainerConnection" :
                                //    "MySqlConnection"));
 
-                               options.UseMySql(Configuration.GetConnectionString("ContainerConnection"));
+                               //options.UseMySql(Configuration.GetConnectionString("ContainerConnection"));
+
+                               options.UseMySql(Configuration.GetConnectionString("ContainerConnection"), builder =>
+                               {
+                                   builder.EnableRetryOnFailure();
+                                   builder.MigrationsAssembly("UserMicroservice");
+                               });
                            });
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -72,7 +78,8 @@ namespace UserMicroservice
 
             services.AddDefaultIdentity<Person>()
                     .AddRoles<IdentityRole>()
-                    .AddEntityFrameworkStores<UserContext>();
+                    .AddEntityFrameworkStores<UserContext>()
+                    .AddDefaultTokenProviders();
 
 
             services.AddControllers().AddNewtonsoftJson(options =>
@@ -236,7 +243,9 @@ namespace UserMicroservice
             services.AddTransient<SendConfirmationEmailEventHandler>();
             services.AddTransient<SendMailIntegrationEventHandler>();
             services.AddTransient<SendMailToFriendIntegrationEventHandler>();
-
+            services.AddTransient<FlightReservationCreatedEventHandler>();
+            services.AddTransient<SendInvitationEventHandler>();
+            services.AddTransient<DeleteTripInvitationEventHandler>();
         }
 
         private void ConfigureEventBus(IApplicationBuilder app)
@@ -246,7 +255,12 @@ namespace UserMicroservice
             eventBus.Subscribe<RollbackRACSAdmin, RollbackRACSAdminHandler>();
             eventBus.Subscribe<SendMailToFriendIntegrationEvent, SendMailToFriendIntegrationEventHandler>();
             eventBus.Subscribe<SendConfirmationEmailEvent, SendConfirmationEmailEventHandler>();
-            eventBus.Subscribe<SendMailToFriendIntegrationEvent, SendMailToFriendIntegrationEventHandler>();
+            eventBus.Subscribe<SendMailIntegrationEvent, SendMailIntegrationEventHandler>();
+            eventBus.Subscribe<FlightReservationCreatedEvent, FlightReservationCreatedEventHandler>();
+            eventBus.Subscribe<SendInvitationEvent, SendInvitationEventHandler>();
+            eventBus.Subscribe<DeleteTripInvitation, DeleteTripInvitationEventHandler>();
+
+
         }
     }
 }

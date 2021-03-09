@@ -707,6 +707,7 @@ namespace AirlineMicroservice.Controllers
 
                 foreach (var flight in flights)
                 {
+
                     stops = new List<object>();
 
                     foreach (var item in flight.Stops)
@@ -720,33 +721,11 @@ namespace AirlineMicroservice.Controllers
                     obj = new List<object>();
                     foreach (var item in flight.Seats)
                     {
-                        Seat seat = (await unitOfWork.SeatRepository.Get(t => t.SeatId == item.SeatId, null, "Invitation")).FirstOrDefault();
-                        if (seat.Invitation != null)
-                        {
-                            if (seat.Invitation.Expires <= DateTime.Now)
-                            {
-                                seat.Available = true;
-                                seat.Reserved = false;
-
-                                try
-                                {
-                                    unitOfWork.SeatRepository.Update(seat);
-
-                                    await unitOfWork.Commit();
-                                    item.Available = true;
-                                }
-                                catch (Exception)
-                                {
-                                    Console.WriteLine("failed to update seat");
-                                }
-                            }
-                        }
-
                         obj.Add(new
                         {
                             item.Column,
                             item.Row,
-                            item.Flight.FlightId,
+                            flight.FlightId,
                             item.Class,
                             item.SeatId,
                             item.Price,
@@ -775,8 +754,9 @@ namespace AirlineMicroservice.Controllers
 
                 return Ok(retVal);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return StatusCode(500, "Failed to return flight and seats");
             }
         }

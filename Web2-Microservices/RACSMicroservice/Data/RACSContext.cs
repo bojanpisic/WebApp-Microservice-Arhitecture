@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RACSMicroservice.Data
 {
-    public class RACSContext : IdentityDbContext
+    public class RACSContext : DbContext
     {
         public RACSContext(DbContextOptions<RACSContext> options)
                                                   : base(options)

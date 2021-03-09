@@ -19,6 +19,7 @@ namespace UserMicroservice.Repository
                 //.Include(i => i.Seat)
                 //.ThenInclude(s => s.Flight)
                 .Include(i => i.Sender)
+                .Include(t => t.Receiver)
                 .FirstOrDefaultAsync(i => i.InvitationId == id);
         }
 

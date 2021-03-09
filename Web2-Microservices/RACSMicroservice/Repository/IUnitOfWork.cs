@@ -12,8 +12,6 @@ namespace RACSMicroservice.Repository
         ICarRepository CarRepository { get; }
 
         IRACSSpecialOffer RACSSpecialOfferRepository { get; }
-
-
         IRentCarServiceRepository RentCarServiceRepository { get; }
         Task Commit();
         void Rollback();

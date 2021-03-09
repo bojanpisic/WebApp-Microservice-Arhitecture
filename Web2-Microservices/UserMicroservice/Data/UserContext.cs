@@ -45,7 +45,7 @@ namespace UserMicroservice.Data
         public DbSet<Person> Persons { get; set; }
         public DbSet<Friendship> Friendships { get; set; }
         public DbSet<Invitation> Invitations { get; set; }
-
+        public DbSet<Bonus> Bonuses { get; set; }
 
     }
 }

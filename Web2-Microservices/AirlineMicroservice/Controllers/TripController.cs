@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 
 namespace AirlineMicroservice.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class TripController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
@@ -30,6 +32,7 @@ namespace AirlineMicroservice.Controllers
         {
             try
             {
+
                 string userId = User.Claims.First(c => c.Type == "UserID").Value;
                 string userRole = User.Claims.First(c => c.Type == "Roles").Value;
 
@@ -39,12 +42,11 @@ namespace AirlineMicroservice.Controllers
                 }
 
                 //dobavi usera
-                var result = await httpClient.GetStringAsync(String.Format("http://usermicroservice:80/api/user/get-userbyid?id={0}",userId));
+                var result = await httpClient.GetStringAsync(String.Format("http://usermicroservice:80/api/user/find-userbyid?id={0}", userId));
                 dynamic data = JObject.Parse(result);
 
                 var mySeats = await unitOfWork.SeatRepository.Get(s => dto.MySeatsIds.Contains(s.SeatId));
                 var seats = new List<object>();
-
                 foreach (var item in mySeats)
                 {
                     seats.Add(new
@@ -59,15 +61,15 @@ namespace AirlineMicroservice.Controllers
 
                 foreach (var item in dto.Friends)
                 {
-                    var result1 = await httpClient.GetStringAsync(String.Format("http://usermicroservice:80/api/user/get-userbyid?id={0}", userId));
+                    var result1 = await httpClient.GetStringAsync(String.Format("http://usermicroservice:80/api/user/find-userbyid?id={0}", userId));
                     dynamic data1 = JObject.Parse(result1);
                     //var friend = await unitOfWork.UserRepository.GetByID(item.Id);
                     var seat = await unitOfWork.SeatRepository.GetByID(item.SeatId);
                     friendList.Add(new
                     {
-                        friendEmail = data1.Email,
-                        friendFirstName = data1.FirstName,
-                        friendLastName = data1.LastName,
+                        friendEmail = data1.email,
+                        friendFirstName = data1.firstName,
+                        friendLastName = data1.lastName,
                         column = seat.Column,
                         row = seat.Row,
                         clas = seat.Class,
@@ -88,7 +90,6 @@ namespace AirlineMicroservice.Controllers
                         clas = seat.Class,
                     });
                 }
-
                 float totalPrice = 0;
 
                 foreach (var item in mySeats)
@@ -97,14 +98,15 @@ namespace AirlineMicroservice.Controllers
                 }
 
                 float priceWithBonus = 0;
+                Console.WriteLine(data.bonusPoints);
 
-                if (totalPrice < data.BonusPoints * 0.01)
+                if (totalPrice < (float)data.bonusPoints * 0.01)
                 {
                     priceWithBonus = 0;
                 }
                 else
                 {
-                    priceWithBonus = (float)(totalPrice - data.BonusPoints * 0.01);
+                    priceWithBonus = (float)(totalPrice - (float)data.bonusPoints * 0.01);
                 }
 
                 return Ok(new
@@ -114,11 +116,12 @@ namespace AirlineMicroservice.Controllers
                     friends = friendList,
                     unregisteredFriends = unregisteredFriendList,
                     mySeats = seats,
-                    myBonus = data.BonusPoints
+                    myBonus = data.bonusPoints
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return StatusCode(500, "Failed to return trip info");
             }
         }

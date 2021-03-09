@@ -3,20 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AirlineMicroservice.Models
+namespace AirlineMicroservice.DTOs
 {
-    public class Invitation
+    public class InvitationInfo
     {
-        public int InvitationId { get; set; }
-        public string SenderId { get; set; }
         public string ReceiverId { get; set; }
+        public string SenderId { get; set; }
         public int SeatId { get; set; }
-        public Seat Seat { get; set; }
         public float Price { get; set; }
         public DateTime Expires { get; set; }
+        public FlightInfo FlightInfo { get; set; }
 
-        public Invitation()
-        {
-        }
     }
 }

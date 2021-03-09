@@ -37,6 +37,7 @@ namespace RACSMicroservice.IntegrationEvents.EventHandling
                        },
                        AdminId = @event.AdminId,
                    });
+                await unitOfWork.Commit();
             }
             catch (Exception)
             {

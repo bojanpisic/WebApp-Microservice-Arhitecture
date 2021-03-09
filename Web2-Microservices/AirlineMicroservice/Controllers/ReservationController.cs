@@ -17,6 +17,8 @@ using System.Threading.Tasks;
 
 namespace AirlineMicroservice.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ReservationController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
@@ -44,7 +46,9 @@ namespace AirlineMicroservice.Controllers
                     return Unauthorized();
                 }
 
-                var result = (await httpClient.GetStringAsync("http://usermicroservice:80/api/user/user-json"));
+                Console.WriteLine("INVITER ID: " + userId);
+
+                var result = (await httpClient.GetStringAsync(String.Format("http://usermicroservice:80/api/user/find-userbyid?id={0}",userId)));
 
                 if (result == null)
                 {
@@ -60,7 +64,10 @@ namespace AirlineMicroservice.Controllers
 
                 var seatsForUpdate = new List<Seat>();
 
-                var mySeats = await unitOfWork.SeatRepository.Get(s => dto.MySeatsIds.Contains(s.SeatId), null, "Flight");
+                //var mySeats = await unitOfWork.SeatRepository.Get(s => dto.MySeatsIds.Contains(s.SeatId), null, "Flight");
+
+                var mySeats = await unitOfWork.SeatRepository.GetSeats(dto.MySeatsIds);
+
 
                 if (mySeats.ToList().Count != dto.MySeatsIds.Count)
                 {
@@ -111,15 +118,15 @@ namespace AirlineMicroservice.Controllers
 
                 if (dto.WithBonus)
                 {
-                    if (totalPrice < userData.BonusPoints * 0.01)
+                    if (totalPrice < (float)userData.bonusPoints * 0.01)
                     {
                         totalPrice = 0;
-                        userData.BonusPoints = (int)(userData.BonusPoints * 0.01 - totalPrice) * 100;
+                        userData.BonusPoints = (int)((float)userData.bonusPoints * 0.01 - totalPrice) * 100;
                     }
                     else
                     {
-                        totalPrice = (float)(totalPrice - userData.BonusPoints * 0.01);
-                        userData.BonusPoints = 0;
+                        totalPrice = (float)(totalPrice - (float)userData.bonusPoints * 0.01);
+                        userData.bonusPoints = 0;
                     }
                 }
 
@@ -132,7 +139,9 @@ namespace AirlineMicroservice.Controllers
 
                 foreach (var unregisteredRes in dto.UnregisteredFriends)
                 {
-                    var seat = await unitOfWork.SeatRepository.GetByID(unregisteredRes.SeatId);
+                    //var seat = await unitOfWork.SeatRepository.GetByID(unregisteredRes.SeatId);
+                    var seat = await unitOfWork.SeatRepository.GetSeat(unregisteredRes.SeatId);
+
 
                     if (seat == null)
                     {
@@ -164,11 +173,13 @@ namespace AirlineMicroservice.Controllers
 
                 //za registrovane prijatelje
 
-                var invitationList = new List<Invitation>();
+                var invitationInfoList = new List<InvitationInfo>();
 
                 foreach (var friend in dto.Friends)
                 {
-                    var seat = (await unitOfWork.SeatRepository.Get(s => s.SeatId == friend.SeatId, null, "Flight")).FirstOrDefault();
+                    //var seat = (await unitOfWork.SeatRepository.Get(s => s.SeatId == friend.SeatId, null, "Flight")).FirstOrDefault();
+
+                    var seat = await unitOfWork.SeatRepository.GetSeat(friend.SeatId);
 
                     if (seat == null)
                     {
@@ -182,16 +193,49 @@ namespace AirlineMicroservice.Controllers
                     seat.Available = false;
                     seat.Reserved = true;
                     seatsForUpdate.Add(seat);
-                    invitationList.Add(new Invitation()
+
+                   var ticket =  new Ticket()
+                    {
+                        Seat = seat,
+                        SeatId = seat.SeatId,
+                        Reservation = null,
+                        Price = seat.Price,
+                        Passport = null,
+                    };
+
+                    seat.Ticket = ticket;
+
+
+                    FlightInfo fi = new FlightInfo()
+                    {
+                        FlightNumber = seat.Flight.FlightNumber,
+                        From = seat.Flight.From.City,
+                        To = seat.Flight.To.City,
+                        Departure = seat.Flight.TakeOffDateTime,
+                        Arrival = seat.Flight.LandingDateTime,
+                        TripTime = seat.Flight.TripTime,
+                        TripLength = seat.Flight.tripLength,
+                        SeatClass = seat.Class,
+                        SeatRow = seat.Row,
+                        SeatColumn = seat.Column,
+                        TicketPrice = seat.Price
+                    };
+
+
+                    invitationInfoList.Add(new InvitationInfo()
                     {
                         SenderId = userId,
                         ReceiverId = friend.Id,
-                        Seat = seat,
+                        SeatId = seat.SeatId,
                         Price = seat.Price,
                         Expires = seat.Flight.TakeOffDateTime < DateTime.Now.AddDays(3) ?
                                     seat.Flight.TakeOffDateTime.AddHours(-3) : DateTime.Now.AddDays(3),
+                        FlightInfo = fi,
                     });
+
+                    Console.WriteLine(friend.Id);
                 }
+
 
 
                 List<int> ticketIds = new List<int>();
@@ -206,9 +250,11 @@ namespace AirlineMicroservice.Controllers
 
                     foreach (var seat in seatsForUpdate)
                     {
+                        Console.WriteLine(seat.Ticket == null);
+                        Console.WriteLine(seat.Ticket2 == null);
+
                         ticketIds.Add(seat.Ticket == null ? seat.Ticket2.Ticket2Id : seat.Ticket.TicketId);
                     }
-
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
@@ -218,7 +264,6 @@ namespace AirlineMicroservice.Controllers
                 {
                     return StatusCode(500, "One of transactions failed. Failed to reserve flight");
                 }
-
 
                 //CAR RESERVATION
 
@@ -275,42 +320,15 @@ namespace AirlineMicroservice.Controllers
                 {
                     Console.WriteLine("failed to send email");
                 }
-
-                foreach (var invitation in invitationList)
-                {
-                    FlightInfo fi = new FlightInfo()
-                    {
-                        FlightNumber = invitation.Seat.Flight.FlightNumber,
-                        From = invitation.Seat.Flight.From.City,
-                        To = invitation.Seat.Flight.To.City,
-                        Departure = invitation.Seat.Flight.TakeOffDateTime,
-                        Arrival = invitation.Seat.Flight.LandingDateTime,
-                        TripTime = invitation.Seat.Flight.TripTime,
-                        TripLength = invitation.Seat.Flight.tripLength,
-                        SeatClass = invitation.Seat.Class,
-                        SeatRow = invitation.Seat.Row,
-                        SeatColumn = invitation.Seat.Column,
-                        TicketPrice = invitation.Price
-                    };
-
-                    try
-                    {
-                        var @event = new SendMailToFriendIntegrationEvent(userId, invitation.ReceiverId, fi);
-                        eventBus.Publish(@event);
-                    }
-                    catch (Exception)
-                    {
-                        Console.WriteLine("failed to send email");
-                    }
-                }
-
-
-
+                //create event for sending invitations 
+                var @event1 = new SendInvitationEvent(invitationInfoList);
+                eventBus.Publish(@event1);
 
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return StatusCode(500, "Failed to reserve flight");
             }
         }
@@ -365,8 +383,6 @@ namespace AirlineMicroservice.Controllers
                     listOfSeatsToUpdate.Add(ticket.Seat);
                 }
 
-                //user.FlightReservations.Remove(reservation);
-
                 //CarSpecialOffer carSpecOffer = null;
 
                 //if (reservation.CarRent != null)
@@ -385,10 +401,10 @@ namespace AirlineMicroservice.Controllers
 
                 //try
                 //{
-                //    foreach (var seat in listOfSeatsToUpdate)
-                //    {
-                //        unitOfWork.SeatRepository.Update(seat);
-                //    }
+                foreach (var seat in listOfSeatsToUpdate)
+                {
+                    unitOfWork.SeatRepository.Update(seat);
+                }
 
                 //    unitOfWork.UserRepository.Update(user);
                 //    if (reservation.CarRent != null)
@@ -400,7 +416,9 @@ namespace AirlineMicroservice.Controllers
                 //        unitOfWork.RACSSpecialOfferRepository.Update(carSpecOffer);
                 //    }
 
-                //    await unitOfWork.Commit();
+                unitOfWork.FlightReservationRepository.Delete(reservation);
+
+                await unitOfWork.Commit();
                 //}
                 //catch (Exception)
                 //{
@@ -415,102 +433,122 @@ namespace AirlineMicroservice.Controllers
             }
         }
 
-        //[HttpPost]
-        //[Route("reserve-special-offer-flight")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //public async Task<IActionResult> ReserveSpecialOfferFlight([FromBody] ReserveFlightDto dto)
-        //{
-        //    try
-        //    {
-        //        string userId = User.Claims.First(c => c.Type == "UserID").Value;
-        //        var user = (User)await unitOfWork.UserManager.FindByIdAsync(userId);
+        [HttpPost]
+        [Route("reserve-special-offer-flight")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> ReserveSpecialOfferFlight([FromBody] ReserveDto dto)
+        {
+            try
+            {
+                string userId = User.Claims.First(c => c.Type == "UserID").Value;
+                string userRole = User.Claims.First(c => c.Type == "Roles").Value;
 
-        //        string userRole = User.Claims.First(c => c.Type == "Roles").Value;
+                if (!userRole.Equals("RegularUser"))
+                {
+                    return Unauthorized();
+                }
 
-        //        if (!userRole.Equals("RegularUser"))
-        //        {
-        //            return Unauthorized();
-        //        }
 
-        //        if (user == null)
-        //        {
-        //            return NotFound("User not found");
-        //        }
+                HttpStatusCode result = (await httpClient.GetAsync(String.Format("http://usermicroservice:80/api/user/find-user?id={0}", userId))).StatusCode;
 
-        //        var specialOffer = await unitOfWork.SpecialOfferRepository.GetSpecialOfferById(dto.Id);
+                if (result.Equals(HttpStatusCode.NotFound))
+                {
+                    return NotFound();
+                }
 
-        //        if (specialOffer == null)
-        //        {
-        //            return NotFound("Selected special offer is not found");
-        //        }
+                var specialOffer = await unitOfWork.SpecialOfferRepository.GetSpecialOfferById(dto.Id);
 
-        //        if (specialOffer.IsReserved)
-        //        {
-        //            return BadRequest("Already reserved");
-        //        }
+                if (specialOffer == null)
+                {
+                    return NotFound("Selected special offer is not found");
+                }
 
-        //        var flightReservation = new FlightReservation()
-        //        {
-        //            User = user,
-        //            Price = specialOffer.NewPrice,
-        //            ReservationDate = DateTime.Now
-        //        };
+                if (specialOffer.IsReserved)
+                {
+                    return BadRequest("Already reserved");
+                }
 
-        //        var tickets = new List<Ticket>();
+                var flightReservation = new FlightReservation()
+                {
+                    UserId = userId,
+                    Price = specialOffer.NewPrice,
+                    ReservationDate = DateTime.Now
+                };
 
-        //        foreach (var seat in specialOffer.Seats)
-        //        {
-        //            if (seat.Flight.TakeOffDateTime < DateTime.Now)
-        //            {
-        //                return BadRequest("One of flights is in past");
-        //            }
+                var tickets = new List<Ticket>();
 
-        //            tickets.Add(new Ticket()
-        //            {
-        //                Seat = seat,
-        //                SeatId = seat.SeatId,
-        //                Reservation = flightReservation,
-        //                Passport = dto.Passport
-        //            });
-        //        }
+                foreach (var seat in specialOffer.Seats)
+                {
+                    if (seat.Flight.TakeOffDateTime < DateTime.Now)
+                    {
+                        return BadRequest("One of flights is in past");
+                    }
 
-        //        flightReservation.Tickets = tickets;
+                    tickets.Add(new Ticket()
+                    {
+                        Seat = seat,
+                        SeatId = seat.SeatId,
+                        Reservation = flightReservation,
+                        Passport = dto.Passport
+                    });
+                }
 
-        //        user.FlightReservations.Add(flightReservation);
-        //        specialOffer.IsReserved = true;
+                flightReservation.Tickets = tickets;
 
-        //        try
-        //        {
-        //            unitOfWork.SpecialOfferRepository.Update(specialOffer);
-        //            unitOfWork.UserRepository.Update(user);
+                specialOffer.IsReserved = true;
 
-        //            await unitOfWork.Commit();
-        //        }
-        //        catch (DbUpdateConcurrencyException ex)
-        //        {
-        //            return BadRequest("Something is modified in the meantime, or reserved by another user");
-        //        }
-        //        catch (Exception)
-        //        {
-        //            return StatusCode(500, "Failed to reserve special offer");
-        //        }
+                unitOfWork.SpecialOfferRepository.Update(specialOffer);
+                await unitOfWork.Commit();
 
-        //        try
-        //        {
-        //            await unitOfWork.AuthenticationRepository.SendTicketConfirmationMail(user, flightReservation);
-        //        }
-        //        catch (Exception)
-        //        {
-        //            return StatusCode(500, "Successfully reserved, but failed to send email");
-        //        }
+                List<FlightInfo> userFlightInfo = new List<FlightInfo>();
 
-        //        return Ok();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return StatusCode(500, "Failed to reserve special offer");
-        //    }
-        //}
+                foreach (var seat in specialOffer.Seats)
+                {
+                    userFlightInfo.Add(new FlightInfo()
+                    {
+                        FlightNumber = seat.Flight.FlightNumber,
+                        From = seat.Flight.From.City,
+                        To = seat.Flight.To.City,
+                        Departure =seat.Flight.TakeOffDateTime,
+                        Arrival = seat.Flight.LandingDateTime,
+                        TripTime = seat.Flight.TripTime,
+                        TripLength = seat.Flight.tripLength,
+                        SeatClass = seat.Class,
+                        SeatRow = seat.Row,
+                        SeatColumn = seat.Column,
+                        TicketPrice = seat.Price
+                    });
+                }
+
+                TripInfo tripInfo = new TripInfo()
+                {
+                    TotalPrice = specialOffer.NewPrice,
+                    FlightInfo = userFlightInfo
+                };
+
+
+                try
+                {
+                    //send to user
+                    var @event = new SendMailIntegrationEvent(userId, tripInfo);
+                    eventBus.Publish(@event);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("failed to send email");
+                }
+
+                return Ok();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                return BadRequest("Something is modified in the meantime, or reserved by another user");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Failed to reserve special offer");
+            }
+        }
 
 
         [HttpGet]

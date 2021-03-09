@@ -23,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -51,7 +52,11 @@ namespace RACSMicroservice
                              //    "ContainerConnection" :
                              //    "MySqlConnection"));
 
-                             options.UseMySql(Configuration.GetConnectionString("ContainerConnection"));
+                             options.UseMySql(Configuration.GetConnectionString("ContainerConnection"), builder => 
+                             { 
+                                 builder.EnableRetryOnFailure();
+                                 builder.MigrationsAssembly("RACSMicroservice");
+                             });
                          });
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -159,6 +164,8 @@ namespace RACSMicroservice
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            string s = Assembly.GetExecutingAssembly().FullName;
+            Console.WriteLine(s);
             Helpers.PopulateDatabase.PreparePopulation(app);
 
             if (env.IsDevelopment())
