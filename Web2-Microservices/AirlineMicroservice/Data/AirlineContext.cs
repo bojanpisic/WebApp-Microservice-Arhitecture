@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AirlineMicroservice.Data
 {
-    public class AirlineContext : IdentityDbContext
+    public class AirlineContext : DbContext
     {
         public AirlineContext(DbContextOptions<AirlineContext> options)
                                                 : base(options)

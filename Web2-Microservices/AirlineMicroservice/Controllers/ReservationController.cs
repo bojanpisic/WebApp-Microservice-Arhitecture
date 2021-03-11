@@ -46,7 +46,6 @@ namespace AirlineMicroservice.Controllers
                     return Unauthorized();
                 }
 
-                Console.WriteLine("INVITER ID: " + userId);
 
                 var result = (await httpClient.GetStringAsync(String.Format("http://usermicroservice:80/api/user/find-userbyid?id={0}",userId)));
 

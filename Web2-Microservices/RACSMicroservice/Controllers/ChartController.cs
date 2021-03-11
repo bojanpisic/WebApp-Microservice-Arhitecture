@@ -70,7 +70,7 @@ namespace RACSMicroservice.Controllers
 
                 foreach (var item in cars)
                 {
-                    if (item.Rents.FirstOrDefault(rent => rent.RentDate == day) != null)
+                    if (item.Rents.FirstOrDefault(rent => rent.RentDate.Date == day) != null)
                     {
                         rentNum++;
                     }
@@ -234,9 +234,9 @@ namespace RACSMicroservice.Controllers
 
                 foreach (var item in cars)
                 {
-                    if ((r = item.Rents.FirstOrDefault(rent => daysOfMonth.Contains(rent.RentDate))) != null)
+                    if ((r = item.Rents.FirstOrDefault(rent => daysOfMonth.Contains(rent.RentDate.Date))) != null)
                     {
-                        var s = stats.Find(s => s.Item1 == r.TakeOverDate);
+                        var s = stats.Find(s => s.Item1 == r.TakeOverDate.Date);
                         int index = stats.IndexOf(s);
 
                         stats[index] = new Tuple<DateTime, int>(s.Item1, s.Item2 + 1);
@@ -317,9 +317,9 @@ namespace RACSMicroservice.Controllers
 
                 foreach (var item in cars)
                 {
-                    if ((r = item.Rents.FirstOrDefault(rent => daysOfWeek.Contains(rent.RentDate))) != null)
+                    if ((r = item.Rents.FirstOrDefault(rent => daysOfWeek.Contains(rent.RentDate.Date))) != null)
                     {
-                        var s = income.Find(s => s.Item1 == r.RentDate);
+                        var s = income.Find(s => s.Item1 == r.RentDate.Date);
                         int index = income.IndexOf(s);
 
                         income[index] = new Tuple<DateTime, float>(s.Item1, s.Item2 + r.TotalPrice);
@@ -403,9 +403,9 @@ namespace RACSMicroservice.Controllers
 
                 foreach (var item in cars)
                 {
-                    if ((r = item.Rents.FirstOrDefault(rent => daysOfMonth.Contains(rent.RentDate))) != null)
+                    if ((r = item.Rents.FirstOrDefault(rent => daysOfMonth.Contains(rent.RentDate.Date))) != null)
                     {
-                        var s = income.Find(s => s.Item1 == r.TakeOverDate);
+                        var s = income.Find(s => s.Item1 == r.TakeOverDate.Date);
                         int index = income.IndexOf(s);
 
                         income[index] = new Tuple<DateTime, float>(s.Item1, s.Item2 + r.TotalPrice);
@@ -486,7 +486,7 @@ namespace RACSMicroservice.Controllers
 
                     foreach (var item in cars)
                     {
-                        if ((r = item.Rents.FirstOrDefault(rent => daysOfMonth.Contains(rent.RentDate))) != null)
+                        if ((r = item.Rents.FirstOrDefault(rent => daysOfMonth.Contains(rent.RentDate.Date))) != null)
                         {
                             monthIncome += r.TotalPrice;
                         }

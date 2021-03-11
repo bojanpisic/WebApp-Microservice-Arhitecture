@@ -172,13 +172,13 @@ namespace RACSMicroservice.Controllers
                 foreach (var item in allCars)
                 {
 
-                    var sum = 0.0;
+                    float sum = 0;
                     foreach (var r in item.Rates)
                     {
                         sum += r.Rate;
                     }
 
-                    float rate = sum == 0 ? 0 : (float)sum / item.Rates.ToArray().Length;
+                    float rate = sum == 0 ? 0 : sum / item.Rates.Count;
 
                     objs.Add(new
                     {
@@ -195,6 +195,8 @@ namespace RACSMicroservice.Controllers
                         racs.Address.State,
                         rate = rate
                     });
+
+                    
                 }
 
                 foreach (var branch in racs.Branches)
@@ -272,13 +274,13 @@ namespace RACSMicroservice.Controllers
 
                 foreach (var item in res) //bilo allcars
                 {
-                    var sum = 0.0;
+                    float sum = 0;
                     foreach (var r in item.Rates)
                     {
                         sum += r.Rate;
                     }
 
-                    float rate = sum == 0 ? 0 : (float)sum / item.Rates.ToArray().Length;
+                    float rate = sum == 0 ? 0 : sum / item.Rates.Count;
 
                     objs.Add(new
                     {
@@ -653,13 +655,12 @@ namespace RACSMicroservice.Controllers
                     specOffDates.Add(new { From = item.FromDate, To = item.ToDate });
                 }
 
-                var sum = 0.0;
+                float sum = 0;
                 foreach (var r in car.Rates)
                 {
                     sum += r.Rate;
                 }
-
-                float rate = sum == 0 ? 0 : (float)sum / car.Rates.ToArray().Length;
+                float rate = sum == 0 ? 0 : sum / car.Rates.Count;
 
                 var obj = new
                 {

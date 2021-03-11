@@ -26,6 +26,7 @@ namespace AirlineMicroservice.IntegrationEvents.EventHandling
                 var flightReservation = new FlightReservation()
                 {
                     UserId = @event.UserId,
+                    ReservationDate = DateTime.Now
                 };
 
                 var tickets = new List<Ticket>();

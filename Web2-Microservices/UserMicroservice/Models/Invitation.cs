@@ -15,9 +15,11 @@ namespace UserMicroservice.Models
         public int SeatId { get; set; }
         public float Price { get; set; }
         public DateTime Expires { get; set; }
+        public bool Accepted { get; set; }
 
         public Invitation()
         {
+            this.Accepted = false;
         }
     }
 }

@@ -39,8 +39,8 @@ namespace RACSMicroservice.Repository
         {
             return await context.Cars
                 .Include(c => c.Branch)
-                .ThenInclude(b => b.RentACarService)
-                .ThenInclude(r => r.Address)
+                    .ThenInclude(b => b.RentACarService)
+                        .ThenInclude(r => r.Address)
                 .Include(c => c.Rates)
                 .Where(c => c.BranchId == id)
                 .ToListAsync();

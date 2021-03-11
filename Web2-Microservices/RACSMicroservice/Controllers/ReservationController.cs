@@ -348,7 +348,7 @@ namespace RACSMicroservice.Controllers
 
                 var rents = await unitOfWork.CarRentRepository.GetRents(userId);
                 var retVal = new List<object>();
-                Console.WriteLine(rents.Count());
+
                 foreach (var rent in rents)
                 {
                     var sum = 0.0;
@@ -356,9 +356,9 @@ namespace RACSMicroservice.Controllers
                     {
                         sum += item.Rate;
                     }
-
+                    Console.WriteLine(rent.RentedCar.Rates.Count);
                     var rate = sum == 0.0 ? 0.0 : sum / rent.RentedCar.Rates.Count;
-
+                    Console.WriteLine("RATE RENT " +rate);
                     retVal.Add(new
                     {
                         brand = rent.RentedCar.Brand,

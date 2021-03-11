@@ -63,12 +63,11 @@ namespace AirlineMicroservice.Controllers
 
                 var reservations = await unitOfWork.FlightReservationRepository.Get(f =>
                                                         f.Tickets.FirstOrDefault(t => t.Seat.Flight.Airline.AdminId == userId) != null);
-
                 int rentNum = 0;
 
                 foreach (var item in reservations)
                 {
-                    if (item.ReservationDate == day)
+                    if (item.ReservationDate.Date == day)
                     {
                         rentNum++;
                     }
@@ -143,9 +142,9 @@ namespace AirlineMicroservice.Controllers
                 
                 foreach (var item in reservations)
                 {
-                    if (daysOfWeek.Contains(item.ReservationDate))
+                    if (daysOfWeek.Contains(item.ReservationDate.Date))
                     {
-                        var s = stats.Find(s => s.Item1 == item.ReservationDate);
+                        var s = stats.Find(s => s.Item1 == item.ReservationDate.Date);
                         int index = stats.IndexOf(s);
 
                         stats[index] = new Tuple<DateTime, int>(s.Item1, s.Item2 + 1);
@@ -224,9 +223,9 @@ namespace AirlineMicroservice.Controllers
 
                 foreach (var item in reservations)
                 {
-                    if (daysOfMonth.Contains(item.ReservationDate))
+                    if (daysOfMonth.Contains(item.ReservationDate.Date))
                     {
-                        var s = stats.Find(s => s.Item1 == item.ReservationDate);
+                        var s = stats.Find(s => s.Item1 == item.ReservationDate.Date);
                         int index = stats.IndexOf(s);
 
                         stats[index] = new Tuple<DateTime, int>(s.Item1, s.Item2 + 1);
@@ -303,9 +302,9 @@ namespace AirlineMicroservice.Controllers
 
                 foreach (var item in reservations)
                 {
-                    if (daysOfWeek.Contains(item.ReservationDate))
+                    if (daysOfWeek.Contains(item.ReservationDate.Date))
                     {
-                        var s = income.Find(s => s.Item1 == item.ReservationDate);
+                        var s = income.Find(s => s.Item1 == item.ReservationDate.Date);
                         int index = income.IndexOf(s);
 
                         income[index] = new Tuple<DateTime, float>(s.Item1, s.Item2 + item.Price);
@@ -386,9 +385,9 @@ namespace AirlineMicroservice.Controllers
 
                 foreach (var item in reservations)
                 {
-                    if (daysOfMonth.Contains(item.ReservationDate))
+                    if (daysOfMonth.Contains(item.ReservationDate.Date))
                     {
-                        var s = income.Find(s => s.Item1 == item.ReservationDate);
+                        var s = income.Find(s => s.Item1 == item.ReservationDate.Date);
                         int index = income.IndexOf(s);
 
                         income[index] = new Tuple<DateTime, float>(s.Item1, s.Item2 + item.Price);
@@ -469,7 +468,7 @@ namespace AirlineMicroservice.Controllers
 
                     foreach (var item in reservations)
                     {
-                        if (daysOfMonth.Contains(item.ReservationDate))
+                        if (daysOfMonth.Contains(item.ReservationDate.Date))
                         {
                             monthIncome += item.Price;
                         }

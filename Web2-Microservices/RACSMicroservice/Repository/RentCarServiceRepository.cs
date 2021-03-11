@@ -30,10 +30,11 @@ namespace RACSMicroservice.Repository
         {
             return await context.RentACarServices
                 .Include(r => r.Cars)
+                    .ThenInclude(c => c.Rates)
                 .Include(r => r.Address)
                 .Include(r => r.Branches)
-                .ThenInclude(b => b.Cars)
-                .ThenInclude(c => c.Rates)
+                    .ThenInclude(b => b.Cars)
+                        .ThenInclude(c => c.Rates)
                 .FirstOrDefaultAsync(r => r.AdminId == adminId);
         }
 

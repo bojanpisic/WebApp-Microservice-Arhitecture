@@ -573,6 +573,11 @@ namespace UserMicroservice.Controllers
                     return BadRequest("Cant find your invitation");
                 }
 
+                invitation.Accepted = true;
+
+                unitOfWork.TripInvitationRepository.Update(invitation);
+                await unitOfWork.Commit();
+
                 var @event = new CreateFlightReservationEvent(invitation.InvitationId, user.Id, invitation.SeatId,dto.Passport, invitation.Price);
 
                 eventBus.Publish(@event);
@@ -614,8 +619,12 @@ namespace UserMicroservice.Controllers
                     return BadRequest("Cant find your invitation");
                 }
 
+                unitOfWork.TripInvitationRepository.Delete(invitation);
+                await unitOfWork.Commit();
+
                 var @event1 = new RejectTripInvitationEvent(invitation.SeatId, invitation.InvitationId);
                 eventBus.Publish(@event1);
+
 
                 return Ok();
             }
@@ -667,6 +676,7 @@ namespace UserMicroservice.Controllers
 
                     retVal.Add(new
                     {
+                        accepted = invite.Accepted,
                         column = data.column,
                         row = data.row,
                         clas = data.class1,
