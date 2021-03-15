@@ -295,17 +295,62 @@ namespace AirlineMicroservice.Controllers
                 }
 
 
-                var @event = new RateFlightIntegrationEvent(userId, dto.Id, dto.Rate);
+                var flights = await unitOfWork.FlightRepository.Get(f => f.FlightId == dto.Id, null, "Rates");
 
-                try
+                var flight = flights.FirstOrDefault();
+
+                if (flight == null)
                 {
-                    eventBus.Publish(@event);
+                    return BadRequest("Flight not found");
                 }
-                catch (Exception)
+
+                if (flight.Rates.FirstOrDefault(r => r.UserId == userId) != null)
                 {
-                    Console.WriteLine("Failed to publish rateFlight event");
-                    return StatusCode(500, "Failed to rate flight.");
+                    return BadRequest("You already rate this flight");
                 }
+
+                //PROVERA DA LI JE LETIO NA OVOM LETU
+                var flightReservations = await unitOfWork.FlightReservationRepository
+                                                .Get(f => f.Tickets.FirstOrDefault(t => t.Seat.Flight == flight) != null && f.UserId == userId,
+                                                null,
+                                                "Tickets");
+
+                var flightReservation = flightReservations.FirstOrDefault();
+
+                if (flightReservation == null)
+                {
+                    return BadRequest("You didnt reserve seat on this flight. Cant rate.");
+                }
+
+                var ticketOfReservation = flightReservation.Tickets.FirstOrDefault();
+                if (ticketOfReservation == null)
+                {
+                    return BadRequest();
+                }
+
+                var ticket = await unitOfWork.TicketRepository.GetTicket(ticketOfReservation.TicketId);
+
+                if (ticket == null)
+                {
+                    return BadRequest();
+                }
+
+                if (ticket.Seat.Flight.LandingDateTime >= DateTime.Now)
+                {
+                    return BadRequest("You can rate flight after landing");
+                }
+
+                flight.Rates.Add(new FlightRate()
+                {
+                    Rate = dto.Rate,
+                    UserId = userId,
+                    Flight = flight
+                });
+
+                unitOfWork.FlightRepository.Update(flight);
+
+                await unitOfWork.Commit();
+
 
                 return Ok();
             }

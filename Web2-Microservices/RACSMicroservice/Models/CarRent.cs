@@ -16,7 +16,7 @@ namespace RACSMicroservice.Models
         public Car RentedCar { get; set; }
         public string UserId { get; set; }
         public DateTime RentDate { get; set; }
-        //public FlightReservation FlightReservation { get; set; }
+        public int? TripReservationId { get; set; }
 
         public CarRent()
         {

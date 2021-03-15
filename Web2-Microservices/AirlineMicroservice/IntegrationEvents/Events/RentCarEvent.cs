@@ -8,7 +8,7 @@ namespace AirlineMicroservice.IntegrationEvents.Events
 {
     public class RentCarEvent:IntegrationEvent
     {
-        public RentCarEvent(int carId, DateTime takeOverDate, DateTime returnDate, string takeOverCity, string returnCity, string userId, List<int> ticketIds)
+        public RentCarEvent(int carId, DateTime takeOverDate, DateTime returnDate, string takeOverCity, string returnCity, string userId, List<int> ticketIds, int tripReservationId)
         {
             CarId = carId;
             TakeOverDate = takeOverDate;
@@ -17,10 +17,13 @@ namespace AirlineMicroservice.IntegrationEvents.Events
             ReturnCity = returnCity;
             UserId = userId;
             TicketIds = ticketIds;
+            TripReservationId = tripReservationId;
         }
 
         public List<int> TicketIds { get; set; }
         public int CarId { get; set; }
+        public int TripReservationId { get; set; }
+
         public DateTime TakeOverDate { get; set; }
         public DateTime ReturnDate { get; set; }
         public string TakeOverCity { get; set; }

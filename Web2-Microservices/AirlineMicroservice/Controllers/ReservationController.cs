@@ -91,6 +91,7 @@ namespace AirlineMicroservice.Controllers
                 {
                     UserId = userId,
                     ReservationDate = DateTime.Now,
+                    IsCarRented = dto.CarReservation != null
                 };
 
                 var myTickets = new List<Ticket>();
@@ -280,7 +281,7 @@ namespace AirlineMicroservice.Controllers
 
 
                     var @event = new RentCarEvent(dto.CarReservation.CarRentId, dto.CarReservation.TakeOverDate, dto.CarReservation.ReturnDate,
-                        dto.CarReservation.TakeOverCity, dto.CarReservation.ReturnCity, userId, ticketIds);
+                        dto.CarReservation.TakeOverCity, dto.CarReservation.ReturnCity, userId, ticketIds, myFlightReservation.FlightReservationId);
                     eventBus.Publish(@event);
                 }
 
@@ -382,47 +383,21 @@ namespace AirlineMicroservice.Controllers
                     listOfSeatsToUpdate.Add(ticket.Seat);
                 }
 
-                //CarSpecialOffer carSpecOffer = null;
+                if (reservation.IsCarRented)
+                {
+                    var @event = new CancelCarRentEvent(reservation.FlightReservationId);
+                    eventBus.Publish(@event);
+                }
 
-                //if (reservation.CarRent != null)
-                //{
-                //    var specialOffers = await unitOfWork.RACSSpecialOfferRepository.Get(s => s.Car == reservation.CarRent.RentedCar
-                //                                    && s.FromDate == reservation.CarRent.TakeOverDate && s.ToDate == reservation.CarRent.ReturnDate);
-                //    carSpecOffer = specialOffers.FirstOrDefault();
 
-                //    if (carSpecOffer != null)
-                //    {
-                //        carSpecOffer.IsReserved = false;
-                //    }
-                //    user.CarRents.Remove(reservation.CarRent);
-                //    reservation.CarRent.RentedCar.Rents.Remove(reservation.CarRent);
-                //}
-
-                //try
-                //{
                 foreach (var seat in listOfSeatsToUpdate)
                 {
                     unitOfWork.SeatRepository.Update(seat);
                 }
 
-                //    unitOfWork.UserRepository.Update(user);
-                //    if (reservation.CarRent != null)
-                //    {
-                //        unitOfWork.CarRepository.Update(reservation.CarRent.RentedCar);
-                //    }
-                //    if (carSpecOffer != null)
-                //    {
-                //        unitOfWork.RACSSpecialOfferRepository.Update(carSpecOffer);
-                //    }
-
                 unitOfWork.FlightReservationRepository.Delete(reservation);
 
                 await unitOfWork.Commit();
-                //}
-                //catch (Exception)
-                //{
-                //    return StatusCode(500, "Failed to cancel reservation");
-                //}
 
                 return Ok();
             }

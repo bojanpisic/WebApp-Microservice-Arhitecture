@@ -220,6 +220,7 @@ namespace RACSMicroservice
 
             services.AddTransient<CreateRACSIntegrationEventHandler>();
             services.AddTransient<RentCarEventHandler>();
+            services.AddTransient<CancelCarRentEventHandler>();
 
         }
 
@@ -229,6 +230,7 @@ namespace RACSMicroservice
 
             eventBus.Subscribe<CreateRACSIntegrationEvent, CreateRACSIntegrationEventHandler>();
             eventBus.Subscribe<RentCarEvent, RentCarEventHandler>();
+            eventBus.Subscribe<CancelCarRentEvent, CancelCarRentEventHandler>();
 
         }
     }

@@ -95,12 +95,9 @@ namespace RACSMicroservice.IntegrationEvents.EventHandling
 
                 if (!citiesToReturn.Contains(@event.ReturnCity))
                 {
-                    //return BadRequest("Cant return to selected city");
                     return;
                 }
 
-                //using (var transaction = _context.Database.BeginTransactionAsync())
-                //{
                 var carRent = new CarRent()
                 {
                     TakeOverCity = @event.TakeOverCity,
@@ -110,7 +107,8 @@ namespace RACSMicroservice.IntegrationEvents.EventHandling
                     RentedCar = car,
                     UserId = @event.UserId,
                     TotalPrice = (await CalculateTotalPrice(@event.TakeOverDate, @event.ReturnDate, car.PricePerDay)),
-                    RentDate = DateTime.Now
+                    RentDate = DateTime.Now,
+                    TripReservationId = @event.TripReservationId
                 };
 
                 car.Rents.Add(carRent);

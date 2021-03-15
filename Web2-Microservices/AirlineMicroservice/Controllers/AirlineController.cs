@@ -584,17 +584,38 @@ namespace AirlineMicroservice.Controllers
                     return BadRequest("Invalid rate. Rate from 1 to 5");
                 }
 
-                var @event = new RateAirlineIntegrationEvent(userId, dto.Id, dto.Rate);
+                var airlines = await unitOfWork.AirlineRepository.Get(a => a.AirlineId == dto.Id, null, "Rates");
 
-                try
+                var airline = airlines.FirstOrDefault();
+
+                if (airline == null)
                 {
-                    eventBus.Publish(@event);
+                    return BadRequest("Airline not found");
                 }
-                catch (Exception)
+
+                if (airline.Rates.FirstOrDefault(r => r.UserId == userId) != null)
                 {
-                    Console.WriteLine("Failed to publish rateAirline event");
-                    return StatusCode(500, "Failed to rate airline.");
+                    return BadRequest("You already rate this airlien company");
                 }
+                //PROVERA DA LI JE LETIO OVOM KOMPANIJOM
+                var flightReservations = await unitOfWork.FlightReservationRepository
+                                                .Get(f => f.Tickets.FirstOrDefault(t =>
+                                                                                    t.Seat.Flight.Airline == airline
+                                                                                    && t.Seat.Flight.LandingDateTime >= DateTime.Now) != null
+                                                                                    && f.UserId == userId,
+                                                null,
+                                                "Tickets");
+
+                airline.Rates.Add(new AirlineRate()
+                {
+                    Rate = dto.Rate,
+                    UserId = userId,
+                    Airline = airline
+                });
+
+                unitOfWork.AirlineRepository.Update(airline);
+
+                await unitOfWork.Commit();
 
                 return Ok();
 
