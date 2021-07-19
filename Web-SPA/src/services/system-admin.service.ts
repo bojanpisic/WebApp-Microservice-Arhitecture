@@ -30,8 +30,12 @@ export class SystemAdminService {
       ConfirmPassword: data.confirmPassword,
       Password: data.password,
       Name: data.companyName,
-      Address: { City: data.city, State: data.state, Lat: data.lat, Lon: data.lon }
+      // Address: { City: data.city, State: data.state, Lat: data.lat, Lon: data.lon }
+      City: data.city, State: data.state, Lat: data.lat, Lon: data.lon
     };
+
+    console.log(body);
+
     return this.http.post(this.BaseURI + '/systemadmin/register-airline', body);
   }
 
@@ -43,7 +47,9 @@ export class SystemAdminService {
       ConfirmPassword: data.confirmPassword,
       Password: data.password,
       Name: data.companyName,
-      Address: { City: data.city, State: data.state, Lat: data.lat, Lon: data.lon }
+      // Address: { City: data.city, State: data.state, Lat: data.lat, Lon: data.lon }
+      City: data.city, State: data.state, Lat: data.lat, Lon: data.lon
+
     };
     return this.http.post(this.BaseURI + '/systemadmin/register-racservice', body);
   }

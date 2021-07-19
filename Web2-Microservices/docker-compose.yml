@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   ocelotapi:
-    image: ${DOCKER_REGISTRY-}ocelotapi
+    image: ${DOCKER_REGISTRY-}ocelotgateway
     container_name: ocelot
     ports:
       - 8084:80
@@ -72,8 +72,17 @@ services:
     volumes:
       - mysqldb:/var/lib/mysql
 
-
-
+  chatmicroservice:
+    container_name: chatmicroservice
+    image: ${DOCKER_REGISTRY-}chatmicroservice
+    build:
+      context: .
+      dockerfile: ChatMicroservice/Dockerfile
+    ports:
+      - 8085:80
+    depends_on:
+      - mysql-server
+      - usermicroservice
 
 volumes:
   mysqldb:

@@ -96,7 +96,7 @@ export class FlightReservationComponent implements OnInit {
         this.nextStep();
       },
       err => {
-        this.toastr.error(err.statusText, 'Error!');
+        this.toastr.error(err.error, 'Error!');
       }
     );
   }
@@ -192,7 +192,6 @@ export class FlightReservationComponent implements OnInit {
       this.pickedSeat = null;
       return;
     }
-    console.log('STIGAO PASENGER!!!!!!!' + passenger);
     const seatIndex = this.flights[this.index].seats.indexOf(this.pickedSeat);
     if (passenger !== null) {
       // TREBA U BAZU ZAPISATI DA JE ZAUZETO
@@ -206,7 +205,8 @@ export class FlightReservationComponent implements OnInit {
       } else {
         if (passenger.passport === undefined) {
           // zovi frienda preko passenger.id
-          this.friends.push({id: passenger, seatId: this.pickedSeat.seatId});
+          console.log(passenger.friendsId);
+          this.friends.push({id: passenger.friendsId, seatId: this.pickedSeat.seatId});
         } else {
           this.unregisteredFriends.push({
             firstName: passenger.firstName,
@@ -229,9 +229,7 @@ export class FlightReservationComponent implements OnInit {
         }
       });
       if (isTaken) {
-        console.log('SEDISTE JE ZAUZETO ' + this.pickedSeat.seatId);
         let ind;
-        console.log('SVA SEDISTA:');
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.pickedSeats[this.index].seats.length; i++) {
           console.log(this.pickedSeats[this.index].seats[i].seatId);
@@ -239,11 +237,9 @@ export class FlightReservationComponent implements OnInit {
             ind = i;
           }
         }
-        console.log('ind:' + ind);
         this.pickedSeats[this.index].seats.splice(ind, 1);
         const isMySeat = this.mySeats[this.index].seatId == this.pickedSeat.seatId;
         if (isMySeat) {
-          console.log('OVO JE MOJE SEDISTE');
           this.mySeats[this.index].seatId = null;
           let isEmpty = true;
           this.mySeats.forEach(element => {
@@ -266,7 +262,6 @@ export class FlightReservationComponent implements OnInit {
           }
         }
         if (isFriendsSeat) {
-          console.log('OVO JE FRENDOVO SEDISTE');
           console.log(indexOfFriendsSeat);
           this.friends.splice(indexOfFriendsSeat, 1);
         }
@@ -285,11 +280,6 @@ export class FlightReservationComponent implements OnInit {
       // OVDE JE NESTO SA BRISANJEM
     }
 
-    console.log(this.mySeats);
-    console.log(this.myPassport);
-    console.log(this.friends);
-    console.log(this.unregisteredFriends);
-    console.log(this.pickedSeats);
     this.blur = false;
     this.fillInfo = false;
     this.pickedSeat = null;
@@ -328,11 +318,10 @@ export class FlightReservationComponent implements OnInit {
       const data = {
         mySeatsIds: this.mySeats.map(res => res.seatId),
         friends: this.friends.map(res => {
-          return {id: res.id.friendsId, seatId: res.seatId};
+          return {id: res.id, seatId: res.seatId};
         }),
         unregisteredFriends: this.unregisteredFriends
       };
-      console.log('SALJEM' + data);
       this.airlineService.getTripInfo(data).subscribe(
         (res: any) => {
           this.confirmData = {
@@ -347,11 +336,14 @@ export class FlightReservationComponent implements OnInit {
           this.showConfirmReservation = true;
         },
         err => {
+              console.log(err);
+
           // tslint:disable-next-line: triple-equals
           if (err.status == 400) {
             // this.toastr.error('Incorrect username or password.', 'Authentication failed.');
             this.toastr.error(err.error, 'Error!');
           } else {
+            console.log(err);
             this.toastr.error(err.error, 'Error!');
           }
         }
@@ -410,11 +402,16 @@ export class FlightReservationComponent implements OnInit {
             this.router.navigate(['/' + this.userId + '/home']);
           },
           err => {
+            console.log(err);
+
             // tslint:disable-next-line: triple-equals
             if (err.status == 400) {
+
               // this.toastr.error('Incorrect username or password.', 'Authentication failed.');
               this.toastr.error(err.error, 'Error!');
             } else {
+              console.log(err);
+              
               this.toastr.error(err.error, 'Error!');
             }
           }

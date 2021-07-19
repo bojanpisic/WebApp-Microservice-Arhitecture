@@ -65,4 +65,12 @@ export class RentACarServiceInfoComponent implements OnInit {
       this.router.navigate(['/' + this.userId + '/rent-a-car-services']);
     }
   }
+
+  seeOffers() {
+    if (this.userId === undefined) {
+      this.router.navigate(['/rent-a-car-services/' + this.id + '/rent-a-car-service-info/car-special-offers']);
+    } else {
+      this.router.navigate(['/' + this.userId + '/rent-a-car-services/' + this.id + '/rent-a-car-service-info/car-special-offers']);
+    }
+  }
 }

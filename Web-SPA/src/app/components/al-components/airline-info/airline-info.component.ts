@@ -55,7 +55,7 @@ export class AirlineInfoComponent implements OnInit {
         this.isOk = true;
       },
       err => {
-        this.toastr.error(err.statusText, 'Error!');
+        this.toastr.error(err.error, 'Error!');
       }
     );
   }
@@ -65,6 +65,14 @@ export class AirlineInfoComponent implements OnInit {
       this.router.navigate(['/airlines']);
     } else {
       this.router.navigate(['/' + this.userId + '/airlines']);
+    }
+  }
+
+  seeOffers() {
+    if (this.userId === undefined) {
+      this.router.navigate(['/airlines/' + this.id + '/airline-info/flight-special-offers']);
+    } else {
+      this.router.navigate(['/' + this.userId + '/airlines/' + this.id + '/airline-info/flight-special-offers']);
     }
   }
 }

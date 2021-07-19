@@ -7,7 +7,7 @@
     <div class="image"></div>
     <span id="name">{{message.senderFirstName}} {{message.senderLastName}}</span>
     <div class="text">
-        <span id="text">I would like to be your friend!</span>
+        <span id="text">{{message.text}}</span>
     </div>
     <!-- <button id="delete" (click)='deleteMessage()'>Delete</button> -->
     <button *ngIf="!message.accepted" id="read" (click)='readMessage()'>OPEN</button>

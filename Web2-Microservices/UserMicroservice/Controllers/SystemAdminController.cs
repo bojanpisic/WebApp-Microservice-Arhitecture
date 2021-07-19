@@ -32,7 +32,7 @@ namespace UserMicroservice.Controllers
 
       
         [HttpPost("register-systemadmin")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
         public async Task<IActionResult> RegisterSystemAdmin([FromBody] RegisterAdminDto userDto)
         {

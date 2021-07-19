@@ -13,6 +13,7 @@
   "dependencies": {
     "@agm/core": "^1.1.0",
     "@angular/animations": "~9.0.6",
+    "@angular/cdk": "^9.2.4",
     "@angular/common": "~9.0.6",
     "@angular/compiler": "~9.0.6",
     "@angular/core": "~9.0.6",
@@ -21,6 +22,7 @@
     "@angular/platform-browser": "~9.0.6",
     "@angular/platform-browser-dynamic": "~9.0.6",
     "@angular/router": "~9.0.6",
+    "@aspnet/signalr": "^1.0.27",
     "@progress/kendo-angular-common": "^1.0.0",
     "@progress/kendo-angular-dateinputs": "^4.3.0",
     "@progress/kendo-angular-intl": "^2.0.0",
@@ -29,6 +31,7 @@
     "@progress/kendo-theme-default": "latest",
     "angular-6-social-login": "^1.1.1",
     "angular-bootstrap-md": "^9.0.1",
+    "angular-webstorage-service": "^1.0.2",
     "angularx-social-login": "^3.2.1",
     "chart.js": "^2.9.3",
     "font-awesome": "^4.7.0",
@@ -40,7 +43,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.1102.2",
+    "@angular-devkit/build-angular": "~0.900.6",
     "@angular/cli": "~9.0.6",
     "@angular/compiler-cli": "~9.0.6",
     "@angular/language-service": "~9.0.6",

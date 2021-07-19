@@ -62,10 +62,10 @@ export class EditCarComponent implements OnInit {
           state: res.state,
           type: res.type,
           year: res.year,
+          rate: res.rate,
           imageUrl: (res.imageUrl === null) ? null : this.san.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${res.imageUrl}`)
         };
         this.car = car;
-        console.log(this.car);
         this.isOk = true;
         this.initForm();
         this.pickedCarType = this.car.type;
@@ -73,7 +73,6 @@ export class EditCarComponent implements OnInit {
         this.pricePerDay = this.car.pricePerDay;
       },
       err => {
-        console.log('dada' + err.status);
         // tslint:disable-next-line: triple-equals
         if (err.status == 400) {
           console.log(err);

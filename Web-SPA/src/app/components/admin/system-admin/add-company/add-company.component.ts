@@ -64,14 +64,15 @@ export class AddCompanyComponent implements OnInit {
 
   onRegister() {
     if (this.companyType === 'register-airline') {
-      console.log('OVDE');
+      console.log(this.data);
       const a = this.adminService.registerAirline(this.data).subscribe(
         (res: any) => {
           this.toastr.success('Success!');
           this.router.navigate(['/system-admin/' + this.adminId]);
         },
         err => {
-          this.toastr.error(err.statusText, 'Error.');
+          console.log(err);
+          this.toastr.error(err.error, 'Error.');
         }
       );
     } else {
@@ -81,7 +82,7 @@ export class AddCompanyComponent implements OnInit {
           this.router.navigate(['/system-admin/' + this.adminId]);
         },
         err => {
-          this.toastr.error(err.statusText, 'Error.');
+          this.toastr.error(err.error, 'Error.');
         }
       );
     }

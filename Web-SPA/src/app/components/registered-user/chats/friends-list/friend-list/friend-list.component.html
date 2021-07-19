@@ -1,0 +1,76 @@
+<!--NE BRISI OVO JE X-->
+<!--<svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: none; height: 16px; width: 16px; stroke: currentcolor; stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>-->
+<header>
+  <nav>
+    <div class="back" routerLink="/{{ userId }}/chats">
+      <svg
+        viewBox="0 0 16 16"
+        role="presentation"
+        aria-hidden="true"
+        focusable="false"
+        style="height: 1em; width: 1em; display: block"
+      >
+        <path
+          d="m10.8 16c-.4 0-.7-.1-.9-.4l-6.8-6.7c-.5-.5-.5-1.3 0-1.8l6.8-6.7c.5-.5 1.2-.5 1.7 0s .5 1.2 0 1.7l-5.8 5.9 5.8 5.9c.5.5.5 1.2 0 1.7-.2.3-.5.4-.8.4"
+        ></path>
+      </svg>
+    </div>
+    <div class="search" (click)="focusInput()">
+      <button>
+        <svg
+          aria-hidden="true"
+          role="presentation"
+          viewBox="0 0 32 32"
+          xmlns="http://www.w3.org/2000/svg"
+          style="
+            display: block;
+            fill: none;
+            height: 16px;
+            width: 16px;
+            stroke: currentcolor;
+            stroke-width: 4;
+            overflow: visible;
+          "
+        >
+          <g fill="none">
+            <path
+              d="m13 24c6.0751322 0 11-4.9248678 11-11 0-6.07513225-4.9248678-11-11-11-6.07513225 0-11 4.92486775-11 11 0 6.0751322 4.92486775 11 11 11zm8-3 9 9"
+            ></path>
+          </g>
+        </svg>
+        <input
+          id="searchInput"
+          type="text"
+          [(ngModel)]="searchText"
+          placeholder="Find your friend!"
+        />
+      </button>
+    </div>
+  </nav>
+</header>
+<main>
+  <ul class="my-friend" [ngClass]="{ blur: showSpinner }">
+    <div *ngIf="showEmpty" class="no-friends">
+      Can't find any friend to chat.
+    </div>
+    <li *ngFor="let user of friends | findFriend: searchText">
+      <div id="image" class="image"></div>
+      <span id="name">{{ user.firstName }} {{ user.lastName }}</span>
+      <span id="email"
+        ><i id="mail" class="material-icons">mail_outline</i>
+        {{ user.email }}</span
+      >
+      <span id="sendMsg" class="material-icons" (click)="sendMessage(user)"
+        >chat</span
+      >
+    </li>
+    <br />
+  </ul>
+  <div class="wrapper">
+    <div class="overlay" *ngIf="showSpinner">
+      <div class="spinner-wrapper">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+    </div>
+  </div>
+</main>

@@ -182,7 +182,9 @@ export class CompanyProfileComponent implements OnInit {
             this.toastr.success('Success!.');
           },
           err => {
-            this.toastr.error(err.statusText, 'Error.');
+            console.log(err);
+            console.log(err.error);
+            this.toastr.error(err.error, 'Error.');
           }
         );
       } else if (this.companyType === 'rac-profile') {
@@ -198,7 +200,7 @@ export class CompanyProfileComponent implements OnInit {
             this.toastr.success('Success!.');
           },
           err => {
-            this.toastr.error(err.statusText, 'Error.');
+            this.toastr.error(err.error, 'Error.');
           }
         );
       }

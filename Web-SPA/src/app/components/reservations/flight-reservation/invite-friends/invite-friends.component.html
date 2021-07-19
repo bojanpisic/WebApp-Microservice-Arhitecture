@@ -5,14 +5,14 @@
         </button>
         <span>Passenger info</span>
         <!-- <div class="price"></div> -->
-        <p>${{seat.price}}</p>
+        <p >${{seat.price}}</p>
     </div>
     <div class="seat" [ngStyle]="{'background-color': seat.class === 'F' ? '#8795fa'
                                                     : seat.class === 'B' ? '#fa8795'
                                                     : seat.class === 'E' ? '#3eb0f7'
                                                     : '#fab387'}">
-        <span>class</span><span>column</span><span>row</span>
-        <p>{{seat.class}}</p><p>{{seat.column}}</p><p>{{seat.row}}</p>
+        <span >class</span><span >column</span><span >row</span>
+        <p>{{seat.class}}</p><p >{{seat.column}}</p><p >{{seat.row}}</p>
     </div>
     <div class="content">
         <form *ngIf="option === 'fill' && pickSeatForMe" [formGroup]="form" (ngSubmit)="confirm()">

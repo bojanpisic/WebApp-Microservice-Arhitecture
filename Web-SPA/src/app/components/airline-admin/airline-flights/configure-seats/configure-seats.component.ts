@@ -80,6 +80,8 @@ export class ConfigureSeatsComponent implements OnInit {
               seatId: element.seatId
             };
             this.seats.push(new1);
+            console.log("LOAD ALL");
+            console.log(new1);
           });
           this.setEconomySeats();
           this.setFirstClassSeats();
@@ -89,7 +91,7 @@ export class ConfigureSeatsComponent implements OnInit {
         }
       },
       err => {
-        this.toastr.error(err.statusText, 'Error.');
+        this.toastr.error(err.error, 'Error.');
       }
     );
   }
@@ -102,12 +104,12 @@ export class ConfigureSeatsComponent implements OnInit {
     } else {
       column = ((index + 1) % 3 === 1) ? 'D' : ((index + 1) % 3 === 2) ? 'E' : 'F';
     }
-    console.log(row, column, classParam);
+    // console.log(row, column, classParam);
     let previousSeat = this.findPreviosSeat(row, column, classParam);
     if (previousSeat === 'NEMA') {
       previousSeat = {price: 100};
     }
-    console.log(previousSeat);
+    // console.log(previousSeat);
     const data = {
       // tslint:disable-next-line:object-literal-shorthand
       column: column,
@@ -122,7 +124,7 @@ export class ConfigureSeatsComponent implements OnInit {
         this.loadAll();
       },
       err => {
-        this.toastr.error(err.statusText, 'Error.');
+        this.toastr.error(err.error, 'Error.');
       }
     );
   }
@@ -134,7 +136,7 @@ export class ConfigureSeatsComponent implements OnInit {
       while (indexOfSeat >= 0) {
         const seat = (classParam === 'F') ? this.firstClassSeats[indexOfSeat] : (classParam === 'B') ? this.businessSeats[indexOfSeat] :
                      (classParam === 'E') ? this.economySeats[indexOfSeat] : this.basicEconomySeats[indexOfSeat];
-        console.log(seat);
+        // console.log(seat);
         if (seat !== 'left' && seat !== 'right') {
           return seat;
         }
@@ -145,7 +147,7 @@ export class ConfigureSeatsComponent implements OnInit {
     while (indexOfSeat >= 0) {
       const seat = (classParam === 'F') ? this.firstClassSeats[indexOfSeat] : (classParam === 'B') ? this.businessSeats[indexOfSeat] :
                    (classParam === 'E') ? this.economySeats[indexOfSeat] : this.basicEconomySeats[indexOfSeat];
-      console.log(seat);
+      // console.log(seat);
       if (seat !== 'left' && seat !== 'right') {
         return seat;
       }
@@ -176,7 +178,7 @@ export class ConfigureSeatsComponent implements OnInit {
           this.loadAll();
         },
         err => {
-          this.toastr.error(err.statusText, 'Error.');
+          this.toastr.error(err.error, 'Error.');
         }
       );
     }
@@ -192,7 +194,7 @@ export class ConfigureSeatsComponent implements OnInit {
         this.loadAll();
       },
       err => {
-        this.toastr.error(err.statusText, 'Error.');
+        this.toastr.error(err.error, 'Error.');
         this.blur = false;
         this.showModify = false;
       }
@@ -213,7 +215,7 @@ export class ConfigureSeatsComponent implements OnInit {
   }
 
   setFirstClassSeats() {
-    console.log('usa');
+    // console.log('usa');
     const numberOfSeats = this.seats.length;
     if (this.seats.filter(x => x.class === 'F').length > 0) {
       let row1 = this.seats.find(x => x.class === 'F');
@@ -224,7 +226,7 @@ export class ConfigureSeatsComponent implements OnInit {
       });
       const rows = row1.row;
       let column;
-      console.log(rows);
+      // console.log(rows);
       for (let r = 1; r < (+rows + 1); r++) {
         for (let c = 0; c < 6; c++) {
           column = (c === 0) ? 'A' : (c === 1) ? 'B' : (c === 2) ? 'C' : (c === 3) ? 'D' : (c === 4) ? 'E' : 'F';
@@ -282,7 +284,7 @@ export class ConfigureSeatsComponent implements OnInit {
 
   setEconomySeats() {
     const numberOfSeats = this.seats.length;
-    console.log('BROJ + ' + this.seats.filter(x => x.class === 'E').length);
+    // console.log('BROJ + ' + this.seats.filter(x => x.class === 'E').length);
     if (this.seats.filter(x => x.class === 'E').length > 0) {
       let row1 = this.seats.find(x => x.class === 'E');
       this.seats.filter(x => x.class === 'E').forEach(element => {
@@ -296,7 +298,7 @@ export class ConfigureSeatsComponent implements OnInit {
         for (let c = 0; c < 6; c++) {
           column = (c === 0) ? 'A' : (c === 1) ? 'B' : (c === 2) ? 'C' : (c === 3) ? 'D' : (c === 4) ? 'E' : 'F';
           if (this.seats.some(seat => seat.row === r.toString() && seat.column === column && seat.class === 'E')) {
-            console.log('ajmoppppp');
+            // console.log('ajmoppppp');
             this.economySeats.push(this.seats.find(seat => seat.class === 'E' && seat.column === column && seat.row === r.toString()));
           } else {
             this.economySeats.push((column === 'A' || column === 'B' || column === 'C') ? 'left' : 'right');
@@ -312,7 +314,7 @@ export class ConfigureSeatsComponent implements OnInit {
         value = this.economySeats[this.economySeats.length - 1];
       }
       this.economySeats.push(lastValue);
-      console.log('ECONOMY' + this.economySeats);
+      // console.log('ECONOMY' + this.economySeats);
     }
   }
 

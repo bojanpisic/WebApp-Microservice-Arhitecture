@@ -1,0 +1,21 @@
+<div class="container" [ngClass]="{ blur: exit }">
+  <div class="info" (click)="openChat()">
+    <div class="image"></div>
+    <span id="name">{{ chat.friendFirstName }} {{ chat.friendLastName }}</span>
+    <div class="text">
+      <span
+        id="text"
+        [ngStyle]="{ 'font-weight': chat.notification ? 'bold' : 'normal' }"
+        >{{ chat.sender }}: {{ chat.message }}</span
+      >
+    </div>
+  </div>
+  <span id="removeChat" class="material-icons" (click)="removeConversation()"
+    >delete</span
+  >
+</div>
+<app-modal
+  *ngIf="exit"
+  (remove)="onDeleteChat($event)"
+  [type]="deleteChat"
+></app-modal>

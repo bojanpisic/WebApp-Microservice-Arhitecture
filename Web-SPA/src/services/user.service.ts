@@ -104,7 +104,19 @@ export class UserService {
     const url = this.BaseURI + '/reject-request';
     return this.http.post(url, body);
   }
+  acceptTripInvitation(data: any) {
+    const body = {
+      Id: data.id,
+      Passport: data.passport
+    };
+    const url = this.BaseURI + '/accept-trip-invitation';
+    return this.http.post(url, body);
+  }
 
+  declineTripInvitation(data: any) {
+    const url = `${this.BaseURI + '/reject-trip-invitation'}/${data.id}`;
+    return this.http.delete(url);
+  }
   changePhoto(data: any) {
     const formData = new FormData();
     formData.append('img', data.image);
@@ -260,7 +272,7 @@ export class UserService {
       UserId: data.userId,
       Token: data.token
     };
-    console.log("body:" + body.UserNameOrEmail + " " + body.Password );
+    console.log("body:" + body.UserId + "     " + body.Token);
     return this.http.post(this.BaseURI + '/authentication/login', body);
   }
 

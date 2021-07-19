@@ -30,11 +30,13 @@ export class AirlineService {
       CarReservation: data.carReservation,
       WithBonus: data.withBonus
     };
+    
     const url = this.BaseURI + '/airline/reservation/flight-reservation';
     return this.http.post(url, body);
   }
 
   reserveSpecialOffer(data) {
+    console.log(data);
     const body = {
       Id: data.id,
       Passport: data.passport
@@ -66,7 +68,7 @@ export class AirlineService {
       Id: data.id,
       Rate: data.rate.rate,
     };
-    const url = this.BaseURI + '/user/rate-flight';
+    const url = this.BaseURI + '/airline/flight/rate-flight';
     return this.http.post(url, body);
   }
 
@@ -76,7 +78,7 @@ export class AirlineService {
       Id: data.id,
       Rate: data.rate,
     };
-    const url = this.BaseURI + '/user/rate-airline';
+    const url = this.BaseURI + '/airline/rate-airline';
     return this.http.post(url, body);
   }
 
@@ -105,12 +107,14 @@ export class AirlineService {
       Friends: data.friends,
       UnregisteredFriends: data.unregisteredFriends
     };
-    const url = this.BaseURI + '/user/get-trip-info';
+    console.log(body);
+    const url = this.BaseURI + '/airline/trip/get-trip-info';
     return this.http.post(url, body);
   }
 
   getAirline(data: any): Observable<any> {
     const url = this.BaseURI + '/airline/get-airline';
+    console.log(url);
     return this.http.get<any>(url);
   }
 
@@ -126,6 +130,7 @@ export class AirlineService {
 
   getTopRatedAirlines(): Observable<any> {
     const url = this.BaseURI + '/airline/home/get-toprated-airlines';
+    console.log(url);
     return this.http.get<any>(url);
   }
 
@@ -135,13 +140,14 @@ export class AirlineService {
       Address: data.address,
       PromoDescription: data.promoDescription,
     };
-    const url = this.BaseURI + '/airlineadmin/change-airline-info';
+    const url = this.BaseURI + '/airline/change-airline-info';
     return this.http.put(url, body);
   }
 
 
   getAirlinePhoto(data: any): Observable<any> {
     const url = `${this.BaseURI + '/airline/get-airline-logo'}/${data}`;
+    console.log(url);
     return this.http.get(url);
   }
 
@@ -284,7 +290,7 @@ export class AirlineService {
   }
 
   getAirlineSpecialOffers(data): Observable<any> {
-    const url = `${this.BaseURI + 'airline/home/airline-special-offers'}/${data}`;
+    const url = `${this.BaseURI + '/airline/home/airline-special-offers'}/${data}`;
     console.log(url);
     return this.http.get<any>(url);
   }

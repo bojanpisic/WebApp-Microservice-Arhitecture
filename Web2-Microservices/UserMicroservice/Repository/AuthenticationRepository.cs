@@ -141,7 +141,7 @@ namespace UserMicroservice.Repository
                    {
 
                        var fromMail = new MailAddress("bojanpisic7@gmail.com");
-                       var frontEmailPassowrd = "bojan123";
+                       var frontEmailPassowrd = "bojan.pisic.1997";
 
                        var toMail = new MailAddress(user.Email);
                        string subject;
@@ -205,7 +205,7 @@ namespace UserMicroservice.Repository
                    .Execute(() =>
                    {
                        var fromMail = new MailAddress("bojanpisic7@gmail.com");
-                       var frontEmailPassowrd = "bojan123";
+                       var frontEmailPassowrd = "bojan.pisic.1997";
 
                        var toMail = new MailAddress(receiverEmail);
                        string subject;
@@ -258,7 +258,7 @@ namespace UserMicroservice.Repository
                .Execute(() =>
                {
                    var fromMail = new MailAddress("bojanpisic7@gmail.com");
-                   var frontEmailPassowrd = "bojan123";
+                   var frontEmailPassowrd = "bojan.pisic.1997";
 
                    var toMail = new MailAddress(receiverEmail);
                    string subject;
@@ -318,7 +318,7 @@ namespace UserMicroservice.Repository
              .Execute(() =>
              {
                  var fromMail = new MailAddress("bojanpisic7@gmail.com");
-                 var frontEmailPassowrd = "bojan123";
+                 var frontEmailPassowrd = "bojan.pisic.1997";
 
                  var toMail = new MailAddress(receiverEmail);
                  string subject;

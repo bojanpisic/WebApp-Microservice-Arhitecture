@@ -60,7 +60,7 @@ export class ConfigureDiscountsComponent implements OnInit {
         } else {
           console.log(err);
           console.log(err.status);
-          this.toastr.error(err.statusText, 'Error!');
+          this.toastr.error(err.error, 'Error!');
         }
       }
     );
@@ -82,11 +82,11 @@ export class ConfigureDiscountsComponent implements OnInit {
           if (err.status == 400) {
             console.log(err);
             // this.toastr.error('Incorrect discount or password.', 'Authentication failed.');
-            this.toastr.error(err.statusText, 'Error!');
+            this.toastr.error(err.error, 'Error!');
           } else {
             console.log(err);
             console.log(err.status);
-            this.toastr.error(err.statusText, 'Error!');
+            this.toastr.error(err.error, 'Error!');
           }
         }
       );

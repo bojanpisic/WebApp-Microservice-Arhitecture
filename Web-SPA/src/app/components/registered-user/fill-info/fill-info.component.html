@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="header">
+        <button (click)="close()">
+            <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: rgb(34, 34, 34); height: 16px; width: 16px; stroke: currentcolor; stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>
+        </button>
+        <span>Fill info</span>
+    </div>
+    <div class="seat" [ngStyle]="{'background-color': '#fab387'}">
+    </div>
+    <div class="content">
+        <form [formGroup]="form" (ngSubmit)="confirm()">
+            <p>YOUR PASSPORT:</p>
+            <input [ngClass]="{'error-input': (form.controls.passport.touched) && form.controls.passport.invalid}" formControlName="passport" type="text">
+            <div class="error" *ngIf="(form.controls.passport.touched) && form.controls.passport.invalid">
+                Passport is required!
+            </div>
+            <button id="confirm" type="submit">
+                Confirm
+            </button>
+        </form>
+</div>

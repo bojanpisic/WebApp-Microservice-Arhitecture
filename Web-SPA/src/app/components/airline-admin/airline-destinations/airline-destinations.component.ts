@@ -57,7 +57,7 @@ export class AirlineDestinationsComponent implements OnInit {
         }
       },
       err => {
-        this.toastr.error(err.statusText, 'Error.');
+        this.toastr.error(err.error, 'Error.');
       }
     );
   }
@@ -119,7 +119,7 @@ export class AirlineDestinationsComponent implements OnInit {
         this.loadDestionations();
       },
       err => {
-        this.toastr.error(err.statusText, 'Error.');
+        this.toastr.error(err.error, 'Error.');
       }
     );
   }

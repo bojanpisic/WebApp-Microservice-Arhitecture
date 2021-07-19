@@ -45,7 +45,6 @@ export class RacCarsComponent implements OnInit {
     // this.racId = this.racService.getAdminsRACId(this.adminId);
     // this.cars = this.carService.getCarsOfSpecificRAC(this.racId);
     if (this.branchId !== undefined) {
-      console.log('USAO1');
       const air1 = this.carService.getBranchesCars(this.branchId).subscribe(
         (res: any[]) => {
           console.log(res);
@@ -68,11 +67,8 @@ export class RacCarsComponent implements OnInit {
             });
           }
           this.isOk = true;
-          console.log(this.cars);
-          console.log('okkk');
         },
         err => {
-          console.log('dada' + err.status);
           // tslint:disable-next-line: triple-equals
           if (err.status == 400) {
             console.log(err);
@@ -85,7 +81,6 @@ export class RacCarsComponent implements OnInit {
         }
       );
     } else {
-      console.log('USAO2');
       const air1 = this.carService.getAdminsCars().subscribe(
         (res: any[]) => {
           console.log(res);
@@ -108,11 +103,8 @@ export class RacCarsComponent implements OnInit {
             });
           }
           this.isOk = true;
-          console.log(this.cars);
-          console.log('okkk');
         },
         err => {
-          console.log('dada' + err.status);
           // tslint:disable-next-line: triple-equals
           if (err.status == 400) {
             console.log(err);
@@ -125,6 +117,8 @@ export class RacCarsComponent implements OnInit {
         }
       );
     }
+
+    console.log(this.cars);
   }
 
   onEdit(value: any) {

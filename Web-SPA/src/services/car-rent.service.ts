@@ -35,7 +35,7 @@ export class CarRentService {
       Address: data.address,
       PromoDescription: data.promoDescription,
     };
-    const url = this.BaseURI + '/rentacarserviceadmin/change-racs-info';
+    const url = this.BaseURI + '/rentacar/change-racs-info';
     return this.http.put(url, body);
   }
 
@@ -43,18 +43,18 @@ export class CarRentService {
     const formData = new FormData();
     formData.append('img', data.image);
 
-    const url = this.BaseURI + '/rentacarserviceadmin/change-racs-logo';
+    const url = this.BaseURI + '/rentacar/change-racs-logo';
     return this.http.put(url, formData);
   }
 
   getRAC(): Observable<any> {
-    const url = this.BaseURI + '/rentacarserviceadmin/get-racs';
+    const url = this.BaseURI + '/rentacar/get-racs';
     console.log(url);
     return this.http.get<any>(url);
   }
 
   getRACCityState(): Observable<any> {
-    const url = this.BaseURI + '/rentacarserviceadmin/get-racs-address';
+    const url = this.BaseURI + '/rentacar/get-racs-address';
     console.log(url);
     return this.http.get<any>(url);
   }
@@ -83,17 +83,17 @@ export class CarRentService {
       State: data.State,
       City: data.City,
     };
-    const url = this.BaseURI + '/rentacarserviceadmin/add-branch';
+    const url = this.BaseURI + '/branch/add-branch';
     return this.http.post(url, body);
   }
 
   deleteBranch(data: any) {
-    const url = this.BaseURI + '/rentacarserviceadmin/delete-branch/' + data.id;
+    const url = this.BaseURI + '/branch/delete-branch/' + data.id;
     return this.http.delete(url);
   }
 
   getAdminsBranches(): Observable<any> {
-    const url = this.BaseURI + '/rentacarserviceadmin/get-racs-branches';
+    const url = this.BaseURI + '/branch/get-racs-branches';
     console.log(url);
     return this.http.get<any>(url);
   }
@@ -141,7 +141,7 @@ export class CarRentService {
       SeatsNumber: data.SeatsNumber,
       PricePerDay: data.PricePerDay,
     };
-    const url = this.BaseURI + '/rentacarserviceadmin/add-car';
+    const url = this.BaseURI + '/car/add-car';
     return this.http.post(url, body);
   }
 
@@ -154,7 +154,7 @@ export class CarRentService {
       SeatsNumber: data.SeatsNumber,
       PricePerDay: data.PricePerDay,
     };
-    const url = `${this.BaseURI + '/rentacarserviceadmin/change-car-info'}/${data.id}`;
+    const url = `${this.BaseURI + '/car/change-car-info'}/${data.id}`;
     return this.http.put(url, body);
   }
 
@@ -168,27 +168,27 @@ export class CarRentService {
       SeatsNumber: data.SeatsNumber,
       PricePerDay: data.PricePerDay,
     };
-    const url = this.BaseURI + '/rentacarserviceadmin/add-car-to-branch';
+    const url = this.BaseURI + '/car/add-car-to-branch';
     return this.http.post(url, body);
   }
 
   deleteCar(data: any) {
-    const url = this.BaseURI + '/rentacarserviceadmin/delete-car/' + data.id;
+    const url = this.BaseURI + '/car/delete-car/' + data.id;
     return this.http.delete(url);
   }
 
   getCar(data: any) {
-    const url = `${this.BaseURI + '/rentacarserviceadmin/get-car'}/${data}`;
+    const url = `${this.BaseURI + '/car/get-car'}/${data}`;
     return this.http.get(url);
   }
 
   getAdminsCars(): Observable<any> {
-    const url = this.BaseURI + '/rentacarserviceadmin/get-racs-cars';
+    const url = this.BaseURI + '/car/get-racs-cars';
     return this.http.get<any>(url);
   }
 
   getBranchesCars(data: any): Observable<any> {
-    const url = `${this.BaseURI + '/rentacarserviceadmin/get-branch-cars'}/${data}`;
+    const url = `${this.BaseURI + '/car/get-branch-cars'}/${data}`;
     return this.http.get<any>(url);
   }
 
@@ -201,12 +201,12 @@ export class CarRentService {
       ToDate: data.ToDate,
       NewPrice: data.NewPrice,
     };
-    const url = `${this.BaseURI + '/rentacarserviceadmin/add-car-specialoffer'}/${data.id}`;
+    const url = `${this.BaseURI + '/rentacar/add-car-specialoffer'}/${data.id}`;
     return this.http.post(url, body);
   }
 
   getAdminsSpecialOffers(): Observable<any> {
-    const url = this.BaseURI + '/rentacarserviceadmin/get-cars-specialoffers';
+    const url = this.BaseURI + '/rentacar/get-cars-specialoffers';
     return this.http.get<any>(url);
   }
 
@@ -234,7 +234,7 @@ export class CarRentService {
       to: data.to,
       isFree: data.isFree
     };
-    const url = this.BaseURI + '/rentacarserviceadmin/get-car-report';
+    const url = this.BaseURI + '/car/get-car-report';
     console.log(url);
     return this.http.get<any>(url, {params: param});
   }
@@ -243,7 +243,7 @@ export class CarRentService {
     const param = {
       year: data.year // 2020-09-25
     };
-    const url = this.BaseURI + '/rentacarserviceadmin/get-income-year';
+    const url = this.BaseURI + '/chart/get-income-year';
     return this.http.get<any>(url, {params: param});
   }
 
@@ -251,7 +251,7 @@ export class CarRentService {
     const param = {
       week: data.week // 2020-W34 to je 34. nedelja
     };
-    const url = this.BaseURI + '/rentacarserviceadmin/get-income-week';
+    const url = this.BaseURI + '/chart/get-income-week';
     return this.http.get<any>(url, {params: param});
   }
 
@@ -259,7 +259,7 @@ export class CarRentService {
     const param = {
       month: data.month // 2020-09
     };
-    const url = this.BaseURI + '/rentacarserviceadmin/get-income-month';
+    const url = this.BaseURI + '/chart/get-income-month';
     return this.http.get<any>(url, {params: param});
   }
 
@@ -268,7 +268,7 @@ export class CarRentService {
     const param = {
       date: data.date // 2020-09-25
     };
-    const url = this.BaseURI + '/rentacarserviceadmin/get-stats-date';
+    const url = this.BaseURI + '/chart/get-stats-date';
     return this.http.get<any>(url, {params: param});
   }
 
@@ -276,7 +276,7 @@ export class CarRentService {
     const param = {
       week: data.week // 2020-W34 to je 34. nedelja
     };
-    const url = this.BaseURI + '/rentacarserviceadmin/get-stats-week';
+    const url = this.BaseURI + '/chart/get-stats-week';
     return this.http.get<any>(url, {params: param});
   }
 
@@ -284,7 +284,7 @@ export class CarRentService {
     const param = {
       month: data.month // 2020-09
     };
-    const url = this.BaseURI + '/rentacarserviceadmin/get-stats-month';
+    const url = this.BaseURI + '/chart/get-stats-month';
     return this.http.get<any>(url, {params: param});
   }
 
@@ -300,7 +300,7 @@ export class CarRentService {
       ret: data.ret,
       carId: data.carId
     };
-    const url = this.BaseURI + '/user/rent-total-price';
+    const url = this.BaseURI + '/reservation/rent-total-price';
     return this.http.get(url, {params: param});
   }
 
@@ -309,7 +309,7 @@ export class CarRentService {
   // }
 
   getUsersCarReservations(): Observable<any> {
-    return this.http.get<any>(this.BaseURI + '/user/get-car-reservations');
+    return this.http.get<any>(this.BaseURI + '/reservation/get-car-reservations');
   }
 
   // getUsersPreviousCarReservations(): Observable<any> {
@@ -322,7 +322,7 @@ export class CarRentService {
       Id: data.carId,
       Rate: data.rate,
     };
-    const url = this.BaseURI + '/user/rate-car';
+    const url = this.BaseURI + '/car/rate-car';
     return this.http.post(url, body);
   }
 
@@ -332,7 +332,7 @@ export class CarRentService {
       Id: data.carServiceId,
       Rate: data.rate,
     };
-    const url = this.BaseURI + '/user/rate-car-service';
+    const url = this.BaseURI + '/rentacar/rate-car-service';
     return this.http.post(url, body);
   }
 
@@ -342,7 +342,7 @@ export class CarRentService {
       ReservationId: data.reservationId
     };
 
-    const url = `${this.BaseURI + '/user/cancel-rent'}/${data.reservationId}`;
+    const url = `${this.BaseURI + '/reservation/cancel-rent'}/${data.reservationId}`;
     return this.http.delete(url); // promeni u delete ako treba
   }
 
@@ -361,7 +361,7 @@ export class CarRentService {
       ReturnDate: data.ret, // datum vracanja auta
       TotalPrice: data.totalPrice, // uzracunata na osnovu cene po danu
     };
-    const url = this.BaseURI + '/user/rent-car';
+    const url = this.BaseURI + '/reservation/rent-car';
     return this.http.post(url, body);
   }
 
@@ -370,7 +370,7 @@ export class CarRentService {
     const body = {
       Id: data.id
     };
-    const url = this.BaseURI + '/user/reserve-special-offer-car';
+    const url = this.BaseURI + '/reservation/reserve-special-offer-car';
     return this.http.post(url, body);
   }
 

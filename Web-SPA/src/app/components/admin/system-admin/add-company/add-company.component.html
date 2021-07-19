@@ -37,7 +37,7 @@
             <input [ngClass]="{'error-input': formUser.controls.password.invalid && (formUser.controls.password.touched || formUser.controls.password.dirty || errorPassword)}"
             formControlName="password" type="password">
             <div class="error" *ngIf="formUser.controls.password.errors?.invalidPassword && (formUser.controls.password.touched || formUser.controls.password.dirty || errorPassword)">
-                Number of characters 6-20.<br>
+                Number of characters 8-20.<br>
                 At least one number.<br>
                 At least one letter.
             </div>

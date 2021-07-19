@@ -176,49 +176,58 @@
       ],
       "UpstreamPathTemplate": "/racs/{everything}/{id}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+
+    //chat 
+    {
+      "DownstreamPathTemplate": "/api/{controller}/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "chatmicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/chat/{controller}/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/{controller}/{everything}?id={id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "chatmicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/chat/{controller}/{everything}/{id}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/racs/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "chatmicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/chat/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/racs/{everything}?id={everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "chatmicroservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/chat/{everything}/{id}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     }
-
-
-
-
-    //{
-    //  "DownstreamPathTemplate": "/api/user/{everything}?id={param}",
-    //  "DownstreamScheme": "http",
-    //  "DownstreamHostAndPorts": [
-    //    {
-    //      "Host": "usermicroservice",
-    //      "Port": 80
-    //    }
-    //  ],
-    //  "UpstreamPathTemplate": "/user/{everything}/{param}",
-    //  "UpstreamHttpMethod": [ "GET" ]
-    //},
-    //{
-    //  "DownstreamPathTemplate": "/api/user/{everything}",
-    //  "DownstreamScheme": "http",
-    //  "DownstreamHostAndPorts": [
-    //    {
-    //      "Host": "usermicroservice",
-    //      "Port": 80
-    //    }
-    //  ],
-    //  "UpstreamPathTemplate": "/user/{everything}",
-    //  "UpstreamHttpMethod": [ "GET" ]
-    //}
-
-
-    //{
-    //  "DownstreamPathTemplate": "/api/user/test",
-    //  "DownstreamScheme": "http",
-    //  "DownstreamHostAndPorts": [
-    //    {
-    //      "Host": "usermicroservice",
-    //      "Port": 80
-    //    }
-    //  ],
-    //  "UpstreamPathTemplate": "/user/test",
-    //  "UpstreamHttpMethod": [ "GET" ]
-    //},
 
 
   ],

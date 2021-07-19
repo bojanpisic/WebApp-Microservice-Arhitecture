@@ -3,6 +3,7 @@ import { RegisteredUser } from 'src/app/entities/registeredUser';
 import { UserService } from 'src/services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { Message } from 'src/app/entities/message';
+import { cwd } from 'process';
 
 @Component({
   selector: 'app-messages',
@@ -19,10 +20,11 @@ export class MessagesComponent implements OnInit {
   acceptedRequests: Array<any>;
   flightInvitations: Array<any>;
   acceptedFlightInvitations: Array<any>;
-
+  passenger: any;
   isOk = false;
-
   senderId;
+  invitationId;
+  fillInfo = false;
 
   activeButton = 'inbox';
 
@@ -34,10 +36,11 @@ export class MessagesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAll();
-    console.log(this.requests);
-    console.log(this.acceptedRequests);
-    console.log(this.flightInvitations);
-    console.log(this.acceptedFlightInvitations);
+    this.flightInvitations = [];
+    this.acceptedFlightInvitations = [];
+    this.acceptedRequests = [];
+
+
   }
 
   loadAll() {
@@ -46,7 +49,6 @@ export class MessagesComponent implements OnInit {
     this.isOk = false;
     const a = this.userService.getRequests().subscribe(
       (res: any[]) => {
-        console.log(res);
         if (res.length) {
           res.forEach(element => {
             const b = {
@@ -55,8 +57,12 @@ export class MessagesComponent implements OnInit {
               senderLastName: element.senderLastName,
               senderId: element.senderId,
               senderEmail: element.senderEmail,
+              text: 'You have friendship request!',
+              content: 'Would you like to becoma a friend with me? ',
+              type: 'friendshipRequest'
             };
-            console.log(b.accepted);
+
+
             if (b.accepted === false) {
               this.acceptedRequests.push(b);
             } else {
@@ -70,7 +76,6 @@ export class MessagesComponent implements OnInit {
 
     const n = this.userService.getFlightInvitations().subscribe(
       (res: any[]) => {
-        console.log(res);
         if (res.length) {
           res.forEach(element => {
             const b = {
@@ -79,8 +84,14 @@ export class MessagesComponent implements OnInit {
               senderLastName: element.senderLastName,
               senderId: element.senderId,
               senderEmail: element.senderEmail,
+              text: 'You have trip invite!',
+              content: 'Would you like to travel with me? ',
+              type: 'tripInvite',
+              invitationId:element.invitationId,
+
             };
-            if (b.accepted === false) {
+
+            if (b.accepted === true) {
               this.acceptedFlightInvitations.push(b);
             } else {
               this.flightInvitations.push(b);
@@ -98,7 +109,6 @@ export class MessagesComponent implements OnInit {
 
   getResponse(value: string) {
     this.myProps.show = false;
-    console.log('value' + value);
     if (value === 'accept') {
       const c = this.userService.acceptFriendship(this.senderId).subscribe(
         (res1: any) => {
@@ -109,8 +119,7 @@ export class MessagesComponent implements OnInit {
         }
       );
     }
-    if (value === 'decline') {
-      console.log('eo me');
+    else if (value === 'decline') {
       const c = this.userService.declineFriendship(this.senderId).subscribe(
         (res1: any) => {
           this.loadAll();
@@ -120,12 +129,50 @@ export class MessagesComponent implements OnInit {
         }
       );
     }
+    else if (value === 'declineTrip') {
+      const c = this.userService.declineTripInvitation(this.invitationId).subscribe(
+        (res1: any) => {
+          this.loadAll();
+        },
+        err => {
+          alert(err.error.description);
+        }
+      );
+    }
+    else if (value === 'acceptTrip') {
+
+      this.fillInfo = true;
+
+      
+    }
   }
 
   openMessageInfo(message: any) {
     this.myProps.message = message;
     this.myProps.show = true;
     this.senderId = message.senderId;
+    this.invitationId = message.invitationId;
   }
 
+  addPassenger(passenger: any) {
+    if (passenger === 'CLOSE') {
+      this.fillInfo = false;
+      return;
+    }
+    var data = {
+      id : this.invitationId,
+      passport: passenger.passport
+    };
+    console.log(data.passport);
+    console.log(data.id);
+
+    const c = this.userService.acceptTripInvitation(data).subscribe(
+      (res1: any) => {
+        this.loadAll();
+      },
+      err => {
+        alert(err.error.description);
+      }
+    );
+  }
 }

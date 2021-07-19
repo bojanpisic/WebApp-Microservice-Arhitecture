@@ -1,4 +1,4 @@
-@import './../../../app.component.scss';
+@import "./../../../app.component.scss";
 
 * {
   box-sizing: border-box;
@@ -11,239 +11,253 @@ header {
     height: 64px;
     background: white;
     opacity: 1;
-    padding:10px 12px;
+    padding: 10px 12px;
     border-bottom: 1px solid rgb(238, 238, 238);
     grid-template-columns: 44px auto 44px;
     position: fixed;
     z-index: 9999;
 
     .back {
-        height: 44px;
-        width: 44px;
-        padding: 14px;
-        svg {
-            fill: rgb(34, 34, 34);
-        }
+      height: 44px;
+      width: 44px;
+      padding: 14px;
+      svg {
+        fill: rgb(34, 34, 34);
+      }
     }
-  
+
     .search {
+      height: 44px;
+      margin: auto 0;
+      border-radius: 24px;
+      color: rgb(34, 34, 34);
+      border: 1px solid rgba(0, 0, 0, 0.03);
+      box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.12);
+      padding: 0 14px;
+
+      button {
+        position: relative;
+        outline: none;
+        width: 100%;
         height: 44px;
-        margin: auto 0;
-        border-radius: 24px;
-        color: rgb(34, 34, 34);
-        border: 1px solid rgba(0, 0, 0, 0.03);
-        box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.12);
-        padding: 0 14px;
+        background-color: transparent;
+        border: none;
+        padding: 0;
 
-        button {
-            position: relative;
-            outline: none;
-            width: 100%;
-            height: 44px;
-            background-color: transparent;
-            border: none;
-            padding: 0;
-
-            svg {
-                position: absolute;
-                top:14px;
-            }
-
-            input {
-                position: absolute;
-                outline: none;
-                border: none;
-                top: 12px;
-                left: 26px;
-                width: calc(100% - 26px * 2);
-                font-size: 16px;
-                line-height: 20px;
-                max-height: 20px;
-                text-overflow: ellipsis;
-                display: -webkit-box;
-                -webkit-line-clamp: 1;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-            }
-
-            :focus {
-                border: none;
-            }
+        svg {
+          position: absolute;
+          top: 14px;
         }
+
+        input {
+          position: absolute;
+          outline: none;
+          border: none;
+          top: 12px;
+          left: 26px;
+          width: calc(100% - 26px * 2);
+          font-size: 16px;
+          line-height: 20px;
+          max-height: 20px;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        :focus {
+          border: none;
+        }
+      }
     }
   }
 }
 
 main {
-    padding: 94px 30px 0 30px;
-    .options {
-        display: grid;
-        grid-template-columns: 50% 50%;
-        margin-bottom: 40px;
+  padding: 94px 30px 0 30px;
+  .options {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    margin-bottom: 40px;
 
-        button {
-            width: 140px;
-            justify-self: center;
-            padding: .5em;
-            border-radius: 24px;
-            background-color: transparent;
-            border: 1px solid rgb(238, 238, 238);
-            color: rgb(80, 80, 80);
-        }
-
-        :focus {
-            outline: none;
-        }
-
-        .active {
-            font-weight: bold;
-            border: 2px solid rgb(34, 34, 34);
-            color: rgb(34, 34, 34);
-            box-shadow: $smallest-shadow;
-        }
+    button {
+      width: 140px;
+      justify-self: center;
+      padding: 0.5em;
+      border-radius: 24px;
+      background-color: transparent;
+      border: 1px solid rgb(238, 238, 238);
+      color: rgb(80, 80, 80);
     }
 
-    ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-
-        .no-friends {
-            font-size: 18px;
-            font-family: 'Roboto';
-            color: $orange;
-            line-height: 26px;
-        }
-
-        li {
-            position: relative;
-            border-radius: 30px;
-            margin-bottom: 30px;
-            padding: 15px 20px;
-            box-shadow: $smallest-shadow;
-            display: grid;
-            grid-template-columns: 80px 170px;
-            grid-template-rows: 30px 40px;
-            grid-template-areas: "image name"
-                                 "image email";
-
-            #add {
-                position: absolute;
-                top: 0;
-                right: 0;
-                margin-top: -10px;
-                margin-right: -10px;
-                background-color: $light-blue;
-                border-radius: 50%;
-                font-size: 24px;
-                color: white;
-                padding: 10px;
-
-            }
-
-            #image {
-                grid-area: image;
-                display: inline-block;
-                width: 70px;
-                height: 70px;
-                background-image: url('../../../../assets/friend1.jpeg');
-                background-size: cover;
-                background-position: 50% 10%;
-                position: relative;
-                overflow: hidden;
-                border-radius: 50%;
-                border: 2px solid white;
-            }
-
-            #name {
-                grid-area: name;
-                align-self: end;
-                font-size: 16px;
-                font-weight: bold;
-                color: rgb(34, 34, 34);
-                line-height: 20px;
-                max-height: 20px;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                overflow: hidden;
-            }
-
-            #email {
-                grid-area: email;
-                font-size: 14px;
-                font-family: 'Roboto';
-                line-height: 20px;
-                max-height: 20px;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                overflow: hidden;
-                color: rgb(119, 119, 119);
-
-                #mail {
-                    vertical-align: bottom;
-                    height: 16px;
-                    width: 16px;
-                    font-size: 16px;
-                    margin-bottom: 2px;
-                    color: $light-blue;
-                }
-            }
-        }
+    :focus {
+      outline: none;
     }
 
-    .separator {
-        width: 100%;
-        margin-bottom: 30px;
-        font-size: 18px;
-        font-weight: bold;
-        color: $orange;
+    .active {
+      font-weight: bold;
+      border: 2px solid rgb(34, 34, 34);
+      color: rgb(34, 34, 34);
+      box-shadow: $smallest-shadow;
+    }
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    .no-friends {
+      font-size: 18px;
+      font-family: "Roboto";
+      color: $orange;
+      line-height: 26px;
+    }
+
+    li {
+      position: relative;
+      border-radius: 30px;
+      margin-bottom: 30px;
+      padding: 15px 20px;
+      box-shadow: $smallest-shadow;
+      display: grid;
+      grid-template-columns: 80px 170px;
+      grid-template-rows: 30px 40px;
+      grid-template-areas:
+        "image name"
+        "image email";
+
+      #add {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin-top: -10px;
+        margin-right: -10px;
+        background-color: $light-blue;
+        border-radius: 50%;
+        font-size: 24px;
+        color: white;
+        padding: 10px;
+      }
+      #sendMsg {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin-top: -10px;
+        margin-right: -10px;
+        background-color: rgb(243, 240, 44);
+        border-radius: 50%;
+        font-size: 24px;
+        color: white;
+        padding: 10px;
+      }
+
+      #image {
+        grid-area: image;
+        display: inline-block;
+        width: 70px;
+        height: 70px;
+        background-image: url("../../../../assets/friend1.jpeg");
+        background-size: cover;
+        background-position: 50% 10%;
         position: relative;
+        overflow: hidden;
+        border-radius: 50%;
+        border: 2px solid white;
+      }
 
-        #people {
-            color: $orange;
-            vertical-align: bottom;
-            margin-right: 5px;
-            margin-left: 24px;
+      #name {
+        grid-area: name;
+        align-self: end;
+        font-size: 16px;
+        font-weight: bold;
+        color: rgb(34, 34, 34);
+        line-height: 20px;
+        max-height: 20px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      #email {
+        grid-area: email;
+        font-size: 14px;
+        font-family: "Roboto";
+        line-height: 20px;
+        max-height: 20px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        color: rgb(119, 119, 119);
+
+        #mail {
+          vertical-align: bottom;
+          height: 16px;
+          width: 16px;
+          font-size: 16px;
+          margin-bottom: 2px;
+          color: $light-blue;
         }
+      }
     }
+  }
 
-    .my-friend {
-        li {
-            border-bottom-right-radius: 10px;
+  .separator {
+    width: 100%;
+    margin-bottom: 30px;
+    font-size: 18px;
+    font-weight: bold;
+    color: $orange;
+    position: relative;
 
-            #name {
-                color: $orange;
-            }
-
-            #image {
-                border: 2px solid $orange;
-            }
-
-            #remove {
-                position: absolute;
-                bottom: 0; right: 0;
-                padding: 7px 12px;
-                border-radius: 10px;
-                background-color: white;
-                text-align: center;
-                font-size: 12px;
-                color: $orange;
-                font-weight: bold;
-                box-shadow: $smallest-shadow;
-            }
-        }
+    #people {
+      color: $orange;
+      vertical-align: bottom;
+      margin-right: 5px;
+      margin-left: 24px;
     }
+  }
+
+  .my-friend {
+    li {
+      border-bottom-right-radius: 10px;
+
+      #name {
+        color: $orange;
+      }
+
+      #image {
+        border: 2px solid $orange;
+      }
+
+      #remove {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        padding: 7px 12px;
+        border-radius: 10px;
+        background-color: white;
+        text-align: center;
+        font-size: 12px;
+        color: $orange;
+        font-weight: bold;
+        box-shadow: $smallest-shadow;
+      }
+    }
+  }
 }
 
 .modal {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0; left: 0;
-    z-index: 2;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
 }
 
 .blur {
-    filter: blur(8px);
-    -webkit-filter: blur(8px);
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
 }

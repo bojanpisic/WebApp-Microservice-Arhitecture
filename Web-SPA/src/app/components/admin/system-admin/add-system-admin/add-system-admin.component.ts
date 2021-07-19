@@ -60,7 +60,7 @@ export class AddSystemAdminComponent implements OnInit {
           this.router.navigate(['/system-admin/' + this.adminId]);
         },
         err => {
-          this.toastr.error(err.statusText, 'Error!');
+          this.toastr.error(err.error, 'Error!');
         }
       );
     }

@@ -72,7 +72,7 @@ export class AirlineFlightsComponent implements OnInit {
         }
       },
       err => {
-        this.toastr.error(err.statusText, 'Error.');
+        this.toastr.error(err.error, 'Error.');
       }
     );
   }

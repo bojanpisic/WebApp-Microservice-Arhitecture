@@ -189,6 +189,8 @@ namespace UserMicroservice.Controllers
                     {
                         new Claim("UserID",user.Id.ToString()),
                         new Claim("Roles", role),
+                        new Claim("FirstName", user.FirstName),
+                        new Claim("LastName", user.LastName),
                         new Claim("PasswordChanged", user.PasswordChanged.ToString())
                         //new Claim("EmailConfirmed", user.EmailConfirmed.ToString())
                     }),

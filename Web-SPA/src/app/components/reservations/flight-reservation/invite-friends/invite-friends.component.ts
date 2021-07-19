@@ -20,6 +20,8 @@ export class InviteFriendsComponent implements OnInit {
   @Input() flight: Flight;
   @Input() person: any;
   @Input() pickSeatForMe: boolean;
+  @Input() invite: boolean;
+
   @Output() passenger = new EventEmitter<any>();
   userId: number;
   user: RegisteredUser;

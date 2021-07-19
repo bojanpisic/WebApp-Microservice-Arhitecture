@@ -18,7 +18,15 @@ export class MessageInfoComponent implements OnInit {
   }
 
   decline() {
-    this.response.emit('decline');
+    if(this.props.message.type =='tripInvite')
+    {
+      this.response.emit('declineTrip');
+
+    }else
+    {
+      this.response.emit('decline');
+
+    }
   }
 
   close() {
@@ -26,7 +34,14 @@ export class MessageInfoComponent implements OnInit {
   }
 
   accept() {
-    this.response.emit('accept');
+    if(this.props.message.type =='tripInvite')
+    {
+      this.response.emit('acceptTrip');
+
+    }else
+    {
+      this.response.emit('accept');
+    }
   }
 
   @HostListener('document:click', ['$event'])

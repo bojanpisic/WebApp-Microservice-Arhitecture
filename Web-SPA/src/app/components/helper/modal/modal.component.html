@@ -1,122 +1,296 @@
 <div *ngIf="type === 'unfriend'" class="popup">
-    <div class="remove-friend-header">
-        <button (click)="return(false)">
-            <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: rgb(34, 34, 34); height: 16px; width: 16px; stroke: currentcolor; stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>
-        </button>
-        <span>Unfriend</span>
-    </div>
-    <div class="content">
-        <img src='../../../../assets/illustrations/undraw_having_fun_iais.svg'>
-        <h4>Are you sure you want to remove 
-            <h4>{{props.friend.firstName}} {{props.friend.lastName}}</h4>
-             from your friends?
-        </h4>
-        <br>
-        <button id="cancel" (click)="return(false)">Cancel</button>
-        <button id="remove" (click)="return(true)">Remove</button>
-    </div>
+  <div class="remove-friend-header">
+    <button (click)="return(false)">
+      <svg
+        aria-hidden="true"
+        role="presentation"
+        viewBox="0 0 32 32"
+        xmlns="http://www.w3.org/2000/svg"
+        style="
+          display: block;
+          fill: rgb(34, 34, 34);
+          height: 16px;
+          width: 16px;
+          stroke: currentcolor;
+          stroke-width: 4;
+          overflow: visible;
+        "
+      >
+        <path d="m6 6 20 20"></path>
+        <path d="m26 6-20 20"></path>
+      </svg>
+    </button>
+    <span>Unfriend</span>
+  </div>
+  <div class="content">
+    <img src="../../../../assets/illustrations/undraw_having_fun_iais.svg" />
+    <h4>
+      Are you sure you want to remove
+      <h4>{{ props.friend.firstName }} {{ props.friend.lastName }}</h4>
+      from your friends?
+    </h4>
+    <br />
+    <button id="cancel" (click)="return(false)">Cancel</button>
+    <button id="remove" (click)="return(true)">Remove</button>
+  </div>
+</div>
+<div *ngIf="type === 'deleteChat'" class="popup">
+  <div class="remove-friend-header">
+    <button (click)="return(false)">
+      <svg
+        aria-hidden="true"
+        role="presentation"
+        viewBox="0 0 32 32"
+        xmlns="http://www.w3.org/2000/svg"
+        style="
+          display: block;
+          fill: rgb(34, 34, 34);
+          height: 16px;
+          width: 16px;
+          stroke: currentcolor;
+          stroke-width: 4;
+          overflow: visible;
+        "
+      >
+        <path d="m6 6 20 20"></path>
+        <path d="m26 6-20 20"></path>
+      </svg>
+    </button>
+    <span>Delete chat</span>
+  </div>
+  <div class="content">
+    <img src="../../../../assets/illustrations/undraw_having_fun_iais.svg" />
+    <h4>Are you sure you want to remove this chat?</h4>
+    <br />
+    <button id="cancel" (click)="return(false)">Cancel</button>
+    <button id="remove" (click)="return(true)">Remove</button>
+  </div>
 </div>
 <div *ngIf="type === 'exitReservation'" class="popup">
-    <div class="remove-friend-header">
-        <button (click)="return(false)">
-            <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: rgb(34, 34, 34); height: 16px; width: 16px; stroke: currentcolor; stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>
-        </button>
-        <span>Exit reservation</span>
-    </div>
-    <div class="content">
-        <img src='../../../../assets/illustrations/undraw_reminder_pa79.png'>
-        <h4>All of the changes will be discard. Are you sure you want to exit?
-        </h4>
-        <br>
-        <button id="cancel" (click)="return(false)">No</button>
-        <button id="remove" (click)="return(true)">Yes</button>
-    </div>
+  <div class="remove-friend-header">
+    <button (click)="return(false)">
+      <svg
+        aria-hidden="true"
+        role="presentation"
+        viewBox="0 0 32 32"
+        xmlns="http://www.w3.org/2000/svg"
+        style="
+          display: block;
+          fill: rgb(34, 34, 34);
+          height: 16px;
+          width: 16px;
+          stroke: currentcolor;
+          stroke-width: 4;
+          overflow: visible;
+        "
+      >
+        <path d="m6 6 20 20"></path>
+        <path d="m26 6-20 20"></path>
+      </svg>
+    </button>
+    <span>Exit reservation</span>
+  </div>
+  <div class="content">
+    <img src="../../../../assets/illustrations/undraw_reminder_pa79.png" />
+    <h4>All of the changes will be discard. Are you sure you want to exit?</h4>
+    <br />
+    <button id="cancel" (click)="return(false)">No</button>
+    <button id="remove" (click)="return(true)">Yes</button>
+  </div>
 </div>
 <div *ngIf="type === 'bookError'" class="popup">
-    <div class="remove-friend-header">
-        <button (click)="return(false)">
-            <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: rgb(34, 34, 34); height: 16px; width: 16px; stroke: currentcolor; stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>
-        </button>
-        <span>Not logged in</span>
-    </div>
-    <div class="content">
-        <img src='../../../../assets/illustrations/undraw_reminder_pa79.png'>
-        <h4>To continue you will have to log in first. Please log in.
-        </h4>
-        <br>
-        <button id="cancel" (click)="return(false)">Cancel</button>
-        <button id="remove" (click)="return(true)">Log in</button>
-    </div>
+  <div class="remove-friend-header">
+    <button (click)="return(false)">
+      <svg
+        aria-hidden="true"
+        role="presentation"
+        viewBox="0 0 32 32"
+        xmlns="http://www.w3.org/2000/svg"
+        style="
+          display: block;
+          fill: rgb(34, 34, 34);
+          height: 16px;
+          width: 16px;
+          stroke: currentcolor;
+          stroke-width: 4;
+          overflow: visible;
+        "
+      >
+        <path d="m6 6 20 20"></path>
+        <path d="m26 6-20 20"></path>
+      </svg>
+    </button>
+    <span>Not logged in</span>
+  </div>
+  <div class="content">
+    <img src="../../../../assets/illustrations/undraw_reminder_pa79.png" />
+    <h4>To continue you will have to log in first. Please log in.</h4>
+    <br />
+    <button id="cancel" (click)="return(false)">Cancel</button>
+    <button id="remove" (click)="return(true)">Log in</button>
+  </div>
 </div>
 <div *ngIf="type === 'errorReservation'" class="popup">
-    <div class="remove-friend-header">
-        <button (click)="return(false)">
-            <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: rgb(34, 34, 34); height: 16px; width: 16px; stroke: currentcolor; stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>
-        </button>
-        <span>Error</span>
-    </div>
-    <div class="content">
-        <img src='../../../../assets/illustrations/undraw_access_denied_6w73.png'>
-        <h4>
-            You will have to pick at least one seat to proceed reservation process.
-        </h4>
-        <br>
-        <button style="grid-column: 1/span 2; width: calc(50% - 20px);" id="remove" (click)="return(true)">Ok</button>
-    </div>
+  <div class="remove-friend-header">
+    <button (click)="return(false)">
+      <svg
+        aria-hidden="true"
+        role="presentation"
+        viewBox="0 0 32 32"
+        xmlns="http://www.w3.org/2000/svg"
+        style="
+          display: block;
+          fill: rgb(34, 34, 34);
+          height: 16px;
+          width: 16px;
+          stroke: currentcolor;
+          stroke-width: 4;
+          overflow: visible;
+        "
+      >
+        <path d="m6 6 20 20"></path>
+        <path d="m26 6-20 20"></path>
+      </svg>
+    </button>
+    <span>Error</span>
+  </div>
+  <div class="content">
+    <img src="../../../../assets/illustrations/undraw_access_denied_6w73.png" />
+    <h4>
+      You will have to pick at least one seat to proceed reservation process.
+    </h4>
+    <br />
+    <button
+      style="grid-column: 1 / span 2; width: calc(50% - 20px)"
+      id="remove"
+      (click)="return(true)"
+    >
+      Ok
+    </button>
+  </div>
 </div>
 <div *ngIf="type === 'carIsReserved'" class="popup">
-    <div class="remove-friend-header">
-        <button (click)="return(false)">
-            <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: rgb(34, 34, 34); height: 16px; width: 16px; stroke: currentcolor; stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>
-        </button>
-        <span>Error</span>
-    </div>
-    <div class="content">
-        <img src='../../../../assets/illustrations/undraw_access_denied_6w73.png'>
-        <h4>
-            This car is reserved so you are not able to edit it.
-        </h4>
-        <br>
-        <button style="grid-column: 1/span 2; width: calc(50% - 20px);" id="remove" (click)="return(true)">Ok</button>
-    </div>
+  <div class="remove-friend-header">
+    <button (click)="return(false)">
+      <svg
+        aria-hidden="true"
+        role="presentation"
+        viewBox="0 0 32 32"
+        xmlns="http://www.w3.org/2000/svg"
+        style="
+          display: block;
+          fill: rgb(34, 34, 34);
+          height: 16px;
+          width: 16px;
+          stroke: currentcolor;
+          stroke-width: 4;
+          overflow: visible;
+        "
+      >
+        <path d="m6 6 20 20"></path>
+        <path d="m26 6-20 20"></path>
+      </svg>
+    </button>
+    <span>Error</span>
+  </div>
+  <div class="content">
+    <img src="../../../../assets/illustrations/undraw_access_denied_6w73.png" />
+    <h4>This car is reserved so you are not able to edit it.</h4>
+    <br />
+    <button
+      style="grid-column: 1 / span 2; width: calc(50% - 20px)"
+      id="remove"
+      (click)="return(true)"
+    >
+      Ok
+    </button>
+  </div>
 </div>
 <div *ngIf="type === 'deleteDestination'" class="popup">
-    <div class="remove-friend-header">
-        <button (click)="return(false)">
-            <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: rgb(34, 34, 34); height: 16px; width: 16px; stroke: currentcolor; stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>
-        </button>
-        <span>Delete</span>
-    </div>
-    <div class="content">
-        <img src='../../../../assets/illustrations/undraw_having_fun_iais.svg'>
-        <h4>Are you sure you want to delete 
-            <h4>{{destination.city}} ({{destination.state}})
-            </h4>
-             from your list of destinations?
-        </h4>
-        <br>
-        <button id="cancel" (click)="return(false)">Cancel</button>
-        <button id="remove" (click)="return(true)">Delete</button>
-    </div>
+  <div class="remove-friend-header">
+    <button (click)="return(false)">
+      <svg
+        aria-hidden="true"
+        role="presentation"
+        viewBox="0 0 32 32"
+        xmlns="http://www.w3.org/2000/svg"
+        style="
+          display: block;
+          fill: rgb(34, 34, 34);
+          height: 16px;
+          width: 16px;
+          stroke: currentcolor;
+          stroke-width: 4;
+          overflow: visible;
+        "
+      >
+        <path d="m6 6 20 20"></path>
+        <path d="m26 6-20 20"></path>
+      </svg>
+    </button>
+    <span>Delete</span>
+  </div>
+  <div class="content">
+    <img src="../../../../assets/illustrations/undraw_having_fun_iais.svg" />
+    <h4>
+      Are you sure you want to delete
+      <h4>{{ destination.city }} ({{ destination.state }})</h4>
+      from your list of destinations?
+    </h4>
+    <br />
+    <button id="cancel" (click)="return(false)">Cancel</button>
+    <button id="remove" (click)="return(true)">Delete</button>
+  </div>
 </div>
 <div *ngIf="type === 'carReservation'" class="popup">
-    <div class="remove-friend-header">
-        <button (click)="return(false)">
-            <svg aria-hidden="true" role="presentation" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display: block; fill: rgb(34, 34, 34); height: 16px; width: 16px; stroke: currentcolor; stroke-width: 4; overflow: visible;"><path d="m6 6 20 20"></path><path d="m26 6-20 20"></path></svg>
-        </button>
-        <span>Confirm Reservation</span>
-    </div>
-    <div class="car-content">
-        <img src='../../../../assets/illustrations/undraw_having_fun_iais.svg'>
-        <p>From: <strong>{{car.from}}</strong> on <strong>{{car.dep}}</strong></p>
-        <p>To: <strong>{{car.to}}</strong> on <strong>{{car.ret}}</strong></p>
-        <p style="font-weight: bold;">{{car.brand}} {{car.model}} {{car.year}}</p>
-        <p>Car company: <strong>{{car.name}}</strong></p>
-        <p>Type: <strong>{{car.type}}</strong></p>
-        <p>Seats: <strong>{{car.seatsNumber}}</strong></p>
-        <p>Total price: <strong>{{car.totalPrice.toFixed(2)}}</strong></p>
-        <br>
-        <button id="cancel" (click)="return(false)">Cancel</button>
-        <button id="remove" (click)="return(true)">Confirm</button>
-    </div>
+  <div class="remove-friend-header">
+    <button (click)="return(false)">
+      <svg
+        aria-hidden="true"
+        role="presentation"
+        viewBox="0 0 32 32"
+        xmlns="http://www.w3.org/2000/svg"
+        style="
+          display: block;
+          fill: rgb(34, 34, 34);
+          height: 16px;
+          width: 16px;
+          stroke: currentcolor;
+          stroke-width: 4;
+          overflow: visible;
+        "
+      >
+        <path d="m6 6 20 20"></path>
+        <path d="m26 6-20 20"></path>
+      </svg>
+    </button>
+    <span>Confirm Reservation</span>
+  </div>
+  <div class="car-content">
+    <img src="../../../../assets/illustrations/undraw_having_fun_iais.svg" />
+    <p>
+      From: <strong>{{ car.from }}</strong> on <strong>{{ car.dep }}</strong>
+    </p>
+    <p>
+      To: <strong>{{ car.to }}</strong> on <strong>{{ car.ret }}</strong>
+    </p>
+    <p style="font-weight: bold">
+      {{ car.brand }} {{ car.model }} {{ car.year }}
+    </p>
+    <p>
+      Car company: <strong>{{ car.name }}</strong>
+    </p>
+    <p>
+      Type: <strong>{{ car.type }}</strong>
+    </p>
+    <p>
+      Seats: <strong>{{ car.seatsNumber }}</strong>
+    </p>
+    <p>
+      Total price: <strong>{{ car.totalPrice.toFixed(2) }}</strong>
+    </p>
+    <br />
+    <button id="cancel" (click)="return(false)">Cancel</button>
+    <button id="remove" (click)="return(true)">Confirm</button>
+  </div>
 </div>
