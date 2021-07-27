@@ -128,7 +128,9 @@ import { ChatInfoComponent } from "./components/registered-user/chats/chat-info/
 import { ChatsComponentComponent } from "./components/registered-user/chats/chats-component/chats-component.component";
 import { FriendListComponent } from "./components/registered-user/chats/friends-list/friend-list/friend-list.component";
 import { LoadingSpinnerComponent } from "./components/loading-spinner/loading-spinner/loading-spinner.component";
+import { ScrollDirective } from "./components/registered-user/chats/scroll.directive";
 // import { StorageServiceModule} from 'angular-webstorage-service';
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
 
 @NgModule({
   declarations: [
@@ -228,6 +230,7 @@ import { LoadingSpinnerComponent } from "./components/loading-spinner/loading-sp
     ChatsComponentComponent,
     FriendListComponent,
     LoadingSpinnerComponent,
+    ScrollDirective,
   ],
   imports: [
     BrowserModule,
@@ -247,6 +250,7 @@ import { LoadingSpinnerComponent } from "./components/loading-spinner/loading-sp
       preventDuplicates: true,
     }),
     SocialLoginModule,
+    InfiniteScrollModule,
   ],
   providers: [
     CookieService,

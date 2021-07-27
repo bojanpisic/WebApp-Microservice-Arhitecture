@@ -11,14 +11,13 @@ import * as signalR from "@aspnet/signalr";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ChatService } from "../../../../../services/chat-service.service";
 import { ToastrService } from "ngx-toastr";
+import { ScrollDirective } from "../scroll.directive";
 @Component({
   selector: "app-chat-info",
   templateUrl: "./chat-info.component.html",
   styleUrls: ["./chat-info.component.scss"],
 })
 export class ChatInfoComponent implements OnInit {
-  @ViewChild("scrollDiv", { static: true }) scrollDiv: ElementRef;
-
   userId: string;
   friendId: string;
   username = "";
@@ -43,12 +42,13 @@ export class ChatInfoComponent implements OnInit {
   scrollCounter: number = 0;
   maxMessagesRender: number = 20;
   prevScrollHeight: number;
+  @ViewChild("scrollDiv") scrollDiv: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
     private chatService: ChatService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService // private scrollDirective: ScrollDirective
   ) {
     route.params.subscribe((params) => {
       this.userId = params.id;
@@ -71,23 +71,21 @@ export class ChatInfoComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.scrollTo(this.scrollDiv.nativeElement.scrollHeight);
+    console.log("sss");
+    this.prepareFor("up");
+    setTimeout(() => this.reset());
   }
 
-  scrollTo(val: number) {
-    setTimeout(() => {
-      console.log(val);
-      this.scrollDiv.nativeElement.scrollTo(0, val);
-    }, 10);
+  onScrollUp(ev: any) {
+    this.prepareFor("up");
+    this.loadMore();
+    setTimeout(() => this.restore());
   }
 
-  onScroll() {
-    let element = this.scrollDiv.nativeElement;
-
+  loadMore() {
     if (
-      element.scrollTop === 0 &&
       this.allMessages.length - this.scrollCounter * this.maxMessagesRender >=
-        this.scrollCounter * this.maxMessagesRender
+      this.scrollCounter * this.maxMessagesRender
     ) {
       this.showSpinner = true;
 
@@ -102,7 +100,7 @@ export class ChatInfoComponent implements OnInit {
         .reverse();
       this.messages.unshift(...newMessages);
       this.scrollCounter++;
-      this.showSpinner = false;
+      this.closeSpinner();
     }
   }
 
@@ -121,6 +119,8 @@ export class ChatInfoComponent implements OnInit {
         senderId: msg.SenderId,
         received: msg.Received,
       });
+
+      this.reset();
     });
 
     this.hubConnection.on("typing", (senderId) => {
@@ -159,7 +159,6 @@ export class ChatInfoComponent implements OnInit {
 
     this.msgText = "";
     this.focusOut(); //to hide typing msg
-    this.scrollTo(this.scrollDiv.nativeElement.scrollHeight);
   }
 
   sendMessageToExistingConversation() {
@@ -284,5 +283,42 @@ export class ChatInfoComponent implements OnInit {
 
   closeSpinner() {
     setTimeout(() => (this.showSpinner = false), 500);
+  }
+
+  previousScrollHeightMinusTop: number = 0; // the variable which stores the distance
+  readyFor: string = "up";
+  toReset = false;
+
+  reset() {
+    this.previousScrollHeightMinusTop = 0;
+    this.readyFor = "up";
+    this.scrollDiv.nativeElement.scrollTop =
+      this.scrollDiv.nativeElement.scrollHeight;
+    // resetting the scroll position to bottom because that is where chats start.
+  }
+
+  restore() {
+    if (this.toReset) {
+      if (this.readyFor === "up") {
+        this.scrollDiv.nativeElement.scrollTop =
+          this.scrollDiv.nativeElement.scrollHeight -
+          this.previousScrollHeightMinusTop;
+        // restoring the scroll position to the one stored earlier
+      }
+      this.toReset = false;
+    }
+  }
+
+  prepareFor(direction) {
+    this.toReset = true;
+    this.readyFor = direction || "up";
+    this.scrollDiv.nativeElement.scrollTop = !this.scrollDiv.nativeElement
+      .scrollTop // check for scrollTop is zero or not
+      ? this.scrollDiv.nativeElement.scrollTop + 1
+      : this.scrollDiv.nativeElement.scrollTop;
+    this.previousScrollHeightMinusTop =
+      this.scrollDiv.nativeElement.scrollHeight -
+      this.scrollDiv.nativeElement.scrollTop;
+    // the current position is stored before new messages are loaded
   }
 }

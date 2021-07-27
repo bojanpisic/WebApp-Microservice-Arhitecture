@@ -28,7 +28,16 @@
     <span id="imeprz">{{ friendFirstName }} {{ friendLastName }}</span>
   </div>
   <div class="mesgs" [ngClass]="{ blur: showSpinner }">
-    <div #scrollDiv class="msg_history" id="msg_h" (scroll)="onScroll()">
+    <!-- <div #scrollDiv class="msg_history" id="msg_h" (scroll)="onScroll()"> -->
+    <div
+      class="msg_history"
+      #scrollDiv
+      infinite-scroll
+      [infiniteScrollUpDistance]="2"
+      [scrollWindow]="false"
+      [infiniteScrollThrottle]="500"
+      (scrolledUp)="onScrollUp($event)"
+    >
       <li class="message" *ngFor="let message of messages">
         <div
           *ngIf="

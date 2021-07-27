@@ -109,7 +109,6 @@
     }
 
     #messageText {
-      font-style: italic;
       padding: 0.4em;
       border-radius: 10px;
       background-color: transparent;
@@ -119,6 +118,7 @@
       width: calc(65% - 7px);
       margin-left: 5px;
       height: 60%;
+      font-size: 16px;
     }
   }
 
